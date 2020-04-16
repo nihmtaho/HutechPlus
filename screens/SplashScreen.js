@@ -1,0 +1,51 @@
+import React from 'react'
+import { StyleSheet, SafeAreaView, View, Image, ActivityIndicator } from 'react-native'
+import {FontAwesome} from '@expo/vector-icons'
+
+const imgSource = '../assets/logo.png'
+
+function SplashScreen() {
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={styles.logoContent}>
+                <Image style={styles.imgLogo} source={require(imgSource)} />
+                {/* <ActivityIndicator size='large' color='#E53935' /> */}
+            </View>
+            <View style={styles.companyContent}>
+                <FontAwesome name='500px' size={42} color='#E53935' />
+            </View>
+        </SafeAreaView>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    logoContent:{
+        flex: 1,
+        justifyContent: 'center'
+    },
+    companyContent:{
+        position: 'absolute',
+        bottom: 42,
+        left: 0,
+        right: 0,
+        display: 'flex',
+        alignItems: "center",
+    },
+    textView: {
+        color: '#101010',
+        fontSize: 24,
+        fontWeight: 'bold'
+    },
+    imgLogo: {
+        width: 174,
+        height: 174,
+        margin: 24
+    }
+})
+
+export default SplashScreen
