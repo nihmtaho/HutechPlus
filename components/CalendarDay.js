@@ -8,7 +8,11 @@ class CalendarDayComponent extends React.Component {
   }
 
   getContentStyle() {
-    const { state, marking = {} } = this.props;
+
+    // console.log(this.props)
+
+    const { state, date, marking = {} } = this.props;
+
     const style = {
       content: {
         borderRadius: 50,
@@ -38,6 +42,13 @@ class CalendarDayComponent extends React.Component {
 
     if (state === 'disabled') {
       style.text.color = '#c1c2c1';
+    }
+
+    if(new Date(date.dateString).getDay() === 0) {
+      style.text.color = '#C63131';
+      if(state === 'disabled') {
+        style.text.color = '#C59D9D';
+      }
     }
 
     return style;
@@ -78,9 +89,8 @@ class CalendarDayComponent extends React.Component {
     this.props.onPress(this.props.date);
   }
 
-  render() {
+  render() {    
     const contentStyle = this.getContentStyle();
-
     return (
       <View style={styles.container}>
         <TouchableOpacity
