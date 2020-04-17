@@ -1,113 +1,167 @@
 import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
+const learnTime = [
+    {
+        caHoc: 1,
+        tietHoc: 1,
+        start: '06:45',
+        end: '7:30'
+    },
+    {
+        caHoc: 1,
+        tietHoc: 2,
+        start: '07:30',
+        end: '08:15'
+    },
+    {
+        caHoc: 1,
+        tietHoc: 3,
+        start: '08:20',
+        end: '09:05'
+    },
+    {
+        caHoc: 2,
+        tietHoc: 4,
+        start: '09:20',
+        end: '10:05'
+    },
+    {
+        caHoc: 2,
+        tietHoc: 5,
+        start: '10:05',
+        end: '10:50'
+    },
+    {
+        caHoc: 2,
+        tietHoc: 6,
+        start: '10:55',
+        end: '11:40'
+    },
+    {
+        caHoc: 3,
+        tietHoc: 7,
+        start: '12:30',
+        end: '13:15'
+    },
+    {
+        caHoc: 3,
+        tietHoc: 8,
+        start: '13:15',
+        end: '14:00'
+    },
+    {
+        caHoc: 3,
+        tietHoc: 9,
+        start: '14:05',
+        end: '14:50'
+    },
+    {
+        caHoc: 4,
+        tietHoc: 10,
+        start: '15:05',
+        end: '15:50'
+    },
+    {
+        caHoc: 4,
+        tietHoc: 11,
+        start: '15:50',
+        end: '16:35'
+    },
+    {
+        caHoc: 4,
+        tietHoc: 12,
+        start: '16:40',
+        end: '17:25'
+    },
+    {
+        caHoc: 5,
+        tietHoc: 13,
+        start: '18:00',
+        end: '18:45'
+    },
+    {
+        caHoc: 5,
+        tietHoc: 14,
+        start: '18:45',
+        end: '19:30'
+    },
+    {
+        caHoc: 5,
+        tietHoc: 15,
+        start: '19:30',
+        end: '20:15'
+    },
+];
+
 function Card(props) {
+
+    const todaySubject = props.timeTable
+    const tietHoc = todaySubject.time
+
+    // console.log('props:')
+    // console.log(props)
+    
+    // console.log('tietHoc:')
+    // console.log(tietHoc)
+
     return(
-        <TouchableOpacity 
+        <TouchableOpacity
             activeOpacity={0.5}
             onPress={props.onPress}
             style={styles.container}>
-            <View style={styles.dateContent}>
-                <View style={styles.mountLeft}>
-                    <Text style={styles.titleStyle}>Thứ:</Text>
-                    <Text style={{ marginLeft: 4, fontSize: 16, fontWeight: 'bold', color: '#393e46' }}>5</Text>
-                </View>
-                <View style={styles.mountLeft}>
-                    <Text style={styles.titleStyle}>Ngày:</Text>
-                    <Text style={{ marginLeft: 4, fontSize: 16, fontWeight: 'bold', color: '#393e46' }}>03/04/2020</Text>
-                </View>
+            <View style={styles.divContent}>
+            <Text style={styles.titleStyle}>{todaySubject.subject_name}</Text>
             </View>
             <View style={styles.divContent}>
-                <View style={styles.leftContent}>
-                    <Text style={styles.titleStyle}>Tên học phần</Text>
-                </View>
                 <View style={styles.rightContent}>
-                    <Text style={styles.subStyle}>Phát triển phần mềm mã nguồn mở phát nguồn mở</Text>
-                </View>
-            </View>
-            <View style={styles.divContent}>
-                <View style={styles.leftContent}>
-                    <Text style={styles.titleStyle}>Phòng học</Text>
-                </View>
-                <View style={styles.rightContent}>
-                    <Text style={styles.subStyle}>B.12-03</Text>
-                </View>
-            </View>
-            <View style={styles.divContent}>
-                <View style={styles.leftContent}>
-                    <Text style={styles.titleStyle}>Giảng viên</Text>
-                </View>
-                <View style={styles.rightContent}>
-                    <Text style={styles.subStyle}>Bla Bla</Text>
+                    <Text style={styles.titleStyle}>{todaySubject.address}</Text>
                 </View>
             </View>
             <View style={styles.mountContent}>
                 <View style={styles.mountLeft}>
-                    <Text style={styles.titleStyle}>Số tiết:</Text>
-                    <Text style={{ marginLeft: 4, fontSize: 16, fontWeight: 'bold', color: '#393e46' }}>5</Text>
-                </View>
-                <View style={styles.mountLeft}>
-                    <Text style={styles.titleStyle }>Tiết bắt đầu:</Text>
-                    <Text style={{ marginLeft: 4, fontSize: 16, fontWeight: 'bold', color: '#393e46' }}>1</Text>
-                </View>
+                    <Text style={styles.titleStyle}>Thời gian học: </Text>
+                    <Text style={styles.titleStyle}>{learnTime[tietHoc[0]].start} - {learnTime[tietHoc[tietHoc.length - 1]].end}</Text>
+                </View>                
             </View>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
-    container:{
-        backgroundColor: '#ffffff',
+    container: {
+        backgroundColor: '#5D6D7E',
         padding: 12,
         marginVertical: 4,
-        marginHorizontal: 6,
+        marginHorizontal: 10,
         borderRadius: 6,
-        shadowColor: '#2AC062',
-        shadowOpacity: 1,
-        elevation: 1,
     },
-    divContent:{
+    divContent: {
         display: "flex",
         flexDirection: "row",
         marginVertical: 2,
     },
-    leftContent:{
-        width: 120,
-    },
-    rightContent:{
+    rightContent: {
         flex: 1,
     },
-    mountContent:{
+    mountContent: {
         display: "flex",
         flexDirection: 'row',
         borderTopWidth: 0.5,
-        borderTopColor: '#ccc',
+        borderTopColor: '#fff',
         paddingTop: 4,
         marginTop: 4
     },
-    dateContent:{
-        display: "flex",
-        flexDirection: 'row',
-        borderBottomWidth: 0.5,
-        borderBottomColor: '#ccc',
-        paddingBottom: 4,
-        marginBottom: 4
-    },
-    mountLeft:{
+    mountLeft: {
         flex: 1,
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
     },
-    titleStyle:{
-        fontSize: 16,
+    titleStyle: {
+        fontSize: 14,
         fontWeight: "bold",
-        color: '#222831'
-    },
-    subStyle:{
-        fontSize: 16,
-        fontWeight: "bold",
-        color: '#393e46'
+        color: '#fff'
     }
 })
 
