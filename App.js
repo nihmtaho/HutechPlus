@@ -1,11 +1,14 @@
 import React from "react";
-// import { Provider as PaperProvider } from 'react-native-paper';
 import RootStackNavigator from './src/navigation/RootStackNavigator';
-// import Routes from "./src/Routes";
+import { Provider, Portal } from "react-native-paper"
 
 function App() {
   return(
-    <RootStackNavigator />
+    <Provider>
+      <Portal>
+        <RootStackNavigator />
+      </Portal>
+    </Provider>
   );
 }
 

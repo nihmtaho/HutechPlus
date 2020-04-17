@@ -6,7 +6,7 @@ import Constants from 'expo-constants';
 
 function Contact(params) {
     return(
-        <View>
+        <View style={{ display: "flex", alignItems: "center", backgroundColor: "#fff" }}>
             <View style={{ display: "flex", flexDirection: "row", width: '35%', justifyContent: "space-around", marginBottom: 14 }}>
                 <TouchableOpacity>
                     <FontAwesome name="youtube-play" size={28} color="#FF0000" />

@@ -1,18 +1,53 @@
 import React from 'react'
-import { StyleSheet, Text, View, StatusBar, ScrollView } from 'react-native'
+import { StyleSheet, AsyncStorage, View, StatusBar, ScrollView } from 'react-native';
+import { Snackbar, Button, Text } from "react-native-paper";
+import firebase from "firebase";
 
-import Button from '../components/Button';
 import Card from '../components/Card';
-// import SpaceStatusBar from '../components/SpaceStatusBar';
 
-function HomeScreen(props) {
-    const { navigation } = props
+const HomeScreen = ({ navigation }) => {
+
+    const [visible, setVisiable] = React.useState(false);
+
+    const _onToggleSnackBar = () => {
+        return setVisiable(true)
+    }
+
+    const _onDismissSnackBar = () => {
+        return setVisiable(false)
+    }
+
+    React.useEffect(() => {
+        const getUsername = async() => {
+            let username;
+            try {
+                username = await AsyncStorage.getItem('username')
+                console.log("Fetch username: ", username)
+            } catch (error) {
+
+            }
+            return username;
+        }
+        getUsername();
+    }, [])
+
     return (
         <View style={styles.container}>
             <ScrollView style={styles.scrollViewContent}>
                 <View style={{height: StatusBar.currentHeight}} ></View>
                 <Card onPress={() => navigation.push('Detail')} />
             </ScrollView>
+            <Button
+                onPress={() => _onToggleSnackBar()}
+            >
+                {visible ? 'Hide' : 'Show'}
+            </Button>
+            <Snackbar
+                visible={visible}
+                onDismiss={() => _onDismissSnackBar()}
+            >
+                Hey there! I'm a Snackbar.
+        </Snackbar>
         </View>
     )
 }

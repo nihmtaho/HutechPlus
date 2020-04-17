@@ -10,7 +10,6 @@ function SettingScreen(props) {
 
     return (
         <View style={styles.container}>
-            {/* <StatusBar backgroundColor="transparent" barStyle='dark-content' /> */}
             <Button color="#000" mode="outlined" onPress={() => signOut()} >Đăng xuất</Button>
         </View>
     )
