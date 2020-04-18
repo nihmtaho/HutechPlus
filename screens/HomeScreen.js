@@ -135,9 +135,6 @@ class HomeScreen extends Component {
                 }
             })
         }
-
-
-
         // const selectedTKBDay = this.state.TKB[this.state.date];
         // this.state.TKB[this.state.date] = {
         //   ...selectedTKBDay,
@@ -173,7 +170,7 @@ class HomeScreen extends Component {
                     <FlatList
                         data={this.state.todaySubject.subjectList}
                         renderItem={({ item, index }) => (
-                            <Card timeTable={item} />
+                            <Card timeTable={item} onPress={() => this.props.navigation.navigate('Detail')} />
                         )}
                         numColumns={1}
                     // keyExtractor={item => item.toString()}
