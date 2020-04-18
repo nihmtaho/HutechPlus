@@ -159,7 +159,7 @@ const RootStackNavigator = ({ navigation }) => {
     return (
         <AuthContext.Provider value={authContext}>
             <NavigationContainer>
-                {isLoading
+                {state.isLoading
                     ? (
                         <SplashScreen />
                     )

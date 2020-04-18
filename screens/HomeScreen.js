@@ -28,6 +28,7 @@ const HomeScreen = ({ navigation }) => {
             }
             return username;
         }
+<<<<<<< Updated upstream
         getUsername();
     }, [])
 
@@ -50,6 +51,57 @@ const HomeScreen = ({ navigation }) => {
         </Snackbar>
         </View>
     )
+=======
+
+
+
+        // const selectedTKBDay = this.state.TKB[this.state.date];
+        // this.state.TKB[this.state.date] = {
+        //   ...selectedTKBDay,
+        //   selected: true
+        // }
+
+        // console.log('ttkb')
+        // console.log(this.state.ttkb)
+
+        // console.log(this.state.TKB[this.state.date])
+
+        return (
+            <View style={styles.container}>
+                <Calendar
+                    dayComponent={CalendarDayComponent}
+                    markedDates={this.state.TKB}
+                    onDayPress={this.onDayPress}
+                    theme={{
+                        monthTextColor: '#581845',
+                        arrowColor: '#165c96',
+                        textMonthFontWeight: 'bold',
+                    }}
+                    style={{
+                        borderWidth: 2,
+                        borderRadius: 12,
+                        borderColor: '#fff',
+                        borderBottomColor: '#5D6D7E'
+                    }}
+                />
+
+                {/* {this.state.TKB[this.state.date].subjectList ? */}
+                {this.state.todaySubject ?
+                    <FlatList
+                        data={this.state.todaySubject.subjectList}
+                        renderItem={({ item, index }) => (
+                            <Card timeTable={item} onPress={() => this.props.navigation.navigate('Detail')} />
+                        )}
+                        numColumns={1}
+                    // keyExtractor={item => item.toString()}
+                    /> :
+                    <View style={styles.subjectEmpty}>
+                        <Text style={{ fontWeight: 'bold' }}>Không có lịch học</Text>
+                    </View>}
+            </View>
+        );
+    }
+>>>>>>> Stashed changes
 }
 
 const styles = StyleSheet.create({
