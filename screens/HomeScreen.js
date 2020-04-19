@@ -27,7 +27,7 @@ class HomeScreen extends Component {
     async componentDidMount() {
         let mssv = await AsyncStorage.getItem("username")
         this.setState({ mssv })
-        console.log(mssv)
+        // console.log(mssv)
     }
 
     onDayPress(date) {
@@ -200,6 +200,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     }
 })
-
 
 export default HomeScreen
