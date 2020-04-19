@@ -118,6 +118,8 @@ const RootStackNavigator = ({ navigation }) => {
                     firebase.database().ref('Students/' + username).once('value', Snapshot => {
                         let data = Snapshot.val() ? Snapshot.val() : {};
                         var hasUsername = Snapshot.child('username').val();
+                        let fullname = Snapshot.child('fullname').val()
+                        let faculty = Snapshot.child('facultyId').val()
 
                         if (hasUsername != username) {
                             Alert.alert("Error", "Tài khoản không tồn tại", [{ text: 'OK' }]);
@@ -131,6 +133,10 @@ const RootStackNavigator = ({ navigation }) => {
                                 try {
                                     AsyncStorage.setItem('userToken', usernameToken)
                                     AsyncStorage.setItem('username', hasUsername)
+                                    AsyncStorage.setItem('fullname', fullname)
+                                    firebase.database().ref('Faculty/' + faculty).on('value', Snapshot => {
+                                        AsyncStorage.setItem('faculty', Snapshot.child('facultyName').val())
+                                    })
                                 } catch (error) {
 
                                 }
@@ -147,6 +153,8 @@ const RootStackNavigator = ({ navigation }) => {
                 try {
                     AsyncStorage.removeItem('userToken')
                     AsyncStorage.removeItem('username')
+                    AsyncStorage.removeItem('fullname')
+                    AsyncStorage.removeItem('faculty')
                 } catch (error) {
 
                 }
