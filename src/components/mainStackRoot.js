@@ -25,7 +25,7 @@ const tabStackRoot = () => {
           else if (route.name === 'Notification') {
             iconName = 'notification';
           }
-          return <AntDesign name={iconName} size={24} color={color} />;
+          return <AntDesign name={iconName} size={22} color={color} />;
         },
       })}
       tabBarOptions={{

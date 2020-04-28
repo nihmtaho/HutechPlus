@@ -13,7 +13,7 @@ const imgSource = '../assets/logo.png';
 function LoginScreen(props) {
     const { navigation } = props;
     const { signIn } = React.useContext(AuthContext);
-
+    
     const [username, setUsername] = React.useState(null);
     const [password, setPassword] = React.useState(null);
     const [request, setRequest] = React.useState(false);
