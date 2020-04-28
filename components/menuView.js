@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Subheading, Divider, Avatar } from 'react-native-paper';
+import { Subheading, Divider } from 'react-native-paper';
 import { AntDesign } from '@expo/vector-icons';
 
 const menuView = (props) => {
@@ -9,7 +9,7 @@ const menuView = (props) => {
         onPress={props.onPress}>
             <View style={styles.container}>
                 <View style={styles.iconView}>
-                    <AntDesign name={props.iconLeft} size={26} color={props.color} />
+                    <AntDesign name={props.iconLeft} size={24} color={props.color} />
                 </View>
                 <View style={styles.titleView}>
                     <Subheading>{props.title}</Subheading>

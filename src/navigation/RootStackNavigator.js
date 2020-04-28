@@ -2,7 +2,8 @@ import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { AsyncStorage, Alert, YellowBox } from "react-native";
-import firebase from "firebase";
+// import firebase from "firebase";
+import { db } from '../config/db'
 
 // TODO: Import Screen dir
 import SplashScreen from '../../screens/SplashScreen';
@@ -23,8 +24,8 @@ console.warn = message => {
 const RootStack = createStackNavigator();
 
 // TODO: Function render default
-const RootStackNavigator = ({ navigation }) => {
-    const [isLoading, setIsLoading] = React.useState(true);
+function RootStackNavigator({ navigation }) {
+    const [username, setUsername] = React.useState('');
 
     const [state, dispatch] = React.useReducer(
         (prevState, action) => {
@@ -57,36 +58,28 @@ const RootStackNavigator = ({ navigation }) => {
     );
 
     React.useEffect(() => {
-        const firebaseConfig = {
-            apiKey: "AIzaSyAZ5RVA-zXlsk92on6GTFASaRf4KEGEyDo",
-            authDomain: "hutech-education.firebaseapp.com",
-            databaseURL: "https://hutech-education.firebaseio.com",
-            projectId: "hutech-education",
-            storageBucket: "hutech-education.appspot.com",
-            messagingSenderId: "501319299038",
-            appId: "1:501319299038:web:bd745da80ec5bf68c7f74f",
-            measurementId: "G-Q92Y4KVQ9D"
-        };
+        // const firebaseConfig = {
+        //     apiKey: "AIzaSyAZ5RVA-zXlsk92on6GTFASaRf4KEGEyDo",
+        //     authDomain: "hutech-education.firebaseapp.com",
+        //     databaseURL: "https://hutech-education.firebaseio.com",
+        //     projectId: "hutech-education",
+        //     storageBucket: "hutech-education.appspot.com",
+        //     messagingSenderId: "501319299038",
+        //     appId: "1:501319299038:web:bd745da80ec5bf68c7f74f",
+        //     measurementId: "G-Q92Y4KVQ9D"
+        // };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        // if (!firebase.apps.length) {
+        //     firebase.initializeApp(firebaseConfig);
+        // }
         // Fetch the token from storage then navigate to our appropriate place
         const bootstrapAsync = async () => {
-            let userToken;
-            let username;
+            let userToken
+            let username
 
             try {
-                // userToken = await AsyncStorage.removeItem('userToken')
                 userToken = await AsyncStorage.getItem('userToken');
                 username = await AsyncStorage.getItem('username');
-                console.log("user token: ", userToken);
-                console.log("username: ", username);
-                if (userToken != null) {
-                    console.log("Your have a token")
-                } else {
-                    console.log("Your token was remove")
-                }
             } catch (e) {
                 // Restoring token failed
             }
@@ -96,7 +89,7 @@ const RootStackNavigator = ({ navigation }) => {
         bootstrapAsync();
 
         setTimeout(() => {
-            setIsLoading(false);
+            // setIsLoading(false);
         }, 1500);
     }, []);
 
@@ -105,7 +98,7 @@ const RootStackNavigator = ({ navigation }) => {
         try {
             token = AsyncStorage.getItem('userToken')
         } catch (error) {
-            
+
         }
         return token;
     }
@@ -114,17 +107,17 @@ const RootStackNavigator = ({ navigation }) => {
         () => ({
             signIn: async (username, password) => {
                 let usernameToken;
-                if (username !== null && password !== null){
-                    firebase.database().ref('Students/' + username).once('value', Snapshot => {
+                if (username !== null && password !== null) {
+                    db.ref('Students/' + username).once('value', Snapshot => {
                         let data = Snapshot.val() ? Snapshot.val() : {};
                         var hasUsername = Snapshot.child('username').val();
-                        let fullname = Snapshot.child('fullname').val()
-                        let faculty = Snapshot.child('facultyId').val()
+                        setUsername(hasUsername)
+                        let fullName = Snapshot.child('fullname').val()
 
                         if (hasUsername != username) {
                             Alert.alert("Error", "Tài khoản không tồn tại", [{ text: 'OK' }]);
                         }
-                        else{
+                        else {
                             if (data.password != password) {
                                 Alert.alert("Error", "Mật khẩu không chính xác!", [{ text: 'OK' }])
                             }
@@ -133,10 +126,7 @@ const RootStackNavigator = ({ navigation }) => {
                                 try {
                                     AsyncStorage.setItem('userToken', usernameToken)
                                     AsyncStorage.setItem('username', hasUsername)
-                                    AsyncStorage.setItem('fullname', fullname)
-                                    firebase.database().ref('Faculty/' + faculty).on('value', Snapshot => {
-                                        AsyncStorage.setItem('faculty', Snapshot.child('facultyName').val())
-                                    })
+                                    AsyncStorage.setItem('fullName', fullName)
                                 } catch (error) {
 
                                 }
@@ -145,7 +135,7 @@ const RootStackNavigator = ({ navigation }) => {
                         }
                     });
                 }
-                else{
+                else {
                     Alert.alert("Error", "Vui lòng điền đầy đủ ID và Mật khẩu", [{ text: 'OK' }]);
                 }
             },
@@ -153,8 +143,7 @@ const RootStackNavigator = ({ navigation }) => {
                 try {
                     AsyncStorage.removeItem('userToken')
                     AsyncStorage.removeItem('username')
-                    AsyncStorage.removeItem('fullname')
-                    AsyncStorage.removeItem('faculty')
+                    AsyncStorage.removeItem('fullName')
                 } catch (error) {
 
                 }

@@ -1,63 +1,77 @@
-import React from 'react'
-import { StyleSheet, View, AsyncStorage } from 'react-native';
-import { Button, Divider } from 'react-native-paper';
-import firebase from "firebase";
+//Import Library
+import React, { useEffect, useContext, useState } from 'react'
+import { StyleSheet, View, AsyncStorage, StatusBar } from 'react-native'
+import { Button, Divider, Paragraph } from 'react-native-paper'
+import { db } from '../src/config/db'
 
-import ProflieView from "../components/profileView";
-import MenuView from "../components/menuView";
+//Import Components
+import ProfileView from "../components/profileView"
+import MenuView from "../components/menuView"
+import LearnView from "../components/learnView"
 
 import { AuthContext } from '../src/context'
 
 const SettingScreen = ({ navigation }) => {
-    const { signOut } = React.useContext(AuthContext);
-    const [username, setUsername] = React.useState('');
-    const [fullname, setFullname] = React.useState('');
-    const [faculty, setFaculty] = React.useState('');
+    const { signOut } = useContext(AuthContext)
 
-    React.useEffect(() => {
-        const getData = async () => {
-            let idUsername;
-            let fullnameUser;
-            let facultyUser;
+    const [state, setState] = useState({
+        fullName: '',
+        departmentName: '',
+        email: ''
+    })
+
+    const { departmentName, fullName, email } = state
+
+    useEffect(() => {
+        const fetchStudent = async () => {
+            let emailUser
+            let idUsername
+            let fullNameUser
+            let departmentName
             try {
                 idUsername = await AsyncStorage.getItem('username')
-                fullnameUser = await AsyncStorage.getItem('fullname')
-                facultyUser = await AsyncStorage.getItem('faculty')
+                // fullNameUser = await AsyncStorage.getItem('fullName')
+                db.ref('Students/' + idUsername).once('value', Snapshot => {
+                    emailUser = Snapshot.child('email').val()
+                    fullNameUser = Snapshot.child('fullname').val()
+                    let departmentCode = Snapshot.child('departmentCode').val()
 
-                // firebase.database().ref('Students/' + idUsername).on('value', Snapshot => {
-                //     let name = Snapshot.child('fullname').val();
-                //     let idUser = Snapshot.child('username').val();
-                //     let faculty = Snapshot.child('facultyId').val();
-                //     firebase.database().ref('Faculty/' + faculty).on('value', Snapshot => {
-                //         setFaculty(Snapshot.child('facultyName').val())
-                //     })
-                // })
-                setFullname(fullnameUser)
-                setUsername(idUsername);
-                setFaculty(facultyUser)
+                    db.ref('Departments/' + departmentCode).once("value", Snapshot => {
+                        departmentName = Snapshot.child('departmentName').val()
+                        setState({ fullName: fullNameUser, email: emailUser, departmentName: departmentName })
+                    })
+                })
             } catch (error) {
-
+                
             }
         }
-        getData()
+        fetchStudent()
+
+        return () => {}
     }, [])
 
     return (
         <View style={styles.container}>
+            <View style={{ paddingTop: StatusBar.currentHeight }}></View>
             <View style={styles.profileView}>
-                <ProflieView name={fullname} subName={username} subFaculty={faculty} />
+                <ProfileView name={fullName} subName={departmentName} subFaculty={email} onPress={() => navigation.navigate("Profile")} />
             </View>
             <Divider />
-            <MenuView title="Thông báo" iconLeft="notification" iconRight="right" color="#0063cd" />
-            <MenuView title="Trợ giúp" iconLeft="questioncircle" iconRight="right" color="blue" />
-            <MenuView title="Đổi mật khẩu" iconLeft="Safety" iconRight="right" color="green" />
-            <MenuView title="Báo lỗi" iconLeft="exclamationcircle" iconRight="right" color="red" />
+            <LearnView title="8" />
+            <Divider />
+            <View>
+                <MenuView title="Tin tức & sự kiện" iconLeft="calendar" iconRight="right" color="#0063cd" />
+                <MenuView title="Đổi thông tin liên lạc" iconLeft="customerservice" iconRight="right" color="green" />
+                <MenuView title="Đổi mật khẩu" iconLeft="Safety" iconRight="right" color="green" />
+                <MenuView title="Trợ giúp" iconLeft="questioncircle" iconRight="right" color="#0063cd" />
+                <MenuView title="Báo lỗi" iconLeft="exclamationcircle" iconRight="right" color="red" />
+            </View>
             <Button
                 contentStyle={{ height: 54 }}
                 color="red"
                 mode="text"
                 // style={styles.button}
-                onPress={() => signOut()}>Đăng xuất</Button>
+                onPress={() => signOut()}>Đăng xuất tài khoản</Button>
         </View>
     )
 }

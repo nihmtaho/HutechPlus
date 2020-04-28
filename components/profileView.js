@@ -1,19 +1,18 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { Avatar, Title, Divider, Paragraph } from "react-native-paper";
+import { Avatar, Title, Paragraph } from "react-native-paper";
 import { AntDesign } from '@expo/vector-icons';
 
 const profileView = (props) => {
     return (
-        <TouchableOpacity style={styles.container} >
+        <TouchableOpacity style={styles.container} onPress={ props.onPress } >
             <View style={styles.avatarView} >
-                <Avatar.Icon size={64} icon="account" style={{ backgroundColor: "#0063cd" }} />
+                <Avatar.Icon size={72} icon="account" style={{ backgroundColor: "#0063cd" }} />
             </View>
             <View style={styles.detailView}>
                 <Title>{props.name}</Title>
-                <Divider />
-                <Paragraph>{props.subName}</Paragraph>
                 <Paragraph>{props.subFaculty}</Paragraph>
+                <Paragraph>{props.subName}</Paragraph>
             </View>
             <View style={styles.iconView}>
                 <AntDesign name="right" size={20} />
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     avatarView: {
-        flex: 0.5,
+        flex: 0.8,
         alignItems: "center",
         marginLeft: 12
     },
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
         flex: 0.5,
         display: "flex",
         alignItems: "center"
-    },
+    }
 })
 
 export default profileView;

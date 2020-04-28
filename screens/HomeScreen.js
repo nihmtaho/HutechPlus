@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, FlatList, StatusBar, AsyncStorage } from 'react-native'
+import { Divider } from 'react-native-paper'
 import { Calendar } from 'react-native-calendars';
 import moment from 'moment'
 import Card from '../components/Card';
@@ -156,14 +157,16 @@ class HomeScreen extends Component {
                         monthTextColor: '#581845',
                         arrowColor: '#165c96',
                         textMonthFontWeight: 'bold',
+                        selectedDayBackgroundColor: 'green'
                     }}
                     style={{
-                        borderWidth: 2,
+                        // borderWidth: 2,
                         borderRadius: 12,
                         borderColor: '#fff',
                         borderBottomColor: '#5D6D7E'
                     }}
                 />
+                <Divider />
 
                 {/* {this.state.TKB[this.state.date].subjectList ? */}
                 {this.state.todaySubject ?
@@ -187,6 +190,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: StatusBar.currentHeight,
+        backgroundColor: "#fff"
     },
     buttonContainer: {
         backgroundColor: '#222',
