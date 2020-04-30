@@ -14,7 +14,7 @@
     "@react-navigation/material-bottom-tabs": "^5.1.8",
     "@react-navigation/native": "^5.1.5",
     "@react-navigation/stack": "^5.2.10",
-    "expo": "^37.0.7",
+    "expo": "^37.0.8",
     "firebase": "7.9.0",
     "moment": "^2.24.0",
     "react": "~16.9.0",
