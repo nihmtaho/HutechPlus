@@ -9,12 +9,8 @@ Deploy with Android and IOS.
 ### How to run project?
 **1. Clone project:** ```git clone https://github.com/thaotruogg/HutechPlus.git```
 
-**2. Download Expo app:**
-  - *[For Android devices](https://play.google.com/store/apps/details?id=host.exp.exponent&hl=vi)*
-  - *[For IOS devices](https://apps.apple.com/us/app/expo-client/id982107779)*
+**2. Install pkg:** ```npm install``` or ```yarn install```.
 
-**3. Run cli:**
-  - **Run with ExpoCLI:** ```expo start```
-  - **Run with Yarn:** ```yarn start``` ***(Recommended)***
+**3. Run Expo CLI:** ```expo start``` or ```yarn start```
 
 **4. Scan QR code in browser or use your device** ***(Can be using IOS/Android simulator)***
