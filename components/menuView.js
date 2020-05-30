@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 const menuView = (props) => {
     return (
         <TouchableOpacity
-        onPress={props.onPress}>
+            onPress={props.onPress}>
             <View style={styles.container}>
                 <View style={styles.iconView}>
                     <AntDesign name={props.iconLeft} size={24} color={props.color} />
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     },
     titleView: {
         flex: 2,
-        marginLeft: 24
+        marginLeft: 8,
     },
     iconView: {
         flex: 0.5,
