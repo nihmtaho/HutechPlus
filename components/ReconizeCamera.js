@@ -1,45 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  StyleSheet,
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   StatusBar,
   Alert,
-  Image,
-  ActivityIndicator
+  Image
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import { BlurView } from 'expo-blur';
 import {
   Provider as PaperProvider,
-  Button,
   ActivityIndicator,
   Colors,
   Button,
-  Text,
-} from "react-native-paper";
+  TextInput,
+} from 'react-native-paper';
 import MaterialIcons from 'react-native-vector-icons/FontAwesome';
-import * as Location from 'expo-location';
-import { getPreciseDistance, isPointWithinRadius } from 'geolib';
 import Config from './config.json'
 
-const DetailScreen = ({ navitgation }) => {
+console.disableYellowBox = true;
 
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [myLocation, setMyLocation] = useState(null);
-  const [checkinStatus, setCheckinStatus] = useState(false);
-  const [withinClass, setWithinClass] = useState(false);
-  const [radius, setRadius] = useState(50);
-  const toggleSwitch = () => setCheckinStatus(previousState => !previousState);
-  // const [checkinStatus, setCheckinStatus] = useState();
-  // const [isEnabled, setIsEnabled] = useState(false);
-
-  // Tuan's home
-  // 10.802919, 106.715229
-  // temp data, waiting for teacher's app setting
-  const [teacherLocation, setTeacherLocation] = useState({ latitude: 10.7710649, longitude: 106.7032397 });
+const ReconizeCamera = () => {
 
   const cameraRef = useRef()
   const [hasPermission, setHasPermission] = useState(null)
@@ -57,45 +40,12 @@ const DetailScreen = ({ navitgation }) => {
   cognitiveHeaders.append('Ocp-Apim-Subscription-Key', Config.COGNITIVE_SERVICES_KEY)
 
   useEffect(() => {
-
-    (async () => {
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Quyền truy cập vị trí đã bị từ chối');
-      }
-
-      let location = await Location.getCurrentPositionAsync({});
-      console.log("DetailScreen -> location", location)
-
-      setMyLocation({ latitude: location.coords.latitude, longitude: location.coords.longitude });
-      setWithinClass(isPointWithinRadius(
-        myLocation,
-        teacherLocation,
-        radius
-      ))
-    })();
-
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
 
-    // return (
-
-    // )
-
-  });
-
-  // const toggleSwitch = (checkIn) => {
-  //   setCheckinStatus(checkIn);
-  // }
-
-  let text = 'Đang kiểm tra vị trí..';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (myLocation) {
-    text = 'latitude: ' + myLocation.latitude + '\nlongitude: ' + myLocation.longitude
-  }
+  }, []); // laau lam :)) 
 
   const takePicture = async () => {
     const photo = await cameraRef.current.takePictureAsync({ quality: 0.01, base64: true });
@@ -478,124 +428,161 @@ const DetailScreen = ({ navitgation }) => {
     return personName;
   }
 
+
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
   return (
     <PaperProvider>
       <View style={styles.container}>
+
+        <StatusBar hidden={true} />
+
+        <View style={styles.topContainer}>
+          <Text style={{ fontWeight: 'bold' }}>Navigation linh tinh khác</Text>
+        </View>
+
         {
-          myLocation ?
-            // myLocation = true
-            // Đã có location, tiến hình kiểm tra trong phạm vi lớp hay không
-            <View style={styles.container}>
+          !isReconize ?
+            <View style={{ flex: 9 / 10 }}>
+
+              {/* <Camera
+                ref={cameraRef}
+                type={Camera.Constants.Type.front}
+                ratio='4:3'
+                style={styles.cmrContainer}>
+              </Camera> */}
+
               {
-                withinClass ?
-                  <View style={styles.container}>
-                    {/* danger here */}
-                    {
-                      isShot ?
-                        <View
-                          style={styles.cmrContainer}>
-                          <Image style={styles.blurredImage} source={{ faceUri }} />
-                          <BlurView intensity={250} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
-                          </BlurView>
-                        </View>
-                        :
-                        <Camera
-                          ref={cameraRef}
-                          type={Camera.Constants.Type.front}
-                          ratio='4:3'
-                          style={styles.cmrContainer}>
-                        </Camera>
-                    }
-
-                    <View style={styles.camer_button_container}>
-
-                      {
-                        isShot ?
-                          <>
-                            <ActivityIndicator
-                              animating={isShot}
-                              size="large"
-                              color={Colors.red800} />
-                            <Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
-                          </>
-                          :
-                          <TouchableOpacity onPress={takePicture} style={styles.capture}>
-                            <MaterialIcons name="circle" size={80} color="#fff" />
-                          </TouchableOpacity>
-                      }
-                    </View>
-                    {/* danger here */}
+                isShot ?
+                  <View
+                    style={styles.cmrContainer}>
+                    <Image style={styles.blurredImage} source={{ faceUri }} />
+                    <BlurView intensity={250} style={[StyleSheet.absoluteFill, styles.nonBlurredContent]}>
+                    </BlurView>
                   </View>
                   :
-                  <View>
-                    {/* withinClass = false */}
-                    {/* Báo ở ngoài lớp học, chưa cho điểm danh */}
-                    <Text>Bạn ở ngoài lớp học</Text>
-                    <Text>Không thể điểm danh</Text>
-                  </View>
+                  <Camera
+                    ref={cameraRef}
+                    type={Camera.Constants.Type.front}
+                    ratio='4:3'
+                    style={styles.cmrContainer}>
+                  </Camera>
               }
+
+              <View style={styles.camer_button_container}>
+
+                {
+                  isShot ?
+                    <>
+                      <ActivityIndicator
+                        animating={isShot}
+                        size="large"
+                        color={Colors.red800} />
+                      <Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
+                    </>
+                    :
+                    <TouchableOpacity onPress={takePicture} style={styles.capture}>
+                      <MaterialIcons name="circle" size={80} color="#fff" />
+                    </TouchableOpacity>
+                }
+              </View>
             </View>
             :
-            <View>
-              {/* myLocation = false */}
-              {/* Chưa có location, tiếp tục xoay xoay xoay :))) */}
-              <Text>{text}</Text>
-              <ActivityIndicator size="large" color="#0000ff" />
+            <View style={{ flex: 9 / 10, alignItems: 'center', justifyContent: 'center' }}>
+
+              {/* <Button
+                icon="google-classroom"
+                mode="contained"
+                onPress={createGroup}
+                style={styles.button}>Create group</Button> */}
+              <Text style={styles.textStyle}>Nhập họ tên & MSSV</Text>
+              <View
+                style={{
+                  flexDirection: 'row'
+                }}>
+                <TextInput
+                  label='Nhập tên'
+                  value={name}
+                  mode='outlined'
+                  Placeholder='Nhập tên'
+                  onChangeText={text => setName(text)}
+                />
+                <TextInput
+                  label='Nhập mssv'
+                  mode='outlined'
+                  value={mssv}
+                  Placeholder='Nhập mssv'
+                  onChangeText={text => setMSSV(text)}
+                />
+              </View>
+              <Button
+                icon="account-multiple-plus"
+                mode="contained"
+                onPress={handleCreatePerson}
+                style={styles.button}>Create new person</Button>
+              {/* <Button
+                icon="apple-finder"
+                mode="contained"
+                onPress={handleAddFace}
+                style={styles.button}>Add face</Button> */}
+              {/* <Button
+                icon="apple-finder"
+                mode="contained"
+                onPress={() => {
+                  setIsReconize(false);
+                  setFaceUrl(null);
+                  console.log("new shot nè")
+                }}
+                style={styles.button}>New shot</Button> */}
             </View>
         }
       </View>
     </PaperProvider>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#000'
   },
-  containerTop: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  containerBottom: {
-    flex: 1,
-    alignItems: "flex-start",
-    justifyContent: "flex-start",
-    flexDirection: 'row',
-    // backgroundColor: 'grey'    
-  },
-  subLeftContainer: {
-    flex: 2,
+  topContainer: {
+    flex: 1 / 10,
     justifyContent: 'center',
-    alignItems: 'flex-start',
-    flexDirection: 'column',
-    // paddingLeft: 20
-    // marginLeft: 20,
+    alignItems: 'center'
   },
-  subRightContainer: {
-    flex: 1,
+  cmrContainer: {
+    flex: 7 / 10
+  },
+  // bottomContainer: {
+  //   flex: 3 / 10,
+  //   justifyContent: 'center',
+  //   alignItems: 'center'
+  // },
+  textStyle: {
+    margin: 10,
+    color: '#fff'
+  },
+  camer_button_container: {
+    flex: 2 / 10,
+    // flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-end',
-    height: 50,
-    marginRight: 20,
+    alignItems: 'center',
+    backgroundColor: '#00000000'
   },
-  text: {
-    fontSize: 17,
-    color: 'black',
-
+  button: {
+    margin: 10
   },
-  subText: {
-    // fontSize: 17,
-    color: 'grey',
+  nonBlurredContent: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  switchStyle: {
-    transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }],
-  },
-  btnStyle: {
-    width: 440
-  }
 })
 
-export default DetailScreen
+export default ReconizeCamera
