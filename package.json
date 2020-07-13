@@ -20,6 +20,7 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
+    "react-native-calendar-strip": "^2.0.7",
     "react-native-calendars": "^1.265.0",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-paper": "^3.8.0",

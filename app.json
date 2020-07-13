@@ -7,9 +7,9 @@
       "android",
       "web"
     ],
-    "version": "2.5.17042020",
+    "version": "2.6.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -23,6 +23,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.thaotruogg.hutechplus",
+      "versionCode": 2
     }
   }
 }

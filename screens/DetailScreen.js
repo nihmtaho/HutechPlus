@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button, Text, Divider } from "react-native-paper";
 
-const DetailScreen = ({ navitgation }) => {
+const DetailScreen = ({ navigation }) => {
   return(
     <View style={{ flex: 1, backgroundColor: "#fffffffff" }}>
       <View style={styles.containerTop}>

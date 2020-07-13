@@ -22,9 +22,9 @@ const tabStackRoot = () => {
           } else if (route.name === 'Setting') {
             iconName = 'user';
           }
-          else if (route.name === 'Notification') {
-            iconName = 'notification';
-          }
+          // else if (route.name === 'Notification') {
+          //   iconName = 'notification';
+          // }
           return <AntDesign name={iconName} size={22} color={color} />;
         },
       })}
@@ -34,7 +34,7 @@ const tabStackRoot = () => {
       }}
     >
       <Tabs.Screen name="Home" component={HomeStack} options={{ title: 'Lịch học' }} />
-      <Tabs.Screen name="Notification" component={NotificationStack} options={{ title: 'Thông báo' }} />
+      {/* <Tabs.Screen name="Notification" component={NotificationStack} options={{ title: 'Thông báo' }} /> */}
       <Tabs.Screen name="Setting" component={SettingStack} options={{ title: 'Tài khoản' }} />
     </Tabs.Navigator>
   )

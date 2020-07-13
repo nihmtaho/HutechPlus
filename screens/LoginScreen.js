@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, TouchableOpacity, StatusBar, Image, ActivityIndicator, AsyncStorage } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, StatusBar, Image, ActivityIndicator, ScrollView } from 'react-native';
 import { Button, TextInput } from 'react-native-paper';
 import firebase from "firebase";
 
@@ -19,7 +19,7 @@ function LoginScreen(props) {
     const [request, setRequest] = React.useState(false);
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
             <View style={styles.contentTopLayout}>
                 <Image style={styles.imgLogo} source={require(imgSource)} />
                 {!request ?
@@ -59,11 +59,11 @@ function LoginScreen(props) {
                         <Button uppercase={false} mode="outlined" color="#1E88E5" onPress={() => navigation.navigate('ForgotPassword')}>Quên mật khẩu?</Button>
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginTop: 50 }}>
+                <View style={{ marginTop: "20%" }}>
                     <Contact />
                 </View>
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
     },
     imgLogo: {
-        width: 174,
-        height: 174,
-        margin: 12,
+        width: 154,
+        height: 154,
+        margin: 40,
     }
 })
 
