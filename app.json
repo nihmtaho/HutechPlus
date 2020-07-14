@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "HutechPlus",
+    "name": "Hutech CheckIn",
     "slug": "HutechPlus",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "2.6.0",
+    "version": "2.6.2007",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
@@ -22,7 +22,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.thaotruogg.hutechplus",
+      "buildNumber": "2.6.2007"
     },
     "android": {
       "package": "com.thaotruogg.hutechplus",
