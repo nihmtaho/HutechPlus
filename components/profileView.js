@@ -7,15 +7,15 @@ const profileView = (props) => {
     return (
         <TouchableOpacity style={styles.container} onPress={ props.onPress } >
             <View style={styles.avatarView} >
-                <Avatar.Icon size={72} icon="account" style={{ backgroundColor: "#0063cd" }} />
+                <Avatar.Icon size={54} icon="account" style={{ backgroundColor: "#0063cd" }} />
             </View>
             <View style={styles.detailView}>
-                <Title>{props.name}</Title>
-                <Paragraph>{props.subFaculty}</Paragraph>
-                <Paragraph>{props.subName}</Paragraph>
+                <Title style={{fontSize: 16}}>{props.name}</Title>
+                <Paragraph style={{fontSize: 12}}>{props.subFaculty}</Paragraph>
+                <Paragraph style={{fontSize: 12}}>{props.subName}</Paragraph>
             </View>
             <View style={styles.iconView}>
-                <AntDesign name="right" size={20} />
+                <AntDesign name="right" size={14} />
             </View>
         </TouchableOpacity>
     )
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     avatarView: {
-        flex: 0.8,
+        flex: 0.6,
         alignItems: "center",
         marginLeft: 12
     },

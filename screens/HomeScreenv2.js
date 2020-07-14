@@ -1,4 +1,3 @@
-// import { StatusBars } from "expo-status-bar";
 import React, { Component } from "react";
 import {
 	StyleSheet,
@@ -10,21 +9,17 @@ import {
 } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
 import moment from "moment";
-import { Divider, Button } from "react-native-paper";
+import { Divider } from "react-native-paper";
 import Card from "../components/Card";
 import { db } from "../src/config/db";
 
 import ErrorItem from "../components/ErrorItem";
-import { ScrollView } from "react-native-gesture-handler";
 
-let sbj = [];
-let objectSchedule = [];
 let date = "";
 let customDatesStyles = [];
 let markedDates = [];
 
 let get;
-let dateList = [];
 let dateData = [];
 let temp;
 let searchTrue;
@@ -40,8 +35,9 @@ class HomeScreen extends Component {
 	componentDidUpdate() {}
 
 	fetch = () => {
+		this.state.markedDates = [];
+		dateData = [];
 		this.setState({ isLoading: true });
-		// this.setState({ formattedDate: moment().format("YYYY-MM-DD") });
 		try {
 			db.ref("Students/" + this.state.mssv + "/schedule/").on(
 				"value",
@@ -126,9 +122,9 @@ class HomeScreen extends Component {
 		searchTrue = this.searchBinary(dateData, this.state.formattedDate);
 		try {
 			if (searchTrue != -1) {
-				if (sbjList.length != 0) {
-					for (let i = 0; i < sbjList.length; i++) {
-						let element = sbjList[i];
+				if (get.length != 0) {
+					for (let i = 0; i < get.length; i++) {
+						let element = get[i];
 						temp = Object.values(element);
 						if (this.state.formattedDate === temp[0]) {
 							this.state.list = temp[1];
@@ -160,17 +156,18 @@ class HomeScreen extends Component {
 			<View style={styles.container}>
 				<View>
 					<CalendarStrip
+						scrollable
 						selectedDate={this.state.selectedDate}
-						calendarAnimation={{ type: "sequence", duration: 50 }}
+						calendarAnimation={{ type: "parallel", duration: 20 }}
 						daySelectionAnimation={{
 							type: "background",
 							duration: 100,
 							highlightColor: "#f9d56e",
 						}}
 						style={{
-							height: 120,
+							height: 132,
 							paddingTop: StatusBar.currentHeight + 8,
-							paddingBottom: 10,
+							paddingBottom: 8,
 						}}
 						calendarHeaderStyle={{ color: "black" }}
 						calendarColor={"#ffffff"}
@@ -187,7 +184,6 @@ class HomeScreen extends Component {
 				</View>
 				<View>
 					<ErrorItem title="Chọn 1 ngày để xem lịch (Lỗi hiển thị)" />
-					<ErrorItem title="Click chọn nhiều lần nếu không hiển thị lịch" />
 					<ErrorItem title="Vuốt xuống nếu không tải được lịch" />
 				</View>
 				<Divider/>

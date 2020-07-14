@@ -105,7 +105,7 @@ function Card(props) {
 			style={styles.container}
 		>
 			<View style={styles.divContent}>
-				<Text style={styles.titleStyle}>{todaySubject.subject_name}</Text>
+				<Text style={styles.titleStyle, styles.fontSize}>{todaySubject.subject_name}</Text>
 			</View>
 			<View style={styles.divContent}>
 				<View style={styles.rightContent}>
@@ -160,9 +160,14 @@ const styles = StyleSheet.create({
 	},
 	titleStyle: {
 		fontSize: 14,
-		fontWeight: "bold",
+		// fontWeight: "bold",
 		color: "#fff",
 	},
+	fontSize: {
+		fontSize: 16,
+		fontWeight: "bold",
+		color: "#fff",
+	}
 });
 
 export default Card;
