@@ -12,10 +12,10 @@ const menuView = (props) => {
                     <AntDesign name={props.iconLeft} size={24} color={props.color} />
                 </View>
                 <View style={styles.titleView}>
-                    <Subheading>{props.title}</Subheading>
+                    <Subheading style={{fontSize: 14}}>{props.title}</Subheading>
                 </View>
                 <View style={styles.iconView}>
-                    <AntDesign name={props.iconRight} size={14} />
+                    <AntDesign name={props.iconRight} size={12} />
                 </View>
             </View>
             <Divider />

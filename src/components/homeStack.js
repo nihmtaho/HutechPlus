@@ -1,6 +1,7 @@
 import React from 'react'
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import HomeScreen from '../../screens/HomeScreen';
+// import HomeScreen from '../../screens/HomeScreen';
+import HomeScreen from '../../screens/HomeScreenv2';
 import DetailScreen from '../../screens/DetailScreen';
 
 const HomeStack = createStackNavigator();
