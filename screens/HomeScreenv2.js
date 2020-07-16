@@ -1,18 +1,14 @@
 import React, { Component } from "react";
-import {
-	StyleSheet,
-	Text,
-	View,
-	FlatList,
-	StatusBar,
-	AsyncStorage,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList, AsyncStorage } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
-import moment from "moment";
 import { Divider } from "react-native-paper";
-import Card from "../components/Card";
-import { db } from "../src/config/db";
+import Constants from "expo-constants";
+import { StatusBar } from "expo-status-bar";
 
+import { db } from "../src/config/db";
+import moment from "moment";
+
+import Card from "../components/Card";
 import ErrorItem from "../components/ErrorItem";
 
 let date = "";
@@ -58,8 +54,6 @@ class HomeScreen extends Component {
 		this.setState({ isLoading: false });
 	};
 
-	componentDidUpdate() {}
-
 	constructor(props) {
 		super(props);
 
@@ -75,7 +69,6 @@ class HomeScreen extends Component {
 			day: [],
 			sbjList: [],
 			isLoading: false,
-			formatDate: "",
 			list: [],
 		};
 	}
@@ -166,7 +159,7 @@ class HomeScreen extends Component {
 						}}
 						style={{
 							height: 132,
-							paddingTop: StatusBar.currentHeight + 8,
+							paddingTop: Constants.statusBarHeight + 8,
 							paddingBottom: 8,
 						}}
 						calendarHeaderStyle={{ color: "black" }}
@@ -186,11 +179,11 @@ class HomeScreen extends Component {
 					<ErrorItem title="Chọn 1 ngày để xem lịch (Lỗi hiển thị)" />
 					<ErrorItem title="Vuốt xuống nếu không tải được lịch" />
 				</View>
-				<Divider/>
+				<Divider />
 
 				{searchTrue != -1 ? (
 					<FlatList
-					style={{marginVertical: 6}}
+						style={{ marginVertical: 6 }}
 						data={this.state.list}
 						renderItem={this.renderRow}
 						keyExtractor={(i, k) => k.toString()}
@@ -204,6 +197,8 @@ class HomeScreen extends Component {
 						<Text>Không có lịch</Text>
 					</View>
 				)}
+
+				<StatusBar style="auto" />
 			</View>
 		);
 	}

@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, View, ScrollView, Text } from "react-native";
-import { WebView } from "react-native-webview";
 
 function ForgotPasswordScreen() {
 	return (
