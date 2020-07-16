@@ -1,6 +1,6 @@
 //Import Library
 import React, { useEffect, useContext, useState } from "react";
-import { StyleSheet, View, AsyncStorage, StatusBar } from "react-native";
+import { StyleSheet, View, AsyncStorage } from "react-native";
 import { Button, Divider, Paragraph } from "react-native-paper";
 import { db } from "../src/config/db";
 
@@ -8,6 +8,8 @@ import { db } from "../src/config/db";
 import ProfileView from "../components/profileView";
 import MenuView from "../components/menuView";
 import LearnView from "../components/learnView";
+import { StatusBar } from 'expo-status-bar';
+import Constants from 'expo-constants';
 
 import { AuthContext } from "../src/context";
 
@@ -54,7 +56,7 @@ const SettingScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ paddingTop: StatusBar.currentHeight }} />
+      <View style={{ paddingTop: Constants.statusBarHeight }} />
       <View style={styles.profileView}>
         <ProfileView
           name={fullName}
@@ -107,6 +109,7 @@ const SettingScreen = ({ navigation }) => {
       >
         Đăng xuất tài khoản
       </Button>
+      <StatusBar style="auto" />
     </View>
   );
 };

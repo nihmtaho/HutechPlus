@@ -4,7 +4,7 @@ import { Button, Text, Divider } from "react-native-paper";
 
 const DetailScreen = ({ navigation }) => {
   return(
-    <View style={{ flex: 1, backgroundColor: "#fffffffff" }}>
+    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View style={styles.containerTop}>
         <Text> Hiển thị thông tin cần thiết </Text>
       </View>
