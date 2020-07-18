@@ -35,8 +35,8 @@ const ProfileScreen = ({ navigation }, props) => {
 			</TouchableOpacity>
 			<View style={styles.headerBlock}>
 				<Avatar.Icon size={120} icon="account" />
-				<Headline style={{ marginVertical: 8 }}>Truong Minh Thao</Headline>
-				<Paragraph style={styles.custom}>1611060383</Paragraph>
+				<Headline style={{ marginVertical: 8 }}>Phạm Thanh Tuấn</Headline>
+				<Paragraph style={styles.custom}>1611060317</Paragraph>
 			</View>
 			<Divider />
 			<View style={styles.bodyBlock}>
@@ -65,11 +65,11 @@ const ProfileScreen = ({ navigation }, props) => {
 				</Subheading>
 				<View style={styles.detailBlock}>
 					<Caption>Email</Caption>
-					<Text>thaotruogg@gmail.com</Text>
+					<Text>phamthanhtuan100mc@gmail.com</Text>
 				</View>
 				<View style={styles.detailBlock}>
 					<Caption>Số điện thoại</Caption>
-					<Text>0389999999</Text>
+					<Text>0353320822</Text>
 				</View>
 				<View style={styles.detailBlock}>
 					<Caption>Địa chỉ</Caption>

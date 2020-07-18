@@ -96,8 +96,10 @@ const learnTime = [
 
 function Card(props) {
 	const todaySubject = props.timeTable;
-	const tietHoc = todaySubject.time;
+	const lession = todaySubject.time;
+	const tietHoc = lession.split(",");
 
+	console.log(learnTime[tietHoc-1]);
 	return (
 		<TouchableOpacity
 			activeOpacity={0.5}
@@ -118,8 +120,8 @@ function Card(props) {
 				<View style={styles.mountLeft}>
 					<Text style={styles.titleStyle}>Thời gian học: </Text>
 					<Text style={styles.titleStyle}>
-						{learnTime[tietHoc[0]].start} -{" "}
-						{learnTime[tietHoc[tietHoc.length - 1]].end}
+						{learnTime[tietHoc[0]-1].start} -{" "}
+						{learnTime[tietHoc[tietHoc.length - 2]].end}
 					</Text>
 				</View>
 			</View>

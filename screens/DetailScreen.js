@@ -21,13 +21,15 @@ import * as Location from 'expo-location';
 import { getPreciseDistance, isPointWithinRadius } from 'geolib';
 import Config from '../config.json'
 
+console.disableYellowBox = true;
+
 const DetailScreen = ({ navitgation }) => {
 
   const [errorMsg, setErrorMsg] = useState(null);
   const [myLocation, setMyLocation] = useState(null);
   const [checkinStatus, setCheckinStatus] = useState(false);
   const [withinClass, setWithinClass] = useState(false);
-  const [radius, setRadius] = useState(10);
+  const [radius, setRadius] = useState(1000);
   const toggleSwitch = () => setCheckinStatus(previousState => !previousState);
   // const [checkinStatus, setCheckinStatus] = useState();
   // const [isEnabled, setIsEnabled] = useState(false);
@@ -113,8 +115,8 @@ const DetailScreen = ({ navitgation }) => {
     const detectResult = await detectFace(uploadResult) // return face ID
     if (!detectResult) {
       Alert.alert(
-        "Detect fail",
-        "Please take photo with only 1 face.",
+        "Điểm danh không thành công",
+        "Vui lòng chụp hình chỉ chứa 1 khuôn mặt",
         [
           {
             text: "OK",
@@ -130,11 +132,11 @@ const DetailScreen = ({ navitgation }) => {
     if (!identityResult) {
       console.log("Identity fail");
       Alert.alert(
-        "Cannot find infomation",
-        "Create new profile",
+        "Không tìm thấy thông tin sinh viên",
+        "Tạo thông tin sinh viên mới",
         [
           {
-            text: "Cancel"
+            text: "Hủy"
           },
           {
             text: "OK",
@@ -153,7 +155,7 @@ const DetailScreen = ({ navitgation }) => {
     if (nameResult) {
       Alert.alert(
         "Detect success",
-        "Hello " + nameResult,
+        "Xin chào " + nameResult + ",\nđiểm danh thành công",
         [
           {
             text: "OK",
@@ -166,8 +168,8 @@ const DetailScreen = ({ navitgation }) => {
       handleAddFace(identityResult, uploadResult);
     } else {
       Alert.alert(
-        'Get user data fail',
-        'Something wrong',
+        'Không thể truy vấn dữ liệu',
+        'Vui lòng kiểm tra đường truyền',
         [
           {
             text: "OK",
@@ -493,15 +495,19 @@ const DetailScreen = ({ navitgation }) => {
         {
           myLocation && withinClass && isShot &&
           <>
-            <Image style={styles.blurredImage} source={{ faceUri }} />
-            <BlurView intensity={250} style={[StyleSheet.absoluteFill, styles.cmrContainer]}>
-            </BlurView>
+            <View style={styles.cmrContainer}>
+              <Image style={styles.blurredImage} source={{ faceUri }} />
+              <BlurView intensity={250} style={[StyleSheet.absoluteFill, styles.cmrContainer]}>
+              </BlurView>
+            </View>
 
-            <ActivityIndicator
-              animating={isShot}
-              size="large"
-              color={Colors.red800} />
-            <Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
+            <View style={styles.btnContainer}>
+              <ActivityIndicator
+                animating={isShot}
+                size="large"
+                color={Colors.red800} />
+              <Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
+            </View>
           </>
         }
         {
@@ -537,7 +543,7 @@ const styles = StyleSheet.create({
     // paddingTop: StatusBar.currentHeight,
   },
   container: {
-    flex: 9/10,
+    flex: 9 / 10,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: '#000'
