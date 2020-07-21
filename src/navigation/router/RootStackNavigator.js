@@ -6,14 +6,14 @@ import {
 } from "@react-navigation/stack";
 import { AsyncStorage, Alert, YellowBox } from "react-native";
 // import firebase from "firebase";
-import { db } from "../config/db";
+import { db } from "../../config/db";
 
 // TODO: Import Screen dir
-import SplashScreen from "../../screens/SplashScreen";
-import TabStack from "../components/mainStackRoot";
-import AuthStack from "../components/authStackRoot";
+import SplashScreen from "../../../screens/SplashScreen";
+import TabStack from "../mainStackRoot";
+import AuthStack from "../authStackRoot";
 
-import { AuthContext } from "../context";
+import { AuthContext } from "../../context";
 import _ from "lodash";
 
 YellowBox.ignoreWarnings(["Setting a timer"]);

@@ -9,7 +9,7 @@ const menuView = (props) => {
             onPress={props.onPress}>
             <View style={styles.container}>
                 <View style={styles.iconView}>
-                    <AntDesign name={props.iconLeft} size={24} color={props.color} />
+                    <AntDesign name={props.iconLeft} size={20} color={props.color} />
                 </View>
                 <View style={styles.titleView}>
                     <Subheading style={{fontSize: 14}}>{props.title}</Subheading>
@@ -25,7 +25,7 @@ const menuView = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 14,
+        paddingVertical: 12,
         flexDirection: "row",
         alignItems: "center"
     },

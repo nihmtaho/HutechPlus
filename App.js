@@ -1,5 +1,5 @@
 import React from "react";
-import RootStackNavigator from './src/navigation/RootStackNavigator';
+import RootStackNavigator from './src/navigation/router/RootStackNavigator';
 import { Provider, Portal } from "react-native-paper"
 
 function App() {

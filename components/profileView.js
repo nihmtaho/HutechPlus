@@ -11,8 +11,8 @@ const profileView = (props) => {
             </View>
             <View style={styles.detailView}>
                 <Title style={{fontSize: 16}}>{props.name}</Title>
-                <Paragraph style={{fontSize: 12}}>{props.subFaculty}</Paragraph>
-                <Paragraph style={{fontSize: 12}}>{props.subName}</Paragraph>
+                <Paragraph style={{fontSize: 12, marginTop: -4}}>{props.subFaculty}</Paragraph>
+                <Paragraph style={{fontSize: 12, marginTop: -4}}>{props.subName}</Paragraph>
             </View>
             <View style={styles.iconView}>
                 <AntDesign name="right" size={14} />

@@ -70,7 +70,7 @@ const SettingScreen = ({ navigation }) => {
       <Divider />
       <View>
         <MenuView
-          title="Tin tức & sự kiện"
+          title="Lịch sử điểm danh"
           iconLeft="calendar"
           iconRight="right"
           color="#0063cd"
