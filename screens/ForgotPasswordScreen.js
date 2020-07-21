@@ -1,12 +1,26 @@
-import React from 'react';
-import { StatusBar, View } from 'react-native';
-import { WebView } from 'react-native-webview';
+import React from "react";
+import { StyleSheet, View, ScrollView, Text } from "react-native";
 
 function ForgotPasswordScreen() {
-
-    return (
-        <WebView source={{ uri: 'http://qlcntt.hutech.edu.vn/forgot-password' }} />
-    )
+	return (
+		<View style={styles.container}>
+			<Text style={styles.textView}>Chức năng đang hoàn thiện...</Text>
+		</View>
+	);
 }
 
-export default ForgotPasswordScreen
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: "white",
+	},
+	textView: {
+		color: "#101010",
+		fontSize: 24,
+		fontWeight: "bold",
+	},
+});
+
+export default ForgotPasswordScreen;

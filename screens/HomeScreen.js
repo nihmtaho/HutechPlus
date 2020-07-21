@@ -7,6 +7,8 @@ import Card from '../components/Card';
 import CalendarDayComponent from '../components/CalendarDay'
 import firebase from "firebase";
 
+console.disableYellowBox = true;
+
 let calendarDate = moment();
 class HomeScreen extends Component {
 
@@ -28,34 +30,37 @@ class HomeScreen extends Component {
     async componentDidMount() {
         let mssv = await AsyncStorage.getItem("username")
         this.setState({ mssv })
-        // console.log(mssv)
+        this.getDayTimetable()
+    }
+
+    getDayTimetable() {
+        let atkb = this.state.ttkb
+        let obj // = atkb.find(o => o.date === calendarDate)
+
+        atkb.forEach(element => {
+            if (element.date) {
+                if (element.date === calendarDate) {
+                    obj = element
+                }
+            }
+        });
+
+        this.setState({
+            todaySubject: obj
+        })
     }
 
     onDayPress(date) {
 
         calendarDate = moment(date.dateString).format('YYYY-MM-DD')
 
-        // this.setState({
-        //   date: calendarDate
-        // });
-
-        // this.state.date = calendarDate
+        this.setState({
+            date: moment(date.dateString).format('DD-MM-YYYY')
+        });
 
         this.removeMarkedDate()
 
-        let arr = this.state.ttkb
-
-        let obj = arr.find(o => o.date === calendarDate)
-
-        if (obj) {
-            // console.log('day clicked:')
-            // console.log(obj);
-
-            this.setState({
-                todaySubject: obj
-            })
-
-        }
+        this.getDayTimetable()
 
         const tempTKB = this.state.TKB
         const selectedTKBDay = tempTKB[calendarDate]
@@ -68,11 +73,9 @@ class HomeScreen extends Component {
             TKB: tempTKB
         })
 
-
     }
 
     convertArrayToObject() {
-        // console.log('haitta')
         let markObject = {}
         let arr = this.state.ttkb
         if (arr) {
@@ -85,15 +88,12 @@ class HomeScreen extends Component {
             this.setState({
                 TKB: markObject
             })
-
-            // setConvertTKB(markObject)
         } else {
             // console.log('Lỗi data từ firebase')
         }
     }
 
     removeMarkedDate() {
-
         // remove previous selected key
         for (var key in this.state.TKB) {
             // skip loop if the property is from prototype
@@ -109,19 +109,10 @@ class HomeScreen extends Component {
                     delete obj[subKey]
                 }
             }
-
-            // const selectedTKBDay = this.state.TKB[this.state.date];
-            // this.state.TKB[this.state.date] = {
-            //   ...selectedTKBDay,
-            //   selected: true
-            // }
         }
     }
 
     render() {
-
-        // console.log(this.state.TKB)
-
         if (this.state.ttkb == null || this.state.ttkb.length == 0) {
 
             firebase.database().ref('Students/' + this.state.mssv + '/schedule/').on('value', Snapshot => {
@@ -132,21 +123,9 @@ class HomeScreen extends Component {
                     })
 
                     this.convertArrayToObject()
-                    // console.log('TKB\'ve been update')
                 }
             })
         }
-        // const selectedTKBDay = this.state.TKB[this.state.date];
-        // this.state.TKB[this.state.date] = {
-        //   ...selectedTKBDay,
-        //   selected: true
-        // }
-
-        // console.log('ttkb')
-        // console.log(this.state.ttkb)
-
-        // console.log(this.state.TKB[this.state.date])
-
         return (
             <View style={styles.container}>
                 <Calendar
@@ -168,17 +147,20 @@ class HomeScreen extends Component {
                 />
                 <Divider />
 
-                {/* {this.state.TKB[this.state.date].subjectList ? */}
                 {this.state.todaySubject ?
-                    <FlatList
-                        data={this.state.todaySubject.subjectList}
-                        renderItem={({ item, index }) => (
-                            <Card timeTable={item} onPress={() => this.props.navigation.navigate('Detail')} />
-                        )}
-                        numColumns={1}
-                    // keyExtractor={item => item.toString()}
-                    /> :
+                    <View>
+                        <Text style={{ textAlign: 'center' }}>Ngày đang chọn: {this.state.todaySubject.date}</Text>
+                        <FlatList
+                            data={this.state.todaySubject.subjectList}
+                            renderItem={({ item }) => (
+                                <Card timeTable={item} onPress={() => this.props.navigation.navigate('Detail')} />
+                            )}
+                            numColumns={1}
+                        // keyExtractor={item => item.toString()}
+                        />
+                    </View> :
                     <View style={styles.subjectEmpty}>
+                        <Text>Ngày đang chọn: {this.state.date}</Text>
                         <Text style={{ fontWeight: 'bold' }}>Không có lịch học</Text>
                     </View>}
             </View>

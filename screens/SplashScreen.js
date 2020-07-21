@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     imgLogo: {
-        width: 174,
-        height: 174,
+        width: 154,
+        height: 154,
         margin: 24
     }
 })
