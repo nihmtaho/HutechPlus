@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, FlatList, AsyncStorage } from "react-native";
+import { StyleSheet, Text, View, FlatList, AsyncStorage, Image } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
 import { Divider } from "react-native-paper";
 import Constants from "expo-constants";
@@ -194,7 +194,8 @@ class HomeScreen extends Component {
 					<View
 						style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
 					>
-						<Text>Không có lịch</Text>
+						<Image style={{width: 120, height: 120}} source={require("../assets/calendar/calendar.png")} />
+						<Text style={{marginTop: 8}}>Không có lịch học</Text>
 					</View>
 				)}
 

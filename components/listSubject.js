@@ -1,43 +1,68 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { Title, Paragraph } from "react-native-paper";
-import { AntDesign } from "@expo/vector-icons";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
-const listSubject = (props) => {
+function listSubject(props) {
+	const todaySubject = props.timeTable;
+	const tietHoc = todaySubject.time;
+
 	return (
-		<TouchableOpacity style={styles.container} onPress={props.onPress}>
-			<View style={styles.detailView}>
-				<Title style={{ fontSize: 16 }}>{props.name}</Title>
-				<Paragraph style={{ fontSize: 12, marginTop: -4 }}>
-					{props.subFaculty}
-				</Paragraph>
-				<Paragraph style={{ fontSize: 12, marginTop: -4 }}>
-					{props.subName}
-				</Paragraph>
+		<TouchableOpacity
+			activeOpacity={0.5}
+			onPress={props.onPress}
+			style={styles.container}
+		>
+			<View style={styles.divContent}>
+				<Text style={(styles.titleStyle, styles.fontSize)}>{subjectName}</Text>
 			</View>
-			<View style={styles.iconView}>
-				<AntDesign name="right" size={14} />
+			<View style={styles.mountContent}>
+				<View style={styles.mountLeft}>
+					<Text style={styles.titleStyle}>Mã môn: {subjectID} </Text>
+				</View>
 			</View>
 		</TouchableOpacity>
 	);
-};
+}
 
 const styles = StyleSheet.create({
 	container: {
+		backgroundColor: "#5D6D7E",
+		padding: 12,
+		marginVertical: 4,
+		marginHorizontal: 10,
+		borderRadius: 6,
+	},
+	divContent: {
 		display: "flex",
 		flexDirection: "row",
-		paddingVertical: 12,
-		alignItems: "center",
+		marginVertical: 2,
 	},
-	detailView: {
-		paddingHorizontal: 12,
-		paddingVertical: 4,
-		flex: 2,
+	rightContent: {
+		flex: 1,
+		marginTop: 8,
 	},
-	iconView: {
-		flex: 0.5,
+	mountContent: {
 		display: "flex",
+		flexDirection: "row",
+		borderTopWidth: 0.5,
+		borderTopColor: "#fff",
+		paddingTop: 4,
+		marginTop: 4,
+	},
+	mountLeft: {
+		flex: 1,
+		display: "flex",
+		flexDirection: "row",
 		alignItems: "center",
+	},
+	titleStyle: {
+		fontSize: 14,
+		// fontWeight: "bold",
+		color: "#fff",
+	},
+	fontSize: {
+		fontSize: 16,
+		fontWeight: "bold",
+		color: "#fff",
 	},
 });
 
