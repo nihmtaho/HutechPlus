@@ -35,7 +35,6 @@ const ProfileScreen = ({ navigation }, props) => {
 				source={require(imgB)}
 				style={{display: "flex", resizeMode: "cover", paddingTop: Constants.statusBarHeight}}
 			>
-<<<<<<< HEAD
 				<TouchableOpacity
 					style={styles.iconBack}
 					onPress={() => navigation.goBack()}
@@ -97,52 +96,6 @@ const ProfileScreen = ({ navigation }, props) => {
 						<Caption>Địa chỉ</Caption>
 						<Text>TP.HCM</Text>
 					</View>
-=======
-				<AntDesign name="back" size={26} />
-				<Text>Back</Text>
-			</TouchableOpacity>
-			<View style={styles.headerBlock}>
-				<Avatar.Icon size={120} icon="account" />
-				<Headline style={{ marginVertical: 8 }}>Phạm Thanh Tuấn</Headline>
-				<Paragraph style={styles.custom}>1611060317</Paragraph>
-			</View>
-			<Divider />
-			<View style={styles.bodyBlock}>
-				<Subheading style={{ paddingTop: 12, fontWeight: "bold" }}>
-					Thông tin cơ bản
-				</Subheading>
-				<View style={styles.detailBlock}>
-					<Caption>Chuyên ngành</Caption>
-					<Text>Công nghệ thông tin</Text>
-				</View>
-				<View style={styles.detailBlock}>
-					<Caption>Khoa/Viện</Caption>
-					<Text>Viện công nghệ Việt - Nhật</Text>
-				</View>
-				<View style={styles.detailBlock}>
-					<Caption>Khoá học</Caption>
-					<Text>2016 - 2020</Text>
-				</View>
-				<View style={styles.detailBlock}>
-					<Caption>Hệ đào tạo</Caption>
-					<Text>Đại học chính quy (chuẩn Nhật Bản)</Text>
-				</View>
-				<Divider style={{ marginTop: 4 }} />
-				<Subheading style={{ paddingTop: 12, fontWeight: "bold" }}>
-					Thông tin liên lạc
-				</Subheading>
-				<View style={styles.detailBlock}>
-					<Caption>Email</Caption>
-					<Text>phamthanhtuan100mc@gmail.com</Text>
-				</View>
-				<View style={styles.detailBlock}>
-					<Caption>Số điện thoại</Caption>
-					<Text>0353320822</Text>
-				</View>
-				<View style={styles.detailBlock}>
-					<Caption>Địa chỉ</Caption>
-					<Text>TP.HCM</Text>
->>>>>>> phamtuan_mc
 				</View>
 			</ScrollView>
 			<StatusBar style="inverted" />
