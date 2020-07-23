@@ -6,6 +6,7 @@ import {
   StatusBar,
   Alert,
   Image,
+  AsyncStorage,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import { BlurView } from 'expo-blur';
@@ -21,13 +22,15 @@ import * as Location from 'expo-location';
 import { getPreciseDistance, isPointWithinRadius } from 'geolib';
 import Config from '../config.json'
 
+console.disableYellowBox = true;
+
 const DetailScreen = ({ navitgation }) => {
 
   const [errorMsg, setErrorMsg] = useState(null);
   const [myLocation, setMyLocation] = useState(null);
   const [checkinStatus, setCheckinStatus] = useState(false);
   const [withinClass, setWithinClass] = useState(false);
-  const [radius, setRadius] = useState(10);
+  const [radius, setRadius] = useState(1000);
   const toggleSwitch = () => setCheckinStatus(previousState => !previousState);
   // const [checkinStatus, setCheckinStatus] = useState();
   // const [isEnabled, setIsEnabled] = useState(false);
@@ -57,6 +60,9 @@ const DetailScreen = ({ navitgation }) => {
   useEffect(() => {
 
     (async () => {
+
+      let get_mssv = await AsyncStorage.getItem("username");
+      setMSSV(get_mssv);
       let { locationStatus } = await Location.requestPermissionsAsync();
       if (locationStatus !== 'granted') {
         setErrorMsg('Quyền truy cập vị trí đã bị từ chối');
@@ -74,6 +80,17 @@ const DetailScreen = ({ navitgation }) => {
         radius
       ))
 
+      try {
+        db.ref("Students/" + this.state.mssv + "/schedule/").on(
+          "value",
+          (Snapshot) => {
+            get = Snapshot.val();
+            Snapshot.forEach((element) => {
+              dateData.push(element.child("date").val());
+            });
+          }
+        );
+      } catch (error) { }
 
     })();
 
@@ -91,14 +108,14 @@ const DetailScreen = ({ navitgation }) => {
   }
 
   const takePicture = async () => {
-    const photo = await cameraRef.current.takePictureAsync({ quality: 0.01, base64: true });
+    const photo = await cameraRef.current.takePictureAsync({ quality: 0.2, base64: true });
     setFaceUri(photo.uri)
     setIsShot(true)
     const uploadResult = await uploadImage(photo.base64) // return image link
     if (!uploadResult) {
       Alert.alert(
-        "Upload fail",
-        "Please take photo again.",
+        "Xử lý ảnh lỗi",
+        "Vui lòng chụp lại",
         [
           {
             text: "OK",
@@ -113,8 +130,8 @@ const DetailScreen = ({ navitgation }) => {
     const detectResult = await detectFace(uploadResult) // return face ID
     if (!detectResult) {
       Alert.alert(
-        "Detect fail",
-        "Please take photo with only 1 face.",
+        "Điểm danh không thành công",
+        "Vui lòng chụp hình chỉ chứa 1 khuôn mặt",
         [
           {
             text: "OK",
@@ -130,11 +147,11 @@ const DetailScreen = ({ navitgation }) => {
     if (!identityResult) {
       console.log("Identity fail");
       Alert.alert(
-        "Cannot find infomation",
-        "Create new profile",
+        "Không tìm thấy thông tin sinh viên",
+        "Tạo thông tin sinh viên mới",
         [
           {
-            text: "Cancel"
+            text: "Hủy"
           },
           {
             text: "OK",
@@ -149,25 +166,48 @@ const DetailScreen = ({ navitgation }) => {
     }
     console.log("identity -> success")
 
-    const nameResult = await getPerson(identityResult)
-    if (nameResult) {
-      Alert.alert(
-        "Detect success",
-        "Hello " + nameResult,
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              setIsShot(false)
-            }
-          },
-        ]
-      )
-      handleAddFace(identityResult, uploadResult);
+    const mssvResult = await getPerson(identityResult)
+    if (mssvResult) {
+
+      if (mssvResult == mssv) {
+        handleAddFace(identityResult, uploadResult);
+
+        /** Then
+       *  Redirect to AttendanceSuccess.js
+       */
+
+        // Alert.alert(
+        //   "Detect success",
+        //   "Xin chào " + name + ",\nđiểm danh thành công",
+        //   [
+        //     {
+        //       text: "OK",
+        //       onPress: () => {
+        //         setIsShot(false)
+        //       }
+        //     },
+        //   ]
+        // )
+
+      } else {
+        Alert.alert(
+          'Điểm danh không thành công',
+          'Vui lòng điểm danh đúng người',
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                setIsShot(false)
+              }
+            },
+          ]
+        );
+      }
+
     } else {
       Alert.alert(
-        'Get user data fail',
-        'Something wrong',
+        'Không thể truy vấn dữ liệu',
+        'Vui lòng kiểm tra đường truyền',
         [
           {
             text: "OK",
@@ -467,8 +507,8 @@ const DetailScreen = ({ navitgation }) => {
         })
     }
     setName(personName)
-    setMSSV(personMSSV)
-    return personName;
+    // setMSSV(personMSSV)
+    return personMSSV;
   }
 
   return (
@@ -493,15 +533,19 @@ const DetailScreen = ({ navitgation }) => {
         {
           myLocation && withinClass && isShot &&
           <>
-            <Image style={styles.blurredImage} source={{ faceUri }} />
-            <BlurView intensity={250} style={[StyleSheet.absoluteFill, styles.cmrContainer]}>
-            </BlurView>
+            <View style={styles.cmrContainer}>
+              <Image style={styles.blurredImage} source={{ faceUri }} />
+              <BlurView intensity={250} style={[StyleSheet.absoluteFill, styles.cmrContainer]}>
+              </BlurView>
+            </View>
 
-            <ActivityIndicator
-              animating={isShot}
-              size="large"
-              color={Colors.red800} />
-            <Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
+            <View style={styles.btnContainer}>
+              <ActivityIndicator
+                animating={isShot}
+                size="large"
+                color={Colors.red800} />
+              <Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
+            </View>
           </>
         }
         {
@@ -537,7 +581,7 @@ const styles = StyleSheet.create({
     // paddingTop: StatusBar.currentHeight,
   },
   container: {
-    flex: 9/10,
+    flex: 9 / 10,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: '#000'

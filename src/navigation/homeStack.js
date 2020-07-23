@@ -25,6 +25,7 @@ const homeStack = ({ navigation, route }) => {
         title: 'Điểm danh',
         headerTransparent: true,
         headerTitleStyle: {
+          color: '#fff',
           fontWeight: "bold"
         },
         headerTitleAlign: "center",
