@@ -6,6 +6,7 @@ import {
   StatusBar,
   Alert,
   Image,
+  AsyncStorage,
 } from 'react-native';
 import { Camera } from 'expo-camera';
 import { BlurView } from 'expo-blur';
@@ -59,6 +60,9 @@ const DetailScreen = ({ navitgation }) => {
   useEffect(() => {
 
     (async () => {
+
+      let get_mssv = await AsyncStorage.getItem("username");
+      setMSSV(get_mssv);
       let { locationStatus } = await Location.requestPermissionsAsync();
       if (locationStatus !== 'granted') {
         setErrorMsg('Quyền truy cập vị trí đã bị từ chối');
@@ -76,6 +80,17 @@ const DetailScreen = ({ navitgation }) => {
         radius
       ))
 
+      try {
+        db.ref("Students/" + this.state.mssv + "/schedule/").on(
+          "value",
+          (Snapshot) => {
+            get = Snapshot.val();
+            Snapshot.forEach((element) => {
+              dateData.push(element.child("date").val());
+            });
+          }
+        );
+      } catch (error) { }
 
     })();
 
@@ -93,14 +108,14 @@ const DetailScreen = ({ navitgation }) => {
   }
 
   const takePicture = async () => {
-    const photo = await cameraRef.current.takePictureAsync({ quality: 0.01, base64: true });
+    const photo = await cameraRef.current.takePictureAsync({ quality: 0.2, base64: true });
     setFaceUri(photo.uri)
     setIsShot(true)
     const uploadResult = await uploadImage(photo.base64) // return image link
     if (!uploadResult) {
       Alert.alert(
-        "Upload fail",
-        "Please take photo again.",
+        "Xử lý ảnh lỗi",
+        "Vui lòng chụp lại",
         [
           {
             text: "OK",
@@ -151,21 +166,44 @@ const DetailScreen = ({ navitgation }) => {
     }
     console.log("identity -> success")
 
-    const nameResult = await getPerson(identityResult)
-    if (nameResult) {
-      Alert.alert(
-        "Detect success",
-        "Xin chào " + nameResult + ",\nđiểm danh thành công",
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              setIsShot(false)
-            }
-          },
-        ]
-      )
-      handleAddFace(identityResult, uploadResult);
+    const mssvResult = await getPerson(identityResult)
+    if (mssvResult) {
+
+      if (mssvResult == mssv) {
+        handleAddFace(identityResult, uploadResult);
+
+        /** Then
+       *  Redirect to AttendanceSuccess.js
+       */
+
+        // Alert.alert(
+        //   "Detect success",
+        //   "Xin chào " + name + ",\nđiểm danh thành công",
+        //   [
+        //     {
+        //       text: "OK",
+        //       onPress: () => {
+        //         setIsShot(false)
+        //       }
+        //     },
+        //   ]
+        // )
+
+      } else {
+        Alert.alert(
+          'Điểm danh không thành công',
+          'Vui lòng điểm danh đúng người',
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                setIsShot(false)
+              }
+            },
+          ]
+        );
+      }
+
     } else {
       Alert.alert(
         'Không thể truy vấn dữ liệu',
@@ -469,8 +507,8 @@ const DetailScreen = ({ navitgation }) => {
         })
     }
     setName(personName)
-    setMSSV(personMSSV)
-    return personName;
+    // setMSSV(personMSSV)
+    return personMSSV;
   }
 
   return (
