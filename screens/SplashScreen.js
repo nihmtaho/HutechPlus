@@ -11,7 +11,7 @@ function SplashScreen() {
                 {/* <ActivityIndicator size='large' color='#E53935' /> */}
             </View>
             <View style={styles.companyContent}>
-                <MaterialCommunityIcons name="material-ui" size={42} color="#E53935" />
+                <MaterialCommunityIcons name="material-ui" size={52} color="#E53935" />
             </View>
         </SafeAreaView>
     )
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     },
     companyContent:{
         position: 'absolute',
-        bottom: 42,
+        bottom: 62,
         left: 0,
         right: 0,
         display: 'flex',
