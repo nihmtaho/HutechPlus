@@ -10,7 +10,6 @@ function App() {
 				<RootStackNavigator />
 				<RootToaster
 					defaultMessage={"Default message"}
-					defaultColor="red"
 					defaultDuration={5000}
 				/>
 			</Portal>
