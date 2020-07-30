@@ -21,7 +21,9 @@ const authStackRoot = () => {
         }} />
       <AuthStack.Screen name="ForgotPassword" component={ForgotPasswordScreen}
         options={{
-          headerTitleAlign: 'center'
+          title: "Quên mật khẩu",
+          headerTitleAlign: 'center',
+          headerShown: false
         }} />
     </AuthStack.Navigator>
   )

@@ -6,6 +6,7 @@ import {
 import SettingScreen from "../../screens/SettingScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
 import SubjectsListScreen from "../../screens/history-screens/SubjectsListScreen";
+import HistoryScreen from '../../screens/history-screens/HistoryScreen';
 
 const SettingStack = createStackNavigator();
 
@@ -38,6 +39,15 @@ const settingStack = ({ route, navigation }) => {
 				component={SubjectsListScreen}
 				options={{
 					title: "Môn học",
+					headerShown: true,
+					headerTitleAlign: "center",
+				}}
+			/>
+			<SettingStack.Screen
+				name="HistoryScreen"
+				component={HistoryScreen}
+				options={{
+					title: "Lịch sử điểm danh",
 					headerShown: true,
 					headerTitleAlign: "center",
 				}}

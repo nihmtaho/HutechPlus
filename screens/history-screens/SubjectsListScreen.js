@@ -13,7 +13,8 @@ const SubjectsListScreen = ({ navigation }) => {
 //    const
 
 	return (
-		<View>
+		<View style={styles.container}>
+			<ListSubject onPress={() => navigation.navigate("HistoryScreen")} />
             <StatusBar style="auto" />
 		</View>
 	);
@@ -22,6 +23,7 @@ const SubjectsListScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingVertical: 8
 	},
 });
 
