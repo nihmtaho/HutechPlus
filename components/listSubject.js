@@ -2,8 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 function listSubject(props) {
-	// const todaySubject = props.timeTable;
-	// const tietHoc = todaySubject.time;
+	const subItem = props.items;
 
 	return (
 		<TouchableOpacity
@@ -18,7 +17,7 @@ function listSubject(props) {
 			<View style={styles.mountContent}>
 				<View style={styles.mountLeft}>
 					{/* <Text style={styles.titleStyle}>Mã môn: {subjectID} </Text> */}
-					<Text style={styles.titleStyle}>Mã môn: SM0012 </Text>
+					<Text style={styles.titleStyle}>Mã môn: {subItem.idSubject} </Text>
 				</View>
 			</View>
 		</TouchableOpacity>

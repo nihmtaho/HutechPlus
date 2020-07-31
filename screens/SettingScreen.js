@@ -65,7 +65,7 @@ const SettingScreen = ({ navigation }) => {
 				/>
 			</View>
 			{/* <LearnView title="8" /> */}
-      <Divider />
+			<Divider />
 			<ScrollView>
 				<MenuView
 					title="Lịch sử điểm danh"
