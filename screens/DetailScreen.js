@@ -30,7 +30,7 @@ const DetailScreen = ({ navitgation }) => {
   const [myLocation, setMyLocation] = useState(null);
   const [checkinStatus, setCheckinStatus] = useState(false);
   const [withinClass, setWithinClass] = useState(false);
-  const [radius, setRadius] = useState(1000);
+  const [radius, setRadius] = useState(100000);
   const toggleSwitch = () => setCheckinStatus(previousState => !previousState);
   // const [checkinStatus, setCheckinStatus] = useState();
   // const [isEnabled, setIsEnabled] = useState(false);
@@ -176,18 +176,18 @@ const DetailScreen = ({ navitgation }) => {
        *  Redirect to AttendanceSuccess.js
        */
 
-        // Alert.alert(
-        //   "Detect success",
-        //   "Xin chào " + name + ",\nđiểm danh thành công",
-        //   [
-        //     {
-        //       text: "OK",
-        //       onPress: () => {
-        //         setIsShot(false)
-        //       }
-        //     },
-        //   ]
-        // )
+        Alert.alert(
+          "Detect success",
+          "Xin chào " + name + ",\nđiểm danh thành công",
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                setIsShot(false)
+              }
+            },
+          ]
+        )
 
       } else {
         Alert.alert(
