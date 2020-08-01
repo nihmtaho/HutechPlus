@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, FlatList, AsyncStorage, Image } from "react-native";
+import {
+	StyleSheet,
+	Text,
+	View,
+	FlatList,
+	AsyncStorage,
+	Image,
+	Platform,
+} from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
 import { Divider } from "react-native-paper";
 import Constants from "expo-constants";
@@ -10,6 +18,7 @@ import moment from "moment";
 
 import Card from "../components/Card";
 import ErrorItem from "../components/ErrorItem";
+import { Toast } from "react-native-root-toaster";
 
 let date = "";
 let customDatesStyles = [];
@@ -26,11 +35,11 @@ class HomeScreen extends Component {
 		setTimeout(() => {
 			this.fetch();
 		}, 2000);
+		this.fetch();
+		return;
 	}
 
-	componentDidUpdate() {}
-
-	fetch = () => {
+	fetch = async () => {
 		this.state.markedDates = [];
 		dateData = [];
 		this.setState({ isLoading: true });
@@ -77,7 +86,7 @@ class HomeScreen extends Component {
 		this.setState({ formattedDate: date.format("YYYY-MM-DD") });
 	};
 
-	func = () => {
+	func = async () => {
 		if (this.state.day.length != 0 || this.state.day != null) {
 			for (let i = 0; i < this.state.day.length; i++) {
 				const element = this.state.day[i];
@@ -110,8 +119,7 @@ class HomeScreen extends Component {
 		return -1;
 	};
 
-	lastUpdate = () => {
-		let { sbjList } = this.state;
+	lastUpdate = async () => {
 		searchTrue = this.searchBinary(dateData, this.state.formattedDate);
 		try {
 			if (searchTrue != -1) {
@@ -175,10 +183,10 @@ class HomeScreen extends Component {
 					/>
 					<Divider />
 				</View>
-				<View>
+				{/* <View>
 					<ErrorItem title="Chọn 1 ngày để xem lịch (Lỗi hiển thị)" />
 					<ErrorItem title="Vuốt xuống nếu không tải được lịch" />
-				</View>
+				</View> */}
 				<Divider />
 
 				{searchTrue != -1 ? (
@@ -194,8 +202,13 @@ class HomeScreen extends Component {
 					<View
 						style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
 					>
-						<Image style={{width: 120, height: 120}} source={require("../assets/calendar/calendar-1.png")} />
-						<Text style={{marginTop: 8, fontWeight: "bold"}}>OOPS...! Không có lịch học</Text>
+						<Image
+							style={{ width: 120, height: 120 }}
+							source={require("../assets/calendar/calendar-1.png")}
+						/>
+						<Text style={{ marginTop: 8, fontWeight: "bold" }}>
+							OOPS...! Không có lịch học
+						</Text>
 					</View>
 				)}
 

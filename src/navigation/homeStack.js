@@ -6,6 +6,7 @@ import {
 // import HomeScreen from '../../screens/HomeScreen';
 import HomeScreen from "../../screens/HomeScreenv2";
 import DetailScreen from "../../screens/DetailScreen";
+import AttendanceSuccess from '../../screens/AttendanceSuccess';
 
 const HomeStack = createStackNavigator();
 
@@ -32,6 +33,8 @@ const homeStack = ({ navigation, route }) => {
 				name="Detail"
 				component={DetailScreen}
 				options={{
+					headerShown: true,
+					headerTransparent: false,
 					title: "Điểm danh",
 					headerStyle: {
 						backgroundColor: "#f4511e",
@@ -40,6 +43,11 @@ const homeStack = ({ navigation, route }) => {
 					headerTitleAlign: "center",
 					...TransitionPresets.SlideFromRightIOS,
 				}}
+			/>
+			<HomeStack.Screen
+				name="AttendanceSuccess"
+				component={AttendanceSuccess}
+				options={{ headerShown: false }}
 			/>
 		</HomeStack.Navigator>
 	);
