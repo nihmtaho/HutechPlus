@@ -194,8 +194,8 @@ class HomeScreen extends Component {
 					<View
 						style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
 					>
-						<Image style={{width: 120, height: 120}} source={require("../assets/calendar/calendar.png")} />
-						<Text style={{marginTop: 8}}>Không có lịch học</Text>
+						<Image style={{width: 120, height: 120}} source={require("../assets/calendar/calendar-1.png")} />
+						<Text style={{marginTop: 8, fontWeight: "bold"}}>OOPS...! Không có lịch học</Text>
 					</View>
 				)}
 
