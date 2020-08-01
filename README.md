@@ -1,12 +1,13 @@
-# Hutech Plus
+# Hutech CheckIn
 Deploy with Android and IOS.
+Resource for Lecturer application: ```https://github.com/thaotruogg/Hutech-Lecturer.git```
 ### Version detail: ***(Recommended)*** 
-- **NodeJS** ```12.16.2```
-- **Expo SDK** ```37.0.0```
-- **Expo CLI** ```3.15.4```
-- **React Navigation** ```5.x```
-- **Yarn** ```1.22.4```
+- **NodeJS** ```12.18.2```
+- **Expo SDK** ```38.0.8```
+- **Yarn** ```~1.22.4```
 ### How to run project?
+**Install ExpoCLI:** ```npm install -g expo-cli```
+
 **1. Clone project:** ```git clone https://github.com/thaotruogg/HutechPlus.git```
 
 **2. Install pkg:** ```npm install``` or ```yarn install```.

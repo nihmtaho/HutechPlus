@@ -7,11 +7,11 @@
       "android",
       "web"
     ],
-    "version": "2.6.2007",
+    "version": "2.6.3007",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/009-face-recognition.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash-face-recogination.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -24,7 +24,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.thaotruogg.hutechplus",
-      "buildNumber": "2.6.2007"
+      "buildNumber": "2.6.3007"
     },
     "android": {
       "package": "com.thaotruogg.hutechplus",

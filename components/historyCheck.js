@@ -1,9 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
-function listSubject(props) {
-	const subItem = props.items;
-
+const historyCheck = (props) => {
 	return (
 		<TouchableOpacity
 			activeOpacity={0.5}
@@ -12,29 +10,34 @@ function listSubject(props) {
 		>
 			<View style={styles.divContent}>
 				{/* <Text style={(styles.titleStyle, styles.fontSize)}>{subjectName}</Text> */}
-				<Text style={(styles.titleStyle, styles.fontSize)}> Thực tập tốt nghiệp</Text>
+				<Text style={(styles.titleStyle, styles.fontSize)}>
+					Thực tập tốt nghiệp
+				</Text>
+				<Text style={styles.titleStyle}>Thời gian điểm danh: {props.times}</Text>
 			</View>
 			<View style={styles.mountContent}>
 				<View style={styles.mountLeft}>
 					{/* <Text style={styles.titleStyle}>Mã môn: {subjectID} </Text> */}
-					<Text style={styles.titleStyle}>Mã môn: {subItem.idSubject} </Text>
+					<Text style={styles.titleStyle}>{props.isCheck}</Text>
+					<Text style={styles.titleStyle}>Tuần {props.weeks}</Text>
 				</View>
 			</View>
 		</TouchableOpacity>
 	);
-}
+};
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: "#5D6D7E",
+		backgroundColor: "#fff",
 		padding: 12,
 		marginVertical: 4,
 		marginHorizontal: 10,
-		borderRadius: 6,
+        borderRadius: 6,
+        elevation: 1,
 	},
 	divContent: {
 		display: "flex",
-		flexDirection: "row",
+		flexDirection: "column",
 		marginVertical: 2,
 	},
 	rightContent: {
@@ -43,9 +46,9 @@ const styles = StyleSheet.create({
 	},
 	mountContent: {
 		display: "flex",
-		flexDirection: "row",
+        flexDirection: "row",
 		borderTopWidth: 0.5,
-		borderTopColor: "#fff",
+		borderTopColor: "gray",
 		paddingTop: 4,
 		marginTop: 4,
 	},
@@ -53,18 +56,19 @@ const styles = StyleSheet.create({
 		flex: 1,
 		display: "flex",
 		flexDirection: "row",
-		alignItems: "center",
+        // alignItems: "center",
+        justifyContent: "space-between"
 	},
 	titleStyle: {
 		fontSize: 14,
 		// fontWeight: "bold",
-		color: "#fff",
+		// color: "#fff",
 	},
 	fontSize: {
 		fontSize: 16,
 		fontWeight: "bold",
-		color: "#fff",
+		// color: "#fff",
 	},
 });
 
-export default listSubject;
+export default historyCheck;

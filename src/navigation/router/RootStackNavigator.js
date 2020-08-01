@@ -1,10 +1,11 @@
 import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { Toast } from "react-native-root-toaster";
 import {
 	createStackNavigator,
 	TransitionPresets,
 } from "@react-navigation/stack";
-import { AsyncStorage, Alert, YellowBox } from "react-native";
+import { AsyncStorage, Alert, YellowBox, Platform } from "react-native";
 // import firebase from "firebase";
 import { db } from "../../config/db";
 
@@ -61,20 +62,6 @@ function RootStackNavigator({ navigation }) {
 	);
 
 	React.useEffect(() => {
-		// const firebaseConfig = {
-		//     apiKey: "AIzaSyAZ5RVA-zXlsk92on6GTFASaRf4KEGEyDo",
-		//     authDomain: "hutech-education.firebaseapp.com",
-		//     databaseURL: "https://hutech-education.firebaseio.com",
-		//     projectId: "hutech-education",
-		//     storageBucket: "hutech-education.appspot.com",
-		//     messagingSenderId: "501319299038",
-		//     appId: "1:501319299038:web:bd745da80ec5bf68c7f74f",
-		//     measurementId: "G-Q92Y4KVQ9D"
-		// };
-
-		// if (!firebase.apps.length) {
-		//     firebase.initializeApp(firebaseConfig);
-		// }
 		// Fetch the token from storage then navigate to our appropriate place
 		const bootstrapAsync = async () => {
 			let userToken;
@@ -116,18 +103,26 @@ function RootStackNavigator({ navigation }) {
 						let fullName = Snapshot.child("fullname").val();
 
 						if (hasUsername != username) {
-							Alert.alert("Error", "Tài khoản không tồn tại", [{ text: "OK" }]);
+							Platform.OS == "ios"
+									? Toast.show("Tài khoản không tồn tại", 5000)
+									: Toast.show(
+											"\n" + "Tài khoản không tồn tại",
+											5000
+									  );
 						} else {
 							if (data.password != password) {
-								Alert.alert("Error", "Mật khẩu không chính xác!", [
-									{ text: "OK" },
-								]);
+								Platform.OS == "ios"
+									? Toast.show("Mật khẩu không chính xác!", 5000)
+									: Toast.show(
+											"\n" + "Mật khẩu không chính xác!",
+											5000
+									  );
 							} else if (data.password == password) {
 								usernameToken = Snapshot.child("tokenLogin").val();
-                                // let deviceLogin = Snapshot.child("deviceAlive");
-                                // Snapshot.set({
-                                //     "deviceAlive": true
-                                // })
+								// let deviceLogin = Snapshot.child("deviceAlive");
+								// Snapshot.set({
+								//     "deviceAlive": true
+								// })
 								try {
 									AsyncStorage.setItem("userToken", usernameToken);
 									AsyncStorage.setItem("username", hasUsername);
@@ -138,9 +133,9 @@ function RootStackNavigator({ navigation }) {
 						}
 					});
 				} else {
-					Alert.alert("Error", "Vui lòng điền đầy đủ ID và Mật khẩu", [
-						{ text: "OK" },
-					]);
+					Platform.OS == "ios"
+						? Toast.show("Vui lòng điền đầy đủ ID và Mật khẩu", 5000)
+						: Toast.show("\n" + "Vui lòng điền đầy đủ ID và Mật khẩu", 5000);
 				}
 			},
 			signOut: () => {

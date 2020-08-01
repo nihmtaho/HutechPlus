@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet, SafeAreaView, View, Image, ActivityIndicator } from 'react-native'
-import {FontAwesome} from '@expo/vector-icons'
-
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 const imgSource = '../assets/logo.png'
 
 function SplashScreen() {
@@ -12,7 +11,7 @@ function SplashScreen() {
                 {/* <ActivityIndicator size='large' color='#E53935' /> */}
             </View>
             <View style={styles.companyContent}>
-                <FontAwesome name='500px' size={42} color='#E53935' />
+                <MaterialCommunityIcons name="material-ui" size={52} color="#E53935" />
             </View>
         </SafeAreaView>
     )
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
     },
     companyContent:{
         position: 'absolute',
-        bottom: 42,
+        bottom: 62,
         left: 0,
         right: 0,
         display: 'flex',
