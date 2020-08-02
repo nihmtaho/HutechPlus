@@ -178,13 +178,16 @@ const DetailScreen = ({ navigation }) => {
 		}
 		console.log("identity -> success");
 
-		const mssvResult = await getPerson(identityResult);
-		if (mssvResult) {
-			if (mssvResult == mssv) {
-				handleAddFace(identityResult, uploadResult);
+		const personResult = await getPerson(identityResult);
+		if (personResult) {
+			if (personResult.userData == mssv) {
+				console.log("face count: ", personResult.persistedFaceIds.length)
+				if(personResult.persistedFaceIds.length < 240) {
+					handleAddFace(identityResult, uploadResult);
+				}
 				setIsShot(false);
 				navigation.navigate("AttendanceSuccess", {
-					username: [mssv],
+					username: [personResult.name],
 				});
 			} else {
 				Alert.alert(
@@ -500,6 +503,7 @@ const DetailScreen = ({ navigation }) => {
 	const getPerson = async (personId) => {
 		let personName = null;
 		let personMSSV = null;
+		let res = null;
 		if (!personId) {
 			console.log("getPerson -> personId", personId);
 			console.log("getPerson -> cannot not getPerson");
@@ -526,6 +530,7 @@ const DetailScreen = ({ navigation }) => {
 				.then((resJson) => {
 					console.log("getPerson -> resJson", resJson);
 					try {
+						res = resJson;
 						personName = resJson.name;
 						personMSSV = resJson.userData;
 					} catch (error) {}
@@ -533,7 +538,8 @@ const DetailScreen = ({ navigation }) => {
 		}
 		setName(personName);
 		// setMSSV(personMSSV)
-		return personMSSV;
+		// return personMSSV;
+		return res;
 	};
 
 	return (
