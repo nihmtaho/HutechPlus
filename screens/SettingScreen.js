@@ -1,7 +1,13 @@
 //Import Library
 import React, { useEffect, useContext, useState } from "react";
-import { StyleSheet, View, AsyncStorage, ScrollView } from "react-native";
-import { Button, Divider } from "react-native-paper";
+import {
+	StyleSheet,
+	View,
+	AsyncStorage,
+	ScrollView,
+	ActivityIndicator,
+} from "react-native";
+import { Button, Divider, Subheading } from "react-native-paper";
 import { db } from "../src/config/db";
 
 //Import Components
@@ -15,6 +21,7 @@ import { AuthContext } from "../src/context";
 
 const SettingScreen = ({ navigation }) => {
 	const { signOut } = useContext(AuthContext);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const [state, setState] = useState({
 		fullName: "",
@@ -25,88 +32,101 @@ const SettingScreen = ({ navigation }) => {
 	const { departmentName, fullName, email } = state;
 
 	useEffect(() => {
-		const fetchStudent = async () => {
-			let emailUser;
-			let idUsername;
-			let fullNameUser;
-			let departmentName;
-			try {
-				idUsername = await AsyncStorage.getItem("username");
-				// fullNameUser = await AsyncStorage.getItem('fullName')
-				db.ref("Students/" + idUsername).once("value", (Snapshot) => {
-					emailUser = Snapshot.child("email").val();
-					fullNameUser = Snapshot.child("fullname").val();
-					let departmentCode = Snapshot.child("departmentCode").val();
-
-					db.ref("Departments/" + departmentCode).once("value", (Snapshot) => {
-						departmentName = Snapshot.child("departmentName").val();
-						setState({
-							fullName: fullNameUser,
-							email: emailUser,
-							departmentName: departmentName,
-						});
-					});
-				});
-			} catch (error) {}
-		};
-		fetchStudent();
+		((async) => {
+			setIsLoading(true);
+			fetchStudent();
+		})();
 
 		return () => {};
 	}, []);
 
+	const fetchStudent = async () => {
+		let emailUser;
+		let idUsername;
+		let fullNameUser;
+		let departmentName;
+		try {
+			idUsername = await AsyncStorage.getItem("username");
+			// fullNameUser = await AsyncStorage.getItem('fullName')
+			db.ref("Students/" + idUsername).once("value", (Snapshot) => {
+				emailUser = Snapshot.child("email").val();
+				fullNameUser = Snapshot.child("fullname").val();
+				let departmentCode = Snapshot.child("departmentCode").val();
+
+				db.ref("Departments/" + departmentCode).once("value", (Snapshot) => {
+					departmentName = Snapshot.child("departmentName").val();
+					setState({
+						fullName: fullNameUser,
+						email: emailUser,
+						departmentName: departmentName,
+					});
+					setIsLoading(false);
+				});
+			});
+		} catch (error) {}
+	};
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.profileView}>
-				<ProfileView
-					name={fullName}
-					subName={departmentName}
-					subFaculty={email}
-					onPress={() => navigation.navigate("Profile")}
-				/>
+				{isLoading ? (
+					<ActivityIndicator
+						style={{
+							backgroundColor: "#f08a5d",
+							height: 120,
+							marginBottom: 14,
+							borderBottomEndRadius: 34,
+							borderBottomStartRadius: 34,
+						}}
+						color="#f6ab6c"
+					/>
+				) : (
+					<ProfileView
+						name={fullName}
+						subName={departmentName}
+						subFaculty={email}
+						onPress={() => navigation.navigate("Profile")}
+					/>
+				)}
 			</View>
 			{/* <LearnView title="8" /> */}
-			<Divider />
+			{/* <Divider /> */}
+			<Subheading style={{ paddingLeft: 12, fontWeight: "bold" }}>
+				Lựa chọn
+			</Subheading>
 			<ScrollView>
 				<MenuView
 					title="Lịch sử điểm danh"
 					iconLeft="calendar"
-					iconRight="right"
+					iconRight="arrow-right"
 					color="#0063cd"
 					onPress={() => navigation.navigate("SubjectList")}
 				/>
 				<MenuView
 					title="Đổi thông tin liên lạc"
 					iconLeft="customerservice"
-					iconRight="right"
+					iconRight="arrow-right"
 					color="green"
 				/>
 				<MenuView
 					title="Đổi mật khẩu"
 					iconLeft="Safety"
-					iconRight="right"
+					iconRight="arrow-right"
 					color="green"
 				/>
 				<MenuView
 					title="Trợ giúp"
 					iconLeft="questioncircle"
-					iconRight="right"
+					iconRight="arrow-right"
 					color="#0063cd"
 				/>
 				<MenuView
 					title="Báo lỗi"
 					iconLeft="exclamationcircle"
-					iconRight="right"
+					iconRight="arrow-right"
 					color="red"
 				/>
 			</ScrollView>
-			<Button
-				contentStyle={{ height: 54 }}
-				color="red"
-				mode="text"
-				onPress={() => signOut()}
-			>
-				Đăng xuất tài khoản
-			</Button>
 			<StatusBar style="auto" />
 		</View>
 	);

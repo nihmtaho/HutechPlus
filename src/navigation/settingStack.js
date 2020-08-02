@@ -32,14 +32,14 @@ const settingStack = ({ route, navigation }) => {
 			<SettingStack.Screen
 				name="Profile"
 				component={ProfileScreen}
-				options={{ title: "Tài khoản", headerShown: false }}
+				options={{ title: "Tài khoản", headerShown: false, ...TransitionPresets.FadeFromBottomAndroid, }}
 			/>
 			<SettingStack.Screen
 				name="SubjectList"
 				component={SubjectsListScreen}
 				options={{
 					title: "Môn học",
-					headerShown: true,
+					headerShown: false,
 					headerTitleAlign: "center",
 				}}
 			/>

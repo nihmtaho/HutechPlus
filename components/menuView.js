@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Subheading, Divider } from 'react-native-paper';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 
 const menuView = (props) => {
     return (
@@ -15,7 +15,7 @@ const menuView = (props) => {
                     <Subheading style={{fontSize: 14}}>{props.title}</Subheading>
                 </View>
                 <View style={styles.iconView}>
-                    <AntDesign name={props.iconRight} size={12} />
+                    <SimpleLineIcons name={props.iconRight} size={12} color="black" />
                 </View>
             </View>
             <Divider />
@@ -25,7 +25,7 @@ const menuView = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 12,
+        paddingVertical: 14,
         flexDirection: "row",
         alignItems: "center"
     },

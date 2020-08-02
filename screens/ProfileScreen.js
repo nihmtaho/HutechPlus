@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import {
 	StyleSheet,
 	View,
 	Image,
 	ScrollView,
 	TouchableOpacity,
-	ImageBackground
+	ActivityIndicator,
+	AsyncStorage,
+	Alert,
 } from "react-native";
 import {
 	Text,
@@ -18,29 +20,122 @@ import {
 } from "react-native-paper";
 import { AntDesign } from "@expo/vector-icons";
 import Constants from "expo-constants";
-import {StatusBar} from 'expo-status-bar';
+import { StatusBar } from "expo-status-bar";
+import { db } from "../src/config/db";
+import { AuthContext } from "../src/context";
 
 let imgB = "../assets/background/25499.jpg";
 let userImage = "../assets/profile-user/student-boy.png";
 
 const ProfileScreen = ({ navigation }, props) => {
+	const { signOut } = useContext(AuthContext);
+	const [isLoading, setIsLoading] = useState(false);
 	const [state, setState] = useState({
-		userCode: "",
-		fullName: "",
+		departmentName: "",
+		majorName: "",
+		data: [],
 	});
+
+	const { data, departmentName, majorName } = state;
+
+	useEffect(() => {
+		(async () => {
+			// Load data from Firebase
+			setIsLoading(true);
+			_fetchData();
+		})();
+		return () => {
+			//cleanup, don't remove return... please!!!
+		};
+	}, []);
+
+	const _fetchData = async () => {
+		let username = await AsyncStorage.getItem("username");
+		// fetch data
+		db.ref("Students/" + username).once("value", (Snapshot) => {
+			let departmentCode_log = Snapshot.child("departmentCode").val();
+			let majorCode_log = Snapshot.child("majorCode").val();
+
+			let yearInOut_log = Snapshot.child("yearInOut").val();
+			let fullName_log = Snapshot.child("fullname").val();
+			let email_log = Snapshot.child("email").val();
+			let address_log = Snapshot.child("addressUser").val();
+			let numberPhone_log = Snapshot.child("phoneNumber").val();
+			let classUser_log = Snapshot.child("classCode").val();
+			let trainingSystem_log = Snapshot.child("trainingSystem").val();
+
+			const data_log = [];
+			data_log.push(
+				fullName_log,
+				username,
+				email_log,
+				address_log,
+				numberPhone_log,
+				classUser_log,
+				yearInOut_log,
+				trainingSystem_log
+			);
+
+			db.ref("Departments/" + departmentCode_log).once("value", (Snapshot) => {
+				let departmentName_log = Snapshot.child("departmentName").val();
+
+				db.ref("Majors/" + majorCode_log).once("value", (Snapshot) => {
+					let majorName_log = Snapshot.child("majorName").val();
+
+					setState({
+						departmentName: departmentName_log,
+						majorName: majorName_log,
+						data: data_log,
+					});
+					setIsLoading(false);
+				});
+			});
+		});
+	};
+
+	const _logOutAction = () => {
+		Alert.alert("Đăng xuất", "Bạn sẽ được đăng xuất tài khoản ngay bây giờ", [
+			{
+				text: "Cancel",
+				style: "cancel",
+			},
+			{
+				text: "OK",
+				onPress: () => {
+					signOut();
+				},
+			},
+		]);
+	};
 
 	return (
 		<View style={{ backgroundColor: "#fff", flex: 1 }}>
-			<ImageBackground
-				source={require(imgB)}
-				style={{display: "flex", resizeMode: "cover", paddingTop: Constants.statusBarHeight}}
+			<View
+				style={{
+					display: "flex",
+					backgroundColor: "#f08a5d",
+					paddingTop: Constants.statusBarHeight,
+					borderBottomEndRadius: 34,
+					borderBottomStartRadius: 34,
+				}}
 			>
 				<TouchableOpacity
 					style={styles.iconBack}
 					onPress={() => navigation.goBack()}
 				>
 					<AntDesign name="back" size={26} color="#fff" />
-					<Text style={{color: "#fff"}}>Back</Text>
+					<Text style={{ color: "#fff", fontSize: 11, marginTop: 4 }}>
+						Trở về
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={styles.iconLogOut}
+					onPress={() => _logOutAction()}
+				>
+					<AntDesign name="logout" size={26} color="#fff" />
+					<Text style={{ color: "#fff", fontSize: 11, marginTop: 4 }}>
+						Đăng xuất
+					</Text>
 				</TouchableOpacity>
 				<View style={styles.headerBlock}>
 					<View
@@ -54,50 +149,65 @@ const ProfileScreen = ({ navigation }, props) => {
 							source={require(userImage)}
 						/>
 					</View>
-					<Headline style={{ marginVertical: 8, color: "#fff" }}>Truong Minh Thao</Headline>
-					<Paragraph style={styles.custom}>1611060383</Paragraph>
+					{isLoading ? (
+						<ActivityIndicator style={{ padding: 28 }} color="#f6ab6c" />
+					) : (
+						<>
+							<Headline style={{ marginVertical: 8, color: "#fff" }}>
+								{data[0]}
+							</Headline>
+							<Paragraph style={styles.custom}>{data[1]}</Paragraph>
+						</>
+					)}
 				</View>
-			</ImageBackground>
-			<Divider />
-			<ScrollView style={{ backgroundColor: "#fff" }}>
-				<View style={styles.bodyBlock}>
-					<Subheading style={{ paddingTop: 12, fontWeight: "bold" }}>
-						Thông tin cơ bản
-					</Subheading>
-					<View style={styles.detailBlock}>
-						<Caption>Chuyên ngành</Caption>
-						<Text>Công nghệ thông tin</Text>
+			</View>
+			{isLoading ? (
+				<ActivityIndicator style={{ padding: 28 }} color="#f6ab6c" />
+			) : (
+				<ScrollView style={{ backgroundColor: "#fff" }}>
+					<View style={styles.bodyBlock}>
+						<Subheading style={{ paddingTop: 12, fontWeight: "bold" }}>
+							Thông tin cơ bản
+						</Subheading>
+						<View style={styles.detailBlock}>
+							<Caption>Lớp</Caption>
+							<Text>{data[5]}</Text>
+						</View>
+						<View style={styles.detailBlock}>
+							<Caption>Chuyên ngành</Caption>
+							<Text>{majorName}</Text>
+						</View>
+						<View style={styles.detailBlock}>
+							<Caption>Khoa/Viện</Caption>
+							<Text>{departmentName}</Text>
+						</View>
+						<View style={styles.detailBlock}>
+							<Caption>Khoá học</Caption>
+							<Text>{data[6]}</Text>
+						</View>
+						<View style={styles.detailBlock}>
+							<Caption>Hệ đào tạo</Caption>
+							<Text>{data[7]}</Text>
+						</View>
+						<Divider style={{ marginTop: 4 }} />
+						<Subheading style={{ paddingTop: 12, fontWeight: "bold" }}>
+							Thông tin liên lạc
+						</Subheading>
+						<View style={styles.detailBlock}>
+							<Caption>Email</Caption>
+							<Text>{data[2]}</Text>
+						</View>
+						<View style={styles.detailBlock}>
+							<Caption>Số điện thoại</Caption>
+							<Text>{data[4]}</Text>
+						</View>
+						<View style={styles.detailBlock}>
+							<Caption>Địa chỉ</Caption>
+							<Text>{data[3]}</Text>
+						</View>
 					</View>
-					<View style={styles.detailBlock}>
-						<Caption>Khoa/Viện</Caption>
-						<Text>Viện công nghệ Việt - Nhật</Text>
-					</View>
-					<View style={styles.detailBlock}>
-						<Caption>Khoá học</Caption>
-						<Text>2016 - 2020</Text>
-					</View>
-					<View style={styles.detailBlock}>
-						<Caption>Hệ đào tạo</Caption>
-						<Text>Đại học chính quy (chuẩn Nhật Bản)</Text>
-					</View>
-					<Divider style={{ marginTop: 4 }} />
-					<Subheading style={{ paddingTop: 12, fontWeight: "bold" }}>
-						Thông tin liên lạc
-					</Subheading>
-					<View style={styles.detailBlock}>
-						<Caption>Email</Caption>
-						<Text>thaotruogg@gmail.com</Text>
-					</View>
-					<View style={styles.detailBlock}>
-						<Caption>Số điện thoại</Caption>
-						<Text>0389999999</Text>
-					</View>
-					<View style={styles.detailBlock}>
-						<Caption>Địa chỉ</Caption>
-						<Text>TP.HCM</Text>
-					</View>
-				</View>
-			</ScrollView>
+				</ScrollView>
+			)}
 			<StatusBar style="inverted" />
 		</View>
 	);
@@ -116,9 +226,19 @@ const styles = StyleSheet.create({
 	},
 	iconBack: {
 		position: "absolute",
-		// top: Constants.statusBarHeight + 12,
 		left: 18,
-		bottom: 12,
+		top: Constants.statusBarHeight + 12,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	iconLogOut: {
+		position: "absolute",
+		right: 18,
+		top: Constants.statusBarHeight + 12,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	custom: {
 		backgroundColor: "#c4fb6d",

@@ -163,17 +163,19 @@ class HomeScreen extends Component {
 						daySelectionAnimation={{
 							type: "background",
 							duration: 100,
-							highlightColor: "#f9d56e",
+							highlightColor: "#f6ab6c",
 						}}
 						style={{
 							height: 132,
 							paddingTop: Constants.statusBarHeight + 8,
 							paddingBottom: 8,
+							borderBottomEndRadius: 34,
+							borderBottomStartRadius: 34,
 						}}
-						calendarHeaderStyle={{ color: "black" }}
-						calendarColor={"#ffffff"}
-						dateNumberStyle={{ color: "black" }}
-						dateNameStyle={{ color: "black" }}
+						calendarHeaderStyle={{ color: "white" }}
+						calendarColor={"#f08a5d"}
+						dateNumberStyle={{ color: "white" }}
+						dateNameStyle={{ color: "white" }}
 						iconContainer={{ flex: 0.12 }}
 						customDatesStyles={this.state.customDatesStyles}
 						markedDates={this.state.markedDates}
@@ -181,13 +183,7 @@ class HomeScreen extends Component {
 						onDateSelected={this.onDateSelected}
 						useIsoWeekday={true}
 					/>
-					<Divider />
 				</View>
-				{/* <View>
-					<ErrorItem title="Chọn 1 ngày để xem lịch (Lỗi hiển thị)" />
-					<ErrorItem title="Vuốt xuống nếu không tải được lịch" />
-				</View> */}
-				<Divider />
 
 				{searchTrue != -1 ? (
 					<FlatList

@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 function listSubject(props) {
-	const subItem = props.items;
+	const subItem = props.dataProps;
 
 	return (
 		<TouchableOpacity
@@ -12,12 +12,12 @@ function listSubject(props) {
 		>
 			<View style={styles.divContent}>
 				{/* <Text style={(styles.titleStyle, styles.fontSize)}>{subjectName}</Text> */}
-				<Text style={(styles.titleStyle, styles.fontSize)}> Thực tập tốt nghiệp</Text>
+				<Text style={(styles.titleStyle, styles.fontSize)}>{subItem.subjectName}</Text>
 			</View>
 			<View style={styles.mountContent}>
 				<View style={styles.mountLeft}>
 					{/* <Text style={styles.titleStyle}>Mã môn: {subjectID} </Text> */}
-					<Text style={styles.titleStyle}>Mã môn: {subItem.idSubject} </Text>
+					<Text style={styles.titleStyle}>Mã môn: {subItem.subjectCode} </Text>
 				</View>
 			</View>
 		</TouchableOpacity>
@@ -26,7 +26,7 @@ function listSubject(props) {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: "#5D6D7E",
+		backgroundColor: "#f08a5d",
 		padding: 12,
 		marginVertical: 4,
 		marginHorizontal: 10,

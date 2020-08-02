@@ -15,16 +15,18 @@ let imgBackground = "../assets/background/25499.jpg";
 const profileView = (props) => {
 	return (
 		<TouchableOpacity style={styles.container} onPress={props.onPress}>
-			<ImageBackground
+			<View
 				style={{
-					resizeMode: "cover",
+					backgroundColor: "#f08a5d",
 					display: "flex",
 					flexDirection: "row",
 					paddingVertical: 12,
 					alignItems: "center",
 					paddingTop: Constants.statusBarHeight,
+					borderBottomEndRadius: 34,
+					borderBottomStartRadius: 34,
+					marginBottom: 14
 				}}
-				source={require(imgBackground)}
 			>
 				<View style={styles.avatarView}>
 					{/* <Avatar.Image
@@ -48,10 +50,10 @@ const profileView = (props) => {
 					</Paragraph>
 				</View>
 				<View style={styles.iconView}>
-					<Entypo name="dot-single" size={34} color="#c4fb6d" />
-					<Paragraph style={{ fontSize: 9, marginTop: -12, color: "#fff" }}>Alive</Paragraph>
+					<Entypo name="dot-single" size={34} color="#a2de96" />
+					<Paragraph style={{ fontSize: 9, marginTop: -16, color: "#fff" }}>active</Paragraph>
 				</View>
-			</ImageBackground>
+			</View>
 		</TouchableOpacity>
 	);
 };
