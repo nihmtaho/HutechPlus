@@ -17,8 +17,6 @@ import { db } from "../src/config/db";
 import moment from "moment";
 
 import Card from "../components/Card";
-import ErrorItem from "../components/ErrorItem";
-import { Toast } from "react-native-root-toaster";
 
 let date = "";
 let customDatesStyles = [];
@@ -34,7 +32,7 @@ class HomeScreen extends Component {
 		this.setState({ mssv: mssv });
 		setTimeout(() => {
 			this.fetch();
-		}, 2000);
+		}, 1000);
 		this.fetch();
 		return;
 	}
@@ -135,9 +133,7 @@ class HomeScreen extends Component {
 			} else {
 				//
 			}
-		} catch (error) {
-			// console.log(error);
-		}
+		} catch (error) {}
 	};
 
 	renderRow = ({ item, index }) => {
