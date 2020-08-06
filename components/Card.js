@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
 		padding: 12,
 		marginVertical: 4,
 		marginHorizontal: 10,
-		borderRadius: 6,
+		borderRadius: 12,
+		elevation: 2,
 	},
 	divContent: {
 		display: "flex",

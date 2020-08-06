@@ -17,7 +17,7 @@ const profileView = (props) => {
 		<TouchableOpacity style={styles.container} onPress={props.onPress}>
 			<View
 				style={{
-					backgroundColor: "#f08a5d",
+					backgroundColor: "#00bcd4",
 					display: "flex",
 					flexDirection: "row",
 					paddingVertical: 12,

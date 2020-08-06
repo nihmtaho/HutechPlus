@@ -18,7 +18,7 @@ function Contact(params) {
                     <FontAwesome name="instagram" size={28} color="#000000" />
                 </TouchableOpacity>
             </View>
-            <Text>{`Build ${Constants.manifest.version}-demo`}</Text>
+            <Text>{`Build ${Constants.manifest.version}-beta-release`}</Text>
         </View>
     )
 }

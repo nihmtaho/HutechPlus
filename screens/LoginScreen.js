@@ -11,7 +11,6 @@ import { Button, TextInput } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 
-
 //TODO: Import only Screens and Components
 import Contact from "../components/Contact";
 
@@ -90,9 +89,9 @@ function LoginScreen(props) {
 						</Button>
 					</TouchableOpacity>
 				</View>
-				<View style={{ marginTop: "20%" }}>
-					<Contact />
-				</View>
+			</View>
+			<View style={{ marginTop: "20%" }}>
+				<Contact />
 			</View>
 			<StatusBar style="auto" />
 		</ScrollView>
@@ -114,8 +113,8 @@ const styles = StyleSheet.create({
 	contentMidLayout: {
 		flex: 1,
 		paddingTop: 20,
-		paddingRight: 20,
-		paddingLeft: 20,
+		paddingHorizontal: 18,
+		marginHorizontal: 12,
 	},
 	imgLogo: {
 		width: 154,

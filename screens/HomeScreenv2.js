@@ -34,6 +34,8 @@ class HomeScreen extends Component {
 			this.fetch();
 		}, 1000);
 		this.fetch();
+		this.func();
+		this.lastUpdate();
 		return;
 	}
 
@@ -94,8 +96,8 @@ class HomeScreen extends Component {
 
 				if (date) {
 					dots.push({
-						color: "red",
-						selectedColor: "green",
+						color: "#dd2c00",
+						selectedColor: "#005086",
 					});
 				}
 
@@ -159,7 +161,7 @@ class HomeScreen extends Component {
 						daySelectionAnimation={{
 							type: "background",
 							duration: 100,
-							highlightColor: "#f6ab6c",
+							highlightColor: "#b2ebf2",
 						}}
 						style={{
 							height: 132,
@@ -167,9 +169,10 @@ class HomeScreen extends Component {
 							paddingBottom: 8,
 							borderBottomEndRadius: 34,
 							borderBottomStartRadius: 34,
+							elevation: 4
 						}}
 						calendarHeaderStyle={{ color: "white" }}
-						calendarColor={"#f08a5d"}
+						calendarColor={"#00bcd4"}
 						dateNumberStyle={{ color: "white" }}
 						dateNameStyle={{ color: "white" }}
 						iconContainer={{ flex: 0.12 }}

@@ -113,10 +113,11 @@ const ProfileScreen = ({ navigation }, props) => {
 			<View
 				style={{
 					display: "flex",
-					backgroundColor: "#f08a5d",
+					backgroundColor: "#00bcd4",
 					paddingTop: Constants.statusBarHeight,
 					borderBottomEndRadius: 34,
 					borderBottomStartRadius: 34,
+					elevation: 4
 				}}
 			>
 				<TouchableOpacity
@@ -150,7 +151,7 @@ const ProfileScreen = ({ navigation }, props) => {
 						/>
 					</View>
 					{isLoading ? (
-						<ActivityIndicator style={{ padding: 28 }} color="#f6ab6c" />
+						<ActivityIndicator style={{ padding: 28 }} color="#b2ebf2" />
 					) : (
 						<>
 							<Headline style={{ marginVertical: 8, color: "#fff" }}>
@@ -162,7 +163,7 @@ const ProfileScreen = ({ navigation }, props) => {
 				</View>
 			</View>
 			{isLoading ? (
-				<ActivityIndicator style={{ padding: 28 }} color="#f6ab6c" />
+				<ActivityIndicator style={{ padding: 28 }} color="#00bcd4" />
 			) : (
 				<ScrollView style={{ backgroundColor: "#fff" }}>
 					<View style={styles.bodyBlock}>
@@ -231,6 +232,7 @@ const styles = StyleSheet.create({
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
+		zIndex: 999
 	},
 	iconLogOut: {
 		position: "absolute",
@@ -239,14 +241,16 @@ const styles = StyleSheet.create({
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
+		zIndex: 998
 	},
 	custom: {
-		backgroundColor: "#c4fb6d",
-		width: 100,
+		backgroundColor: "#fff",
+		// width: 100,
 		textAlign: "center",
 		color: "#000",
 		borderRadius: 5,
 		paddingVertical: 2,
+		paddingHorizontal: 12
 	},
 });
 

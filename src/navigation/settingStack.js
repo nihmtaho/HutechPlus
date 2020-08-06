@@ -6,7 +6,7 @@ import {
 import SettingScreen from "../../screens/SettingScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
 import SubjectsListScreen from "../../screens/history-screens/SubjectsListScreen";
-import HistoryScreen from '../../screens/history-screens/HistoryScreen';
+import HistoryScreen from "../../screens/history-screens/HistoryScreen";
 
 const SettingStack = createStackNavigator();
 
@@ -32,7 +32,11 @@ const settingStack = ({ route, navigation }) => {
 			<SettingStack.Screen
 				name="Profile"
 				component={ProfileScreen}
-				options={{ title: "Tài khoản", headerShown: false, ...TransitionPresets.FadeFromBottomAndroid, }}
+				options={{
+					title: "Tài khoản",
+					headerShown: false,
+					...TransitionPresets.FadeFromBottomAndroid,
+				}}
 			/>
 			<SettingStack.Screen
 				name="SubjectList"
@@ -48,7 +52,7 @@ const settingStack = ({ route, navigation }) => {
 				component={HistoryScreen}
 				options={{
 					title: "Lịch sử điểm danh",
-					headerShown: true,
+					headerShown: false,
 					headerTitleAlign: "center",
 				}}
 			/>

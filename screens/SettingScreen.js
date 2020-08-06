@@ -72,13 +72,13 @@ const SettingScreen = ({ navigation }) => {
 				{isLoading ? (
 					<ActivityIndicator
 						style={{
-							backgroundColor: "#f08a5d",
+							backgroundColor: "#00bcd4",
 							height: 120,
 							marginBottom: 14,
 							borderBottomEndRadius: 34,
 							borderBottomStartRadius: 34,
 						}}
-						color="#f6ab6c"
+						color="#b2ebf2"
 					/>
 				) : (
 					<ProfileView
@@ -91,10 +91,10 @@ const SettingScreen = ({ navigation }) => {
 			</View>
 			{/* <LearnView title="8" /> */}
 			{/* <Divider /> */}
-			<Subheading style={{ paddingLeft: 12, fontWeight: "bold" }}>
-				Lựa chọn
-			</Subheading>
 			<ScrollView>
+				<Subheading style={{ paddingLeft: 12, fontWeight: "bold" }}>
+					Lựa chọn
+				</Subheading>
 				<MenuView
 					title="Lịch sử điểm danh"
 					iconLeft="calendar"
@@ -114,6 +114,9 @@ const SettingScreen = ({ navigation }) => {
 					iconRight="arrow-right"
 					color="green"
 				/>
+				<Subheading style={{ marginTop: 12, paddingLeft: 12, fontWeight: "bold" }}>
+					Ứng dụng
+				</Subheading>
 				<MenuView
 					title="Trợ giúp"
 					iconLeft="questioncircle"

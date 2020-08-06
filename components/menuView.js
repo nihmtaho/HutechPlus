@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Subheading, Divider } from 'react-native-paper';
+import { Subheading, Divider, TouchableRipple } from 'react-native-paper';
 import { AntDesign, SimpleLineIcons } from '@expo/vector-icons';
 
 const menuView = (props) => {
@@ -18,7 +18,7 @@ const menuView = (props) => {
                     <SimpleLineIcons name={props.iconRight} size={12} color="black" />
                 </View>
             </View>
-            <Divider />
+            <Divider style={{marginLeft: 60}} />
         </TouchableOpacity>
     )
 }

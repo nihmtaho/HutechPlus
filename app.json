@@ -7,11 +7,11 @@
       "android",
       "web"
     ],
-    "version": "2.6.3007",
+    "version": "2.7.0608",
     "orientation": "portrait",
-    "icon": "./assets/009-face-recognition.png",
+    "icon": "./assets/logo/icon-have-background.png",
     "splash": {
-      "image": "./assets/splash-face-recogination.png",
+      "image": "./assets/splash-screen/splash-face-recogination.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -24,7 +24,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.thaotruogg.hutechplus",
-      "buildNumber": "2.6.3007"
+      "buildNumber": "2.7.0608"
     },
     "android": {
       "package": "com.thaotruogg.hutechplus",
