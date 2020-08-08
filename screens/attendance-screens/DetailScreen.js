@@ -15,9 +15,11 @@ import {
 	ActivityIndicator,
 	Colors,
 	Button,
+	Caption,
 	Text,
 } from "react-native-paper";
 import MaterialIcons from "react-native-vector-icons/FontAwesome";
+import { Ionicons } from '@expo/vector-icons';
 import * as Location from "expo-location";
 import { getPreciseDistance, isPointWithinRadius } from "geolib";
 import Config from "../../config.json";
@@ -187,18 +189,14 @@ const DetailScreen = ({ navigation }) => {
 					username: [mssv],
 				});
 			} else {
-				Alert.alert(
-					"Điểm danh không thành công",
-					"Đây không phải bạn",
-					[
-						{
-							text: "OK",
-							onPress: () => {
-								setIsShot(false);
-							},
+				Alert.alert("Điểm danh không thành công", "Đây không phải bạn", [
+					{
+						text: "OK",
+						onPress: () => {
+							setIsShot(false);
 						},
-					]
-				);
+					},
+				]);
 			}
 		} else {
 			Alert.alert(
@@ -540,6 +538,14 @@ const DetailScreen = ({ navigation }) => {
 		<View style={styles.container}>
 			{myLocation && withinClass && !isShot && (
 				<>
+					<View style={styles.borderBox}>
+						<Caption style={{ textAlign: "center" }}>
+							Giữ gương mặt vừa trong khung
+						</Caption>
+						<Caption style={{ textAlign: "center", marginTop: -8 }}>
+							và ấn nút chụp.
+						</Caption>
+					</View>
 					<Camera
 						ref={cameraRef}
 						type={Camera.Constants.Type.front}
@@ -553,14 +559,15 @@ const DetailScreen = ({ navigation }) => {
 								width: 58,
 								height: 58,
 								display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 999,
+								justifyContent: "center",
+								alignItems: "center",
+								borderRadius: 999,
 							}}
 						>
 							<MaterialIcons name="camera" size={24} color="#000" />
 						</View>
 					</TouchableOpacity>
+
 				</>
 			)}
 			{myLocation && withinClass && isShot && (
@@ -636,10 +643,22 @@ const styles = StyleSheet.create({
 	},
 	cmrContainer: {
 		width: "100%",
+		marginTop: 90,
 		flex: 7 / 10,
 		alignItems: "center",
 		justifyContent: "center",
 		// borderWidth: 1,
+	},
+	borderBox: {
+		position: "absolute",
+		top: "22%",
+		left: "16%",
+		width: 240,
+		height: 300,
+		borderWidth: 2,
+		borderColor: "gray",
+		borderRadius: 24,
+		zIndex: 999,
 	},
 });
 

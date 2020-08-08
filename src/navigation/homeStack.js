@@ -34,8 +34,7 @@ const homeStack = ({ navigation, route }) => {
 				name="Detail"
 				component={DetailScreen}
 				options={{
-					headerShown: true,
-					headerTransparent: false,
+					headerShown: false,
 					title: "Điểm danh",
 					headerStyle: {
 						backgroundColor: "#f4511e",
