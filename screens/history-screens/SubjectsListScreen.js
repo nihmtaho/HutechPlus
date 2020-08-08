@@ -35,19 +35,14 @@ const SubjectsListScreen = ({ navigation }) => {
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
-		(async () => {
-			// setIsLoading(true);
-			// setTimeout(() => {
-			_fetchData();
-			// }, 500);
-		})();
-		// return () => {};
+		_fetchData();
+		return () => {};
 	}, []);
 
 	const _fetchData = async () => {
 		let idUsername;
 		idUsername = await AsyncStorage.getItem("username");
-		db.ref("Students/" + idUsername + "/schedule/").once(
+		db.ref("Students/" + idUsername + "/schedule/").on(
 			"value",
 			(Snapshot) => {
 				tempData = Snapshot.val();
@@ -73,7 +68,7 @@ const SubjectsListScreen = ({ navigation }) => {
 			const subjectCode_log = unique[i];
 			// console.log(subjectCode_log);
 			// Fetch info Subjects
-			db.ref("Subject/" + subjectCode_log + "/").once("value", (Snapshot) => {
+			db.ref("Subject/" + subjectCode_log + "/").on("value", (Snapshot) => {
 				subjectId_log = Snapshot.child("subjectId").val();
 				subjectName_log = Snapshot.child("subjectName").val();
 				// console.log(subjectId_log, subjectName_log);

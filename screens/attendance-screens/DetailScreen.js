@@ -20,7 +20,7 @@ import {
 import MaterialIcons from "react-native-vector-icons/FontAwesome";
 import * as Location from "expo-location";
 import { getPreciseDistance, isPointWithinRadius } from "geolib";
-import Config from "../config.json";
+import Config from "../../config.json";
 
 console.disableYellowBox = true;
 

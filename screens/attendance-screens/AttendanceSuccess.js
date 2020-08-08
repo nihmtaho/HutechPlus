@@ -8,11 +8,12 @@ import {
 	Text,
 	Caption,
 } from "react-native-paper";
-import { db } from "../src/config/db";
+import { db } from "../../src/config/db";
 import moment from "moment";
 
+const sourceImg = "../../assets/success.png";
+
 const AttendanceSuccess = ({ navigation, route }) => {
-	// const [svName, setSVName] = useState();
 	const [date, setDate] = useState(null);
 	const [state, setState] = useState({
 		logIsSuccess: "",
@@ -22,7 +23,7 @@ const AttendanceSuccess = ({ navigation, route }) => {
 
 	useEffect(() => {
 		(async () => {
-			setDate(moment().format("DD-MM-YYYY HH:mm:ss"));
+			setDate(moment().format("DD-MM-YYYY HH:mm"));
 		})();
 	});
 
@@ -31,7 +32,7 @@ const AttendanceSuccess = ({ navigation, route }) => {
 			<View style={styles.contentImg}>
 				<Image
 					style={styles.successIcon}
-					source={require("../assets/success.png")}
+					source={require(sourceImg)}
 				/>
 				<Headline>Xin chào {route.params.username[0]}</Headline>
 				<Subheading>{status}</Subheading>

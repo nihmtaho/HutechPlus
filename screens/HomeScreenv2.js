@@ -142,7 +142,12 @@ class HomeScreen extends Component {
 		return (
 			<Card
 				timeTable={item}
-				onPress={() => this.props.navigation.navigate("Detail")}
+				onPress={() =>
+					this.props.navigation.navigate("NavigateToDetail", {
+						subjectCode: item.subjectId,
+						address: item.address
+					})
+				}
 			/>
 		);
 	};
@@ -169,7 +174,7 @@ class HomeScreen extends Component {
 							paddingBottom: 8,
 							borderBottomEndRadius: 34,
 							borderBottomStartRadius: 34,
-							elevation: 4
+							elevation: 4,
 						}}
 						calendarHeaderStyle={{ color: "white" }}
 						calendarColor={"#00bcd4"}

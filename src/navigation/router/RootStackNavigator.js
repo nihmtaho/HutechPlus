@@ -101,6 +101,7 @@ function RootStackNavigator({ navigation }) {
 						var hasUsername = Snapshot.child("username").val();
 						setUsername(hasUsername);
 						let fullName = Snapshot.child("fullname").val();
+						let name_class = Snapshot.child("classCode").val();
 
 						if (hasUsername != username) {
 							Platform.OS == "ios"
@@ -127,6 +128,7 @@ function RootStackNavigator({ navigation }) {
 									AsyncStorage.setItem("userToken", usernameToken);
 									AsyncStorage.setItem("username", hasUsername);
 									AsyncStorage.setItem("fullName", fullName);
+									AsyncStorage.setItem("nameClass", name_class);
 								} catch (error) {}
 								dispatch({ type: "SIGN_IN", token: getToken() });
 							}
@@ -143,6 +145,7 @@ function RootStackNavigator({ navigation }) {
 					AsyncStorage.removeItem("userToken");
 					AsyncStorage.removeItem("username");
 					AsyncStorage.removeItem("fullName");
+					AsyncStorage.removeItem("nameClass");
 				} catch (error) {}
 				dispatch({ type: "SIGN_OUT" });
 			},
