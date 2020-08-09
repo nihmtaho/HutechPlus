@@ -128,6 +128,7 @@ const SettingScreen = ({ navigation }) => {
 					iconLeft="exclamationcircle"
 					iconRight="arrow-right"
 					color="red"
+					onPress={() => navigation.navigate("BugScreen")}
 				/>
 			</ScrollView>
 			<StatusBar style="auto" />

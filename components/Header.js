@@ -22,7 +22,7 @@ export default function Header(props) {
 
 const styles = StyleSheet.create({
 	content: {
-		backgroundColor: "#f08a5d",
+		backgroundColor: "#00bcd4",
 		paddingTop: Constants.statusBarHeight + 8,
 		height: 110,
 		borderBottomStartRadius: 32,

@@ -7,6 +7,7 @@ import SettingScreen from "../../screens/SettingScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
 import SubjectsListScreen from "../../screens/history-screens/SubjectsListScreen";
 import HistoryScreen from "../../screens/history-screens/HistoryScreen";
+import BugScreen from "../../screens/bug-a-help-screens/BugScreen";
 
 const SettingStack = createStackNavigator();
 
@@ -52,6 +53,15 @@ const settingStack = ({ route, navigation }) => {
 				component={HistoryScreen}
 				options={{
 					title: "Lịch sử điểm danh",
+					headerShown: false,
+					headerTitleAlign: "center",
+				}}
+			/>
+			<SettingStack.Screen
+				name="BugScreen"
+				component={BugScreen}
+				options={{
+					title: "Báo lỗi",
 					headerShown: false,
 					headerTitleAlign: "center",
 				}}

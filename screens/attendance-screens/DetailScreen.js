@@ -19,14 +19,15 @@ import {
 	Text,
 } from "react-native-paper";
 import MaterialIcons from "react-native-vector-icons/FontAwesome";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { getPreciseDistance, isPointWithinRadius } from "geolib";
 import Config from "../../config.json";
+import moment from "moment";
 
 console.disableYellowBox = true;
 
-const DetailScreen = ({ navigation }) => {
+const DetailScreen = ({ navigation, route }) => {
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [myLocation, setMyLocation] = useState(null);
 	const [checkinStatus, setCheckinStatus] = useState(false);
@@ -58,6 +59,15 @@ const DetailScreen = ({ navigation }) => {
 	const [name, setName] = useState("");
 	const [mssv, setMSSV] = useState("");
 	// const [personId, setPersonId] = useState('')
+	const [state, setState] = useState({
+		year: "",
+		month: "",
+		day: "",
+		timeMoment: "",
+	});
+	const { year, month, day, timeMoment } = state;
+
+	const { dataMoment } = route.params;
 
 	const cognitiveHeaders = new Headers();
 	cognitiveHeaders.append("Content-Type", "application/json");
@@ -98,14 +108,8 @@ const DetailScreen = ({ navigation }) => {
 				);
 			} catch (error) {}
 		})();
-		return () => {
-			//			setIsShot(false)
-		};
+		_cutString();
 	});
-
-	// const toggleSwitch = (checkIn) => {
-	//   setCheckinStatus(checkIn);
-	// }
 
 	let text = "Đang kiểm tra vị trí..";
 	if (errorMsg) {
@@ -117,6 +121,46 @@ const DetailScreen = ({ navigation }) => {
 			"\nlongitude: " +
 			myLocation.longitude;
 	}
+
+	const _cutString = () => {
+		let year_log = dataMoment;
+		let month_log = dataMoment;
+		let day_log = dataMoment;
+
+		setState({
+			year: year_log.substr(0, 4),
+			month: month_log.substr(5, 2),
+			day: day_log.substr(8, 2),
+			timeMoment: moment().format("HH:mm:ss"),
+		});
+	};
+
+	const _pushDataAttendance = () => {
+		db.ref(
+			"Subject/" +
+				subjectCode +
+				"/attendance/16DTHJE1/" +
+				year +
+				"/" +
+				month +
+				"/" +
+				day +
+				"/" +
+				mssv +
+				"/"
+		)
+			.update({
+				dateCheckIn: dataMoment,
+				timeCheckIn: timeMoment,
+				valueCheckIn: true,
+			})
+			.then((data) => {
+				console.log("dataCheckIn -> pushed");
+			})
+			.catch((error) => {
+				console.log("error", error);
+			});
+	};
 
 	const takePicture = async () => {
 		const photo = await cameraRef.current.takePictureAsync({
@@ -184,6 +228,7 @@ const DetailScreen = ({ navigation }) => {
 		if (mssvResult) {
 			if (mssvResult == mssv) {
 				handleAddFace(identityResult, uploadResult);
+				_pushDataAttendance();
 				setIsShot(false);
 				navigation.navigate("AttendanceSuccess", {
 					username: [mssv],
@@ -191,7 +236,7 @@ const DetailScreen = ({ navigation }) => {
 			} else {
 				Alert.alert("Điểm danh không thành công", "Đây không phải bạn", [
 					{
-						text: "OK",
+						text: "Đồng ý",
 						onPress: () => {
 							setIsShot(false);
 						},
@@ -204,7 +249,7 @@ const DetailScreen = ({ navigation }) => {
 				"Vui lòng kiểm tra đường truyền",
 				[
 					{
-						text: "OK",
+						text: "Đồng ý",
 						onPress: () => {
 							setIsShot(false);
 						},
@@ -567,7 +612,6 @@ const DetailScreen = ({ navigation }) => {
 							<MaterialIcons name="camera" size={24} color="#000" />
 						</View>
 					</TouchableOpacity>
-
 				</>
 			)}
 			{myLocation && withinClass && isShot && (

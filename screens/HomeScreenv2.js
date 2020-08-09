@@ -145,7 +145,9 @@ class HomeScreen extends Component {
 				onPress={() =>
 					this.props.navigation.navigate("NavigateToDetail", {
 						subjectCode: item.subjectId,
-						address: item.address
+						address: item.address,
+						name_lecturer: item.valueGV,
+						dataMoment: this.state.formattedDate,
 					})
 				}
 			/>
@@ -204,7 +206,7 @@ class HomeScreen extends Component {
 					>
 						<Image
 							style={{ width: 120, height: 120 }}
-							source={require("../assets/calendar/calendar-1.png")}
+							source={require("../assets/calendar/037-calendar.png")}
 						/>
 						<Text style={{ marginTop: 8, fontWeight: "bold" }}>
 							OOPS...! Không có lịch học

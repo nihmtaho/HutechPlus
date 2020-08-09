@@ -6,16 +6,10 @@ import {
 	AsyncStorage,
 	ActivityIndicator,
 	Image,
+	ScrollView,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import {
-	Button,
-	Caption,
-	Title,
-	Subheading,
-	Paragraph,
-} from "react-native-paper";
-import Constants from "expo-constants";
+import { Button, Caption, Subheading, Paragraph } from "react-native-paper";
 import HeaderComponent from "../../components/Header";
 
 import { db } from "../../src/config/db";
@@ -26,8 +20,10 @@ const sourceCheckInTrue = "../../assets/other-icon/020-wifi.png";
 const NavigateToDetail = ({ navigation, route }) => {
 	const { subjectCode } = route.params;
 	const { address } = route.params;
+	const { name_lecturer } = route.params;
+	const { dataMoment } = route.params;
 	const [nameClass, setNameClass] = useState("");
-	const [stateCheckIn, setStateCheckIn] = useState();
+	const [nameLecturer, setNameLecturer] = useState("");
 	const [validCheckIn, setValidCheckIn] = useState();
 	const [isLoad, setIsLoad] = useState(false);
 
@@ -38,8 +34,11 @@ const NavigateToDetail = ({ navigation, route }) => {
 	const { subject_code, subject_name } = state;
 
 	useEffect(() => {
-		_getAsyncCode();
-		_fetchInfoSubject();
+		try {
+			_getAsyncCode();
+			_fetchInfoSubject();
+			_fetchInfoLecturer();
+		} catch (error) {}
 	}, [subjectCode]);
 
 	const _getAsyncCode = async () => {
@@ -50,51 +49,60 @@ const NavigateToDetail = ({ navigation, route }) => {
 			db.ref(
 				"Subject/" + subjectCode + "/attendance/" + nameClass_log + "/"
 			).on("value", (Snapshot) => {
-				const object_childCheckIn = Snapshot.child("stateCheckIn").val();
-				let element;
-				for (
-					let index = 0;
-					index < Object.values(object_childCheckIn).length;
-					index++
-				) {
-					element = Object.values(object_childCheckIn)[2];
-				}
-				if (element) {
-					setValidCheckIn(element);
+				if (Snapshot.exists()) {
+					const object_childCheckIn = Snapshot.child("stateCheckIn").val();
+					let element;
+					for (
+						let index = 0;
+						index < Object.values(object_childCheckIn).length;
+						index++
+					) {
+						element = Object.values(object_childCheckIn)[2];
+					}
+					if (element) {
+						setValidCheckIn(element);
+					}
 				}
 			});
 			setNameClass(nameClass_log);
-		} catch (error) {
-			console.log("error list: ", error);
-		}
+		} catch (error) {}
 	};
 
 	const _fetchInfoSubject = () => {
-		db.ref("Subject/" + subjectCode + "/").once("value", (Snapshot) => {
-			// let subjectCode = Snapshot.child("subjectId").val();
-			// let subjectName = Snapshot.child("subjectName").val();
-			let object_log = Snapshot.val();
-			let subjectCode_temp;
-			let subjectName_temp;
-			// console.log("object", object_log);
-			for (let index = 0; index < Object.values(object_log).length; index++) {
-				subjectCode_temp = Object.values(object_log)[2];
-				subjectName_temp = Object.values(object_log)[3];
-			}
-			if (subjectCode_temp && subjectName_temp) {
-				setState({
-					subject_code: subjectCode_temp,
-					subject_name: subjectName_temp,
-				});
-			}
-		setIsLoad(false);
-
-		});
+		try {
+			db.ref("Subject/" + subjectCode + "/").once("value", (Snapshot) => {
+				if (Snapshot.exists()) {
+					let object_log = Snapshot.val();
+					let subjectCode_temp;
+					let subjectName_temp;
+					for (
+						let index = 0;
+						index < Object.values(object_log).length;
+						index++
+					) {
+						subjectCode_temp = Object.values(object_log)[2];
+						subjectName_temp = Object.values(object_log)[3];
+					}
+					if (subjectCode_temp && subjectName_temp) {
+						setState({
+							subject_code: subjectCode_temp,
+							subject_name: subjectName_temp,
+						});
+					}
+					setIsLoad(false);
+				}
+			});
+		} catch (error) {}
 	};
 
-	const _actionOnPress = () => {
-
-	}
+	const _fetchInfoLecturer = () => {
+		db.ref("Teachers/" + name_lecturer + "/").once("value", (Snapshot) => {
+			if (Snapshot.exists()) {
+				let value_log = Snapshot.child("fullname").val();
+				setNameLecturer(value_log);
+			}
+		});
+	};
 
 	return (
 		<View style={styles.container}>
@@ -104,16 +112,48 @@ const NavigateToDetail = ({ navigation, route }) => {
 					<ActivityIndicator style={{ padding: 28 }} color="#00bcd4" />
 				) : (
 					<>
-						<Subheading style={{fontWeight: "bold"}}>Mã môn học: {subject_code}</Subheading>
-						<Subheading style={{fontWeight: "bold"}}>Môn học: {subject_name}</Subheading>
-						<Paragraph>Địa điểm: {address}</Paragraph>
-						<Paragraph>Lớp của bạn: {nameClass}</Paragraph>
-						{validCheckIn === true ? (
-							<Text>Điểm danh đang mở.</Text>
-						) : (
-							<Text>Điểm danh đang đóng.</Text>
-						)}
-						<Text>{JSON.stringify(stateCheckIn)}</Text>
+						<View style={styles.flexRow}>
+							<View style={{ marginRight: 8 }}>
+								<Caption>Mã môn học</Caption>
+								<Subheading style={{ fontWeight: "bold" }}>
+									{subject_code}
+								</Subheading>
+							</View>
+							<View style={{ marginLeft: 8 }}>
+								<Caption>Môn học</Caption>
+								<Subheading style={{ fontWeight: "bold" }}>
+									{subject_name}
+								</Subheading>
+							</View>
+						</View>
+						<View style={styles.flexRow}>
+							<View style={{ marginRight: 8 }}>
+								<Caption>Địa điểm</Caption>
+								<Paragraph>{address}</Paragraph>
+							</View>
+							<View style={{ marginLeft: 8 }}>
+								<Caption>Ngày học</Caption>
+								<Paragraph>{dataMoment}</Paragraph>
+							</View>
+						</View>
+						<View>
+							<Caption>Giảng viên giảng dạy</Caption>
+							<Paragraph>{nameLecturer}</Paragraph>
+						</View>
+						<View style={styles.flexRow}>
+							<View style={{ marginRight: 8 }}>
+								<Caption>Lớp của bạn</Caption>
+								<Paragraph>{nameClass}</Paragraph>
+							</View>
+							<View style={{ marginLeft: 8 }}>
+								<Caption>Trạng thái</Caption>
+								{validCheckIn === true ? (
+									<Paragraph>Điểm danh đang mở.</Paragraph>
+								) : (
+									<Paragraph>Điểm danh đang đóng.</Paragraph>
+								)}
+							</View>
+						</View>
 					</>
 				)}
 			</View>
@@ -141,7 +181,7 @@ const NavigateToDetail = ({ navigation, route }) => {
 				) : (
 					<Button
 						mode="contained"
-						onPress={() => navigation.navigate("Detail")}
+						onPress={() => navigation.navigate("Detail", {dataMoment: dataMoment})}
 					>
 						Bắt đầu điểm danh
 					</Button>
@@ -160,7 +200,6 @@ const styles = StyleSheet.create({
 	content: {
 		flex: 0.7,
 		padding: 8,
-		// backgroundColor: "#000"
 	},
 	contentButton: {
 		flex: 0.3,
@@ -172,12 +211,16 @@ const styles = StyleSheet.create({
 	imgIcon: {
 		width: 120,
 		height: 120,
-		marginBottom: 12
+		marginBottom: 12,
 	},
 	contentImage: {
 		display: "flex",
 		justifyContent: "center",
 		alignItems: "center",
+	},
+	flexRow: {
+		display: "flex",
+		flexDirection: "row",
 	},
 });
 
