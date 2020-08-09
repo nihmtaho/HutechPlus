@@ -22,8 +22,9 @@ import MaterialIcons from "react-native-vector-icons/FontAwesome";
 import { Ionicons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { getPreciseDistance, isPointWithinRadius } from "geolib";
-import Config from "../../config.json";
 import moment from "moment";
+import Config from "../../config.json";
+import { db } from "../../src/config/db";
 
 console.disableYellowBox = true;
 
@@ -59,6 +60,7 @@ const DetailScreen = ({ navigation, route }) => {
 	const [name, setName] = useState("");
 	const [mssv, setMSSV] = useState("");
 	// const [personId, setPersonId] = useState('')
+
 	const [state, setState] = useState({
 		year: "",
 		month: "",
@@ -66,8 +68,9 @@ const DetailScreen = ({ navigation, route }) => {
 		timeMoment: "",
 	});
 	const { year, month, day, timeMoment } = state;
-
 	const { dataMoment } = route.params;
+	const { name_class } = route.params;
+	const { subjectCode } = route.params;
 
 	const cognitiveHeaders = new Headers();
 	cognitiveHeaders.append("Content-Type", "application/json");
@@ -95,20 +98,9 @@ const DetailScreen = ({ navigation, route }) => {
 				longitude: location.coords.longitude,
 			});
 			setWithinClass(isPointWithinRadius(myLocation, teacherLocation, radius));
-
-			try {
-				db.ref("Students/" + this.state.mssv + "/schedule/").on(
-					"value",
-					(Snapshot) => {
-						get = Snapshot.val();
-						Snapshot.forEach((element) => {
-							dateData.push(element.child("date").val());
-						});
-					}
-				);
-			} catch (error) {}
+			_cutString();
 		})();
-		_cutString();
+		return () => {};
 	});
 
 	let text = "Đang kiểm tra vị trí..";
@@ -126,7 +118,6 @@ const DetailScreen = ({ navigation, route }) => {
 		let year_log = dataMoment;
 		let month_log = dataMoment;
 		let day_log = dataMoment;
-
 		setState({
 			year: year_log.substr(0, 4),
 			month: month_log.substr(5, 2),
@@ -135,11 +126,13 @@ const DetailScreen = ({ navigation, route }) => {
 		});
 	};
 
-	const _pushDataAttendance = () => {
+	const _pushAttendance = () => {
 		db.ref(
 			"Subject/" +
 				subjectCode +
-				"/attendance/16DTHJE1/" +
+				"/attendance/" +
+				name_class +
+				"/" +
 				year +
 				"/" +
 				month +
@@ -228,15 +221,15 @@ const DetailScreen = ({ navigation, route }) => {
 		if (mssvResult) {
 			if (mssvResult == mssv) {
 				handleAddFace(identityResult, uploadResult);
-				_pushDataAttendance();
 				setIsShot(false);
+				_pushAttendance();
 				navigation.navigate("AttendanceSuccess", {
 					username: [mssv],
 				});
 			} else {
 				Alert.alert("Điểm danh không thành công", "Đây không phải bạn", [
 					{
-						text: "Đồng ý",
+						text: "OK",
 						onPress: () => {
 							setIsShot(false);
 						},
@@ -249,7 +242,7 @@ const DetailScreen = ({ navigation, route }) => {
 				"Vui lòng kiểm tra đường truyền",
 				[
 					{
-						text: "Đồng ý",
+						text: "OK",
 						onPress: () => {
 							setIsShot(false);
 						},

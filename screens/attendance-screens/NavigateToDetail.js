@@ -181,7 +181,13 @@ const NavigateToDetail = ({ navigation, route }) => {
 				) : (
 					<Button
 						mode="contained"
-						onPress={() => navigation.navigate("Detail", {dataMoment: dataMoment})}
+						onPress={() =>
+							navigation.navigate("Detail", {
+								dataMoment: dataMoment,
+								name_class: nameClass,
+								subjectCode: subject_code,
+							})
+						}
 					>
 						Bắt đầu điểm danh
 					</Button>
