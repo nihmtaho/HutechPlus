@@ -108,8 +108,6 @@ const NavigateToDetail = ({ navigation, route }) => {
 			let year_log = dataMoment.substr(0, 4);
 			let month_log = dataMoment.substr(5, 2);
 			let day_log = dataMoment.substr(8, 2);
-			// let nameClass_log = await AsyncStorage.getItem("nameClass");
-			// let username = await AsyncStorage.getItem("username");
 			db.ref(
 				"Subject/" +
 					subjectCode +
@@ -127,7 +125,6 @@ const NavigateToDetail = ({ navigation, route }) => {
 			).once("value", (Snapshot) => {
 				if (Snapshot.exists()) {
 					const element = Object.values(Snapshot.val())[2];
-					console.log(element);
 					setValidHaveCheckIn(element);
 					setIsLoad(false);
 				}
@@ -249,7 +246,7 @@ const NavigateToDetail = ({ navigation, route }) => {
 					<ActivityIndicator style={{ padding: 28 }} color="#00bcd4" />
 				) : !validCheckIn ? (
 					<Caption style={{ textAlign: "center" }}>
-						Giảng viên chưa mở điểm danh, vui lòng quay lại sau.
+						Giảng viên chưa mở điểm danh, quay lại sau nhé :).
 					</Caption>
 				) : dateOpen ? (
 					validHaveCheckIn ? (

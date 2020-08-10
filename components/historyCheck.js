@@ -2,24 +2,33 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 
 const historyCheck = (props) => {
+	// const {data} = dataPro
+
 	return (
 		<TouchableOpacity
-			activeOpacity={0.5}
 			onPress={props.onPress}
 			style={styles.container}
 		>
 			<View style={styles.divContent}>
-				{/* <Text style={(styles.titleStyle, styles.fontSize)}>{subjectName}</Text> */}
 				<Text style={(styles.titleStyle, styles.fontSize)}>
-					Thực tập tốt nghiệp
+					{props.titleSubj}
 				</Text>
-				<Text style={styles.titleStyle}>Thời gian điểm danh: {props.times}</Text>
+				<Text style={styles.titleStyle}>
+					Thời gian điểm danh: {props.times}
+				</Text>
 			</View>
 			<View style={styles.mountContent}>
 				<View style={styles.mountLeft}>
-					{/* <Text style={styles.titleStyle}>Mã môn: {subjectID} </Text> */}
-					<Text style={styles.titleStyle}>{props.isCheck}</Text>
-					<Text style={styles.titleStyle}>Tuần {props.weeks}</Text>
+					{props.isCheck == true ? (
+						<Text style={(styles.titleStyle, styles.colorGreen)}>
+							ĐÃ ĐIỂM DANH
+						</Text>
+					) : (
+						<Text style={(styles.titleStyle, styles.colorRed)}>
+							CHƯA ĐIỂM DANH
+						</Text>
+					)}
+					<Text style={styles.titleStyle}>Lần {props.weeks}</Text>
 				</View>
 			</View>
 		</TouchableOpacity>
@@ -32,8 +41,8 @@ const styles = StyleSheet.create({
 		padding: 12,
 		marginVertical: 4,
 		marginHorizontal: 10,
-        borderRadius: 6,
-        elevation: 1,
+		borderRadius: 14,
+		elevation: 1,
 	},
 	divContent: {
 		display: "flex",
@@ -46,7 +55,7 @@ const styles = StyleSheet.create({
 	},
 	mountContent: {
 		display: "flex",
-        flexDirection: "row",
+		flexDirection: "row",
 		borderTopWidth: 0.5,
 		borderTopColor: "gray",
 		paddingTop: 4,
@@ -56,8 +65,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		display: "flex",
 		flexDirection: "row",
-        // alignItems: "center",
-        justifyContent: "space-between"
+		// alignItems: "center",
+		justifyContent: "space-between",
 	},
 	titleStyle: {
 		fontSize: 14,
@@ -69,6 +78,12 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		// color: "#fff",
 	},
+	colorRed: {
+		color: "red",
+	},
+	colorGreen: {
+		color: "#96bb7c"
+	}
 });
 
 export default historyCheck;
