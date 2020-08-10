@@ -13,6 +13,7 @@ import { Button, Caption, Subheading, Paragraph } from "react-native-paper";
 import HeaderComponent from "../../components/Header";
 
 import { db } from "../../src/config/db";
+import moment from "moment";
 
 const sourceCheckInFalse = "../../assets/other-icon/040-error.png";
 const sourceCheckInTrue = "../../assets/other-icon/020-wifi.png";
@@ -25,7 +26,10 @@ const NavigateToDetail = ({ navigation, route }) => {
 	const [nameClass, setNameClass] = useState("");
 	const [nameLecturer, setNameLecturer] = useState("");
 	const [validCheckIn, setValidCheckIn] = useState();
+	const [dateOpen, setDateOpen] = useState();
 	const [isLoad, setIsLoad] = useState(false);
+	const [dateFirebase, setDateFirebase] = useState("");
+	const [validHaveCheckIn, setValidHaveCheckIn] = useState(false);
 
 	const [state, setState] = useState({
 		subject_code: "",
@@ -33,38 +37,104 @@ const NavigateToDetail = ({ navigation, route }) => {
 	});
 	const { subject_code, subject_name } = state;
 
+	const [momentState, setMomentState] = useState({
+		year: "",
+		month: "",
+		day: "",
+		timeMoment: "",
+	});
+	const { year, month, day } = momentState;
+
 	useEffect(() => {
 		try {
 			_getAsyncCode();
 			_fetchInfoSubject();
 			_fetchInfoLecturer();
+			_validHaveCheckIn();
+			_cutString();
 		} catch (error) {}
 	}, [subjectCode]);
 
 	const _getAsyncCode = async () => {
 		setIsLoad(true);
-
 		try {
 			let nameClass_log = await AsyncStorage.getItem("nameClass");
+			let mssv = await AsyncStorage.getItem("username");
 			db.ref(
 				"Subject/" + subjectCode + "/attendance/" + nameClass_log + "/"
 			).on("value", (Snapshot) => {
 				if (Snapshot.exists()) {
 					const object_childCheckIn = Snapshot.child("stateCheckIn").val();
 					let element;
+					let element_dateOpen;
 					for (
 						let index = 0;
 						index < Object.values(object_childCheckIn).length;
 						index++
 					) {
 						element = Object.values(object_childCheckIn)[2];
+						element_dateOpen = Object.values(object_childCheckIn)[0];
 					}
-					if (element) {
-						setValidCheckIn(element);
-					}
+					setValidCheckIn(element);
+					setDateFirebase(element_dateOpen);
+				}
+				if (dataMoment === moment().format("YYYY-MM-DD")) {
+					setDateOpen(true);
+				} else {
+					setDateOpen(false);
 				}
 			});
+
 			setNameClass(nameClass_log);
+		} catch (error) {}
+	};
+
+	const _cutString = () => {
+		let year_log = dataMoment;
+		let month_log = dataMoment;
+		let day_log = dataMoment;
+		setMomentState({
+			year: year_log.substr(0, 4),
+			month: month_log.substr(5, 2),
+			day: day_log.substr(8, 2),
+			timeMoment: moment().format("HH:mm:ss"),
+		});
+	};
+
+	const _validHaveCheckIn = async () => {
+		try {
+			let nameClass_log = await AsyncStorage.getItem("nameClass");
+			let mssv = await AsyncStorage.getItem("username");
+			let year_log = dataMoment.substr(0, 4);
+			let month_log = dataMoment.substr(5, 2);
+			let day_log = dataMoment.substr(8, 2);
+			// let nameClass_log = await AsyncStorage.getItem("nameClass");
+			// let username = await AsyncStorage.getItem("username");
+			db.ref(
+				"Subject/" +
+					subjectCode +
+					"/attendance/" +
+					nameClass_log +
+					"/" +
+					year_log +
+					"/" +
+					month_log +
+					"/" +
+					day_log +
+					"/" +
+					mssv +
+					"/"
+			).once("value", (Snapshot) => {
+				if (Snapshot.exists()) {
+					const element = Object.values(Snapshot.val())[2];
+					console.log(element);
+					setValidHaveCheckIn(element);
+					setIsLoad(false);
+				}
+				else {
+					setIsLoad(false)
+				}
+			});
 		} catch (error) {}
 	};
 
@@ -89,7 +159,6 @@ const NavigateToDetail = ({ navigation, route }) => {
 							subject_name: subjectName_temp,
 						});
 					}
-					setIsLoad(false);
 				}
 			});
 		} catch (error) {}
@@ -158,7 +227,9 @@ const NavigateToDetail = ({ navigation, route }) => {
 				)}
 			</View>
 			<View style={styles.contentImage}>
-				{!validCheckIn ? (
+				{isLoad == true ? (
+					<ActivityIndicator style={{ padding: 28 }} color="#00bcd4" />
+				) : !validCheckIn ? (
 					<>
 						<Image
 							style={styles.imgIcon}
@@ -174,23 +245,39 @@ const NavigateToDetail = ({ navigation, route }) => {
 				)}
 			</View>
 			<View style={styles.contentButton}>
-				{!validCheckIn ? (
+				{isLoad == true ? (
+					<ActivityIndicator style={{ padding: 28 }} color="#00bcd4" />
+				) : !validCheckIn ? (
 					<Caption style={{ textAlign: "center" }}>
 						Giảng viên chưa mở điểm danh, vui lòng quay lại sau.
 					</Caption>
+				) : dateOpen ? (
+					validHaveCheckIn ? (
+						<Caption>Bạn đã điểm danh thành công</Caption>
+					) : (
+						<Button
+							mode="contained"
+							onPress={() =>
+								navigation.navigate("Detail", {
+									dataMoment: dataMoment,
+									name_class: nameClass,
+									subjectCode: subject_code,
+								})
+							}
+						>
+							Bắt đầu điểm danh
+						</Button>
+					)
 				) : (
-					<Button
-						mode="contained"
-						onPress={() =>
-							navigation.navigate("Detail", {
-								dataMoment: dataMoment,
-								name_class: nameClass,
-								subjectCode: subject_code,
-							})
-						}
-					>
-						Bắt đầu điểm danh
-					</Button>
+					<>
+						<Caption style={{ textAlign: "center" }}>
+							Có vẻ như bạn đang chọn sai ngày.
+						</Caption>
+						<Caption style={{ textAlign: "center" }}>
+							Ngày điểm danh của bạn là:
+						</Caption>
+						<Caption style={{ textAlign: "center" }}>{dateFirebase}</Caption>
+					</>
 				)}
 			</View>
 			<StatusBar style="auto" />
