@@ -6,6 +6,8 @@ import {
 	FlatList,
 	AsyncStorage,
 	TouchableOpacity,
+	RefreshControl,
+	ActivityIndicator,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
@@ -20,57 +22,83 @@ const HistoryScreen = ({ navigation, route }) => {
 	const [data, setData] = useState();
 	const [haveObj, setHaveObj] = useState();
 	const [subjName, setSubjName] = useState("");
+	const [refreshing, setRefreshing] = useState(false);
+	const [isLoad, setIsLoad] = useState(false);
 
 	useEffect(() => {
 		_fetchObject();
-	});
+		return () => {};
+	}, []);
 
 	const _fetchObject = async () => {
-		let username = await AsyncStorage.getItem("username");
-		let class_name = await AsyncStorage.getItem("nameClass");
-		db.ref("Subject/" + subjectCode + "/attendance/" + class_name + "/").once(
-			"value",
-			(Snapshot) => {
-				if (Snapshot.exists()) {
-					let value = Object.values(Snapshot.child("2020/08").val());
-					let data_log = [];
-					for (let index = 0; index < value.length; index++) {
-						const element = value[index];
-						if (Object.keys(element) == username) {
-							data_log.push(Object.values(element));
-						}
-					}
-					let data2 = [];
+		try {
+			setIsLoad(true);
+			let username = await AsyncStorage.getItem("username");
+			let class_name = await AsyncStorage.getItem("nameClass");
+			db.ref("Subject/" + subjectCode + "/attendance/" + class_name + "/").once(
+				"value",
+				(Snapshot) => {
+					if (Snapshot.exists()) {
+						if (Snapshot.child("2020/08").exists()) {
+							let value = Object.values(Snapshot.child("2020/08").val());
+							let data_log = [];
+							for (let index = 0; index < value.length; index++) {
+								const element = value[index];
+								if (Object.keys(element) == username) {
+									data_log.push(Object.values(element));
+								}
+							}
+							let data2 = [];
 
-					for (let index = 0; index < data_log.length; index++) {
-						const element = data_log[index];
-						for (let y = 0; y < element.length; y++) {
-							const element2 = element[y];
-							data2.push(element2);
+							for (let index = 0; index < data_log.length; index++) {
+								const element = data_log[index];
+								for (let y = 0; y < element.length; y++) {
+									const element2 = element[y];
+									data2.push(element2);
+								}
+							}
+							setData(data2);
+							setHaveObj(true);
+							setRefreshing(false);
+							setIsLoad(false);
+						} else {
+							setHaveObj(false);
+							setRefreshing(false);
+							setIsLoad(false);
 						}
+					} else {
+						setHaveObj(false);
+						setRefreshing(false);
+						setIsLoad(false);
 					}
-
-					setData(data2);
-					setHaveObj(true);
-				} else {
-					setHaveObj(false);
 				}
-			}
-		);
-		db.ref("Subject/" + subjectCode + "/").on("value", (Snapshot) => {
-			if (Snapshot.exists()) {
-				let value = Snapshot.child("subjectName").val();
-				setSubjName(value);
-			}
+			);
+			db.ref("Subject/" + subjectCode + "/").on("value", (Snapshot) => {
+				if (Snapshot.exists()) {
+					let value = Snapshot.child("subjectName").val();
+					setSubjName(value);
+				}
+			});
+		} catch (error) {}
+	};
+
+	const wait = (timeout) => {
+		return new Promise((resolve) => {
+			setTimeout(resolve, timeout);
 		});
 	};
+
+	const _onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		wait(1000).then(() => _fetchObject());
+	}, []);
 
 	const _renderRow = ({ item, index }) => {
 		return (
 			<HistoryCheck
 				times={item.dateCheckIn}
 				isCheck={item.valueCheckIn}
-				weeks={index}
+				weeks={item.dateCheckIn}
 				titleSubj={subjName}
 			/>
 		);
@@ -95,15 +123,20 @@ const HistoryScreen = ({ navigation, route }) => {
 					{subjectCode}
 				</Caption>
 			</View>
-			{haveObj ? (
+			{isLoad ? (
+				<ActivityIndicator style={{ padding: 28 }} color="#96bb7c" />
+			) : haveObj ? (
 				<FlatList
 					style={{ marginTop: 8 }}
 					data={data}
 					renderItem={_renderRow}
 					keyExtractor={(i, k) => k.toString()}
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
+					}
 				/>
 			) : (
-				<Caption style={{ textAlign: "center" }}>Not found data :)</Caption>
+				<Caption style={{ textAlign: "center" }}>Not found data</Caption>
 			)}
 			<StatusBar style="auto" />
 		</View>

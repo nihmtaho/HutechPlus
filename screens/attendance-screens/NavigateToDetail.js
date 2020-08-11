@@ -52,8 +52,10 @@ const NavigateToDetail = ({ navigation, route }) => {
 			_fetchInfoLecturer();
 			_validHaveCheckIn();
 			_cutString();
-		} catch (error) {}
-	}, [subjectCode]);
+		} catch (error) {
+			console.log("error list in useEffect: ", error);
+		}
+	}, []);
 
 	const _getAsyncCode = async () => {
 		setIsLoad(true);
@@ -259,6 +261,7 @@ const NavigateToDetail = ({ navigation, route }) => {
 									dataMoment: dataMoment,
 									name_class: nameClass,
 									subjectCode: subject_code,
+									lecturer_code: name_lecturer 
 								})
 							}
 						>

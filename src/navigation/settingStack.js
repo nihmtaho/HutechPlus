@@ -52,9 +52,8 @@ const settingStack = ({ route, navigation }) => {
 				name="HistoryScreen"
 				component={HistoryScreen}
 				options={{
-					title: "Lịch sử điểm danh",
 					headerShown: false,
-					headerTitleAlign: "center",
+					gestureEnabled: false,
 				}}
 			/>
 			<SettingStack.Screen

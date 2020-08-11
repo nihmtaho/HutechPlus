@@ -4,10 +4,9 @@
     "slug": "HutechPlus",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
-    "version": "2.7.0608",
+    "version": "3.2.0811",
     "orientation": "portrait",
     "icon": "./assets/logo/icon-have-background.png",
     "splash": {
@@ -24,7 +23,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.thaotruogg.hutechplus",
-      "buildNumber": "2.7.0608"
+      "buildNumber": "3.2.0811"
     },
     "android": {
       "package": "com.thaotruogg.hutechplus",

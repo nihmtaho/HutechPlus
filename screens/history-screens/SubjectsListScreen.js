@@ -5,9 +5,7 @@ import {
 	FlatList,
 	AsyncStorage,
 	TouchableOpacity,
-	Alert,
-	ActivityIndicator,
-	ToastAndroid,
+	RefreshControl
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
@@ -18,86 +16,75 @@ import { Ionicons } from "@expo/vector-icons";
 import { Title, Button, Caption, Text } from "react-native-paper";
 import { ceil } from "react-native-reanimated";
 
-const listIdSubject = [];
-const subjectItem = [];
-let unique = [];
-let dataSubject = [];
-let tempData = [];
-
 const SubjectsListScreen = ({ navigation }) => {
-	const [dataRoom, setDataRoom] = useState([]);
-	const [test, setTest] = useState({
-		subjectCode: "",
-		subjectName: "",
-	});
-	const [listFound, setListFound] = useState(undefined);
-
-	const [isLoading, setIsLoading] = useState(false);
+	const [valueData, setValueData] = useState([]);
+	const [isLoad, setIsLoad] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
-		_fetchData();
-		return () => {};
+		// _fetchData();
+		_fetchSubjectCode();
 	}, []);
 
-	const _fetchData = async () => {
-		let idUsername;
-		idUsername = await AsyncStorage.getItem("username");
-		db.ref("Students/" + idUsername + "/schedule/").on(
-			"value",
-			(Snapshot) => {
-				tempData = Snapshot.val();
-			}
-		);
+	const _fetchSubjectCode = async () => {
+		try {
+			setIsLoad(true);
+			let username = await AsyncStorage.getItem("username");
+			db.ref("Students/" + username + "/schedule/").on("value", (Snapshot) => {
+				if (Snapshot.exists()) {
+					let unique_array = [];
+					let value_snapshot = Snapshot.val();
+					for (let index = 0; index < value_snapshot.length; index++) {
+						let element_first = Object.values(value_snapshot[index])[1];
+						for (let y = 0; y < element_first.length; y++) {
+							let element_second = Object.values(element_first[y])[1];
+							unique_array.push(element_second);
+						}
+					}
+					unique_array = [...new Set(unique_array)];
+					let arrayInfoSubject = [];
 
-		for (let i = 0; i < tempData.length; i++) {
-			const element = tempData[i];
-			const convertObject = Object.values(element)[1]; // Get value index 1
-			for (let i = 0; i < convertObject.length; i++) {
-				const element = convertObject[i];
-				subjectItem.push(Object.values(element)[1]);
-			}
-		}
-		unique = [];
-		unique = [...new Set(subjectItem)];
-		// setListFound({ ...unique });
-
-		let subjectId_log;
-		let subjectName_log;
-		dataSubject = [];
-		for (let i = 0; i < unique.length; i++) {
-			const subjectCode_log = unique[i];
-			// console.log(subjectCode_log);
-			// Fetch info Subjects
-			db.ref("Subject/" + subjectCode_log + "/").on("value", (Snapshot) => {
-				subjectId_log = Snapshot.child("subjectId").val();
-				subjectName_log = Snapshot.child("subjectName").val();
-				// console.log(subjectId_log, subjectName_log);
-				dataSubject.push({
-					subjectCode: Snapshot.child("subjectId").val(),
-					subjectName: Snapshot.child("subjectName").val(),
-				});
-				// console.log("dataSubject", dataSubject);
-				setDataRoom(dataSubject);
+					for (let i = 0; i < unique_array.length; i++) {
+						let value_of_array = unique_array[i];
+						db.ref("Subject/" + value_of_array + "/").on(
+							"value",
+							(Snapshot) => {
+								if (Snapshot.exists()) {
+									let value_subjectCode = Object.values(Snapshot.val())[2];
+									let value_subjectName = Object.values(Snapshot.val())[3];
+									arrayInfoSubject.push({
+										subjectCode: value_subjectCode,
+										subjectName: value_subjectName,
+									});
+								}
+							}
+						);
+					}
+					setValueData(arrayInfoSubject);
+					setIsLoad(false);
+					setRefreshing(false);
+				}
 			});
-		}
-		// setIsLoading(false);
+		} catch (error) {}
 	};
 
-	const _actionTest = () => {
-		// Alert.alert("Thông báo", "_onPress", [
-		// 	{
-		// 		text: "OK",
-		// 		style: "cancel",
-		// 	},
-		// ]);
+	const wait = (timeout) => {
+		return new Promise((resolve) => {
+			setTimeout(resolve, timeout);
+		});
 	};
+
+	const _onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		wait(1000).then(() => _fetchSubjectCode());
+	}, []);
 
 	const _renderRow = ({ item }) => {
 		return (
 			<ListSubject
 				dataProps={item}
 				onPress={() =>
-					navigation.navigate("HistoryScreen", {
+					navigation.push("HistoryScreen", {
 						subjectCode: item.subjectCode,
 					})
 				}
@@ -149,14 +136,17 @@ const SubjectsListScreen = ({ navigation }) => {
 			>
 				Vui lòng khởi động lại ứng dụng nếu bạn đã đăng nhập bằng tài khoản khác
 			</Caption>
-			<FlatList
-				style={{ marginTop: 8 }}
-				data={dataSubject}
-				renderItem={_renderRow}
-				keyExtractor={(item) => item.subjectCode}
-				refreshing={isLoading}
-				onRefresh={_fetchData}
-			/>
+			<View style={styles.content}>
+				<FlatList
+					style={{ marginTop: 8 }}
+					data={valueData}
+					renderItem={_renderRow}
+					keyExtractor={(item) => item.subjectCode}
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
+					}
+				/>
+			</View>
 			<StatusBar style="auto" />
 		</View>
 	);
@@ -167,7 +157,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 	content: {
-		padding: 8,
+		flex: 1,
+		padding: 4,
 	},
 });
 

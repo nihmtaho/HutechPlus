@@ -7,9 +7,10 @@ import {
 	AsyncStorage,
 	Image,
 	Platform,
+	RefreshControl,
 } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
-import { Divider } from "react-native-paper";
+import { Caption } from "react-native-paper";
 import Constants from "expo-constants";
 import { StatusBar } from "expo-status-bar";
 
@@ -32,10 +33,8 @@ class HomeScreen extends Component {
 		this.setState({ mssv: mssv });
 		setTimeout(() => {
 			this.fetch();
-		}, 1000);
+		}, 2000);
 		this.fetch();
-		this.func();
-		this.lastUpdate();
 		return;
 	}
 
@@ -154,9 +153,69 @@ class HomeScreen extends Component {
 		);
 	};
 
+	pushObject = async () => {
+		try {
+			let date_select = this.state.formattedDate;
+			let time_moment = moment().format("HH:mm:ss");
+
+			//Cut String
+			let year_cut = date_select.substr(0, 4);
+			let month_cut = date_select.substr(5, 2);
+			let day_cut = date_select.substr(8, 2);
+
+			let name_class = await AsyncStorage.getItem("nameClass");
+			let username = await AsyncStorage.getItem("username");
+			let array_ID = [];
+			for (let i = 0; i < this.state.list.length; i++) {
+				let valueID_in_list = Object.values(this.state.list[i])[1];
+				array_ID.push(valueID_in_list);
+			}
+			for (let x = 0; x < array_ID.length; x++) {
+				let item_subjID = array_ID[x];
+				db.ref("Subject/" + item_subjID + "/attendance/" + name_class + "/").on(
+					"value",
+					(Snapshot) => {
+						if (Snapshot.exists()) {
+							if (searchTrue != -1) {
+								if (
+									Snapshot.child(
+										year_cut + "/" + month_cut + "/" + day_cut + "/"
+									).exists()
+								) {
+									// Do not thing
+								} else {
+									db.ref(
+										"Subject/" +
+											item_subjID +
+											"/attendance/" +
+											name_class +
+											"/" +
+											year_cut +
+											"/" +
+											month_cut +
+											"/" +
+											day_cut +
+											"/" +
+											username +
+											"/"
+									).update({
+										dateCheckIn: date_select,
+										timeCheckIn: time_moment,
+										valueCheckIn: false,
+									});
+								}
+							}
+						}
+					}
+				);
+			}
+		} catch (error) {}
+	};
+
 	render() {
 		this.func();
 		this.lastUpdate();
+		this.pushObject();
 
 		return (
 			<View style={styles.container}>
@@ -191,28 +250,37 @@ class HomeScreen extends Component {
 					/>
 				</View>
 
-				{searchTrue != -1 ? (
-					<FlatList
-						style={{ marginVertical: 6 }}
-						data={this.state.list}
-						renderItem={this.renderRow}
-						keyExtractor={(i, k) => k.toString()}
-						refreshing={this.state.isLoading}
-						onRefresh={this.fetch}
-					/>
-				) : (
-					<View
-						style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-					>
-						<Image
-							style={{ width: 120, height: 120 }}
-							source={require("../assets/calendar/037-calendar.png")}
+				<View style={styles.content}>
+					{searchTrue != -1 ? (
+						<FlatList
+							data={this.state.list}
+							renderItem={this.renderRow}
+							keyExtractor={(i, k) => k.toString()}
+							refreshControl={
+								<RefreshControl
+									refreshing={this.state.isLoading}
+									onRefresh={this.fetch}
+								/>
+							}
 						/>
-						<Text style={{ marginTop: 8, fontWeight: "bold" }}>
-							OOPS...! Không có lịch học
-						</Text>
-					</View>
-				)}
+					) : (
+						<View style={{
+							flex: 1,
+							display: "flex",
+							justifyContent: "center",
+							alignItems: "center"
+						}}>
+							<Caption>Chọn vào lịch nếu bạn không thấy lịch học</Caption>
+							<Image
+								style={{ width: 120, height: 120 }}
+								source={require("../assets/calendar/037-calendar.png")}
+							/>
+							<Text style={{ marginTop: 8, fontWeight: "bold" }}>
+								OOPS...! Không có lịch học
+							</Text>
+						</View>
+					)}
+				</View>
 
 				<StatusBar style="auto" />
 			</View>
@@ -224,6 +292,10 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "white",
+	},
+	content: {
+		flex: 1,
+		padding: 4,
 	},
 });
 

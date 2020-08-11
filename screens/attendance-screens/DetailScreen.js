@@ -25,6 +25,7 @@ import { getPreciseDistance, isPointWithinRadius } from "geolib";
 import moment from "moment";
 import Config from "../../config.json";
 import { db } from "../../src/config/db";
+import Constants from "expo-constants";
 
 console.disableYellowBox = true;
 
@@ -45,10 +46,9 @@ const DetailScreen = ({ navigation, route }) => {
 	// 10.802795, 106.715138
 	// fail location 10.803674, 106.688265
 	// temp data, waiting for teacher's app setting
-	const [teacherLocation, setTeacherLocation] = useState({
-		latitude: 10.802795,
-		longitude: 106.715138,
-	});
+	// latitude: 10.802795,
+	// 	longitude: 106.715138,
+	const [teacherLocation, setTeacherLocation] = useState({});
 
 	const cameraRef = useRef();
 	const [hasPermission, setHasPermission] = useState(null);
@@ -71,6 +71,7 @@ const DetailScreen = ({ navigation, route }) => {
 	const { dataMoment } = route.params;
 	const { name_class } = route.params;
 	const { subjectCode } = route.params;
+	const { lecturer_code } = route.params;
 
 	const cognitiveHeaders = new Headers();
 	cognitiveHeaders.append("Content-Type", "application/json");
@@ -80,7 +81,17 @@ const DetailScreen = ({ navigation, route }) => {
 	);
 
 	useEffect(() => {
-		(async () => {
+		_main();
+	}, []);
+
+	const wait = (timeout) => {
+		return new Promise((resolve) => {
+			setTimeout(resolve, timeout);
+		});
+	};
+
+	const _main = async () => {
+		try {
 			let get_mssv = await AsyncStorage.getItem("username");
 			setMSSV(get_mssv);
 			let { locationStatus } = await Location.requestPermissionsAsync();
@@ -93,26 +104,47 @@ const DetailScreen = ({ navigation, route }) => {
 			const { cameraStatus } = await Camera.requestPermissionsAsync();
 			setHasPermission(cameraStatus === "granted");
 
+			let localLocation = {
+				latitude: location.coords.latitude,
+				longitude: location.coords.longitude,
+			};
+
+			let lecturerLocation;
+
 			setMyLocation({
 				latitude: location.coords.latitude,
 				longitude: location.coords.longitude,
 			});
-			setWithinClass(isPointWithinRadius(myLocation, teacherLocation, radius));
-			_cutString();
-		})();
-		return () => {};
-	});
 
-	let text = "Đang kiểm tra vị trí..";
-	if (errorMsg) {
-		text = errorMsg;
-	} else if (myLocation) {
-		text =
-			"latitude: " +
-			myLocation.latitude +
-			"\nlongitude: " +
-			myLocation.longitude;
-	}
+			db.ref("Teachers/" + lecturer_code + "/location/coords/").on(
+				"value",
+				(Snapshot) => {
+					if (Snapshot.exists()) {
+						let value_latitude_location = Snapshot.child("latitude").val();
+						let value_longitude_location = Snapshot.child("longitude").val();
+
+						lecturerLocation = {
+							latitude: value_latitude_location,
+							longitude: value_longitude_location,
+						};
+
+						setTeacherLocation({
+							latitude: value_latitude_location,
+							longitude: value_longitude_location,
+						});
+					}
+				}
+			);
+			setWithinClass(
+				isPointWithinRadius(localLocation, lecturerLocation, radius)
+			);
+			_cutString();
+		} catch (error) {
+			console.log("error list: ", error);
+		}
+	};
+
+	const _checkLocation = () => {};
 
 	const _cutString = () => {
 		let year_log = dataMoment;
@@ -574,69 +606,86 @@ const DetailScreen = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.container}>
-			{myLocation && withinClass && !isShot && (
-				<>
-					<View style={styles.borderBox}>
-						<Caption style={{ textAlign: "center" }}>
-							Giữ gương mặt vừa trong khung
-						</Caption>
-						<Caption style={{ textAlign: "center", marginTop: -8 }}>
-							và ấn nút chụp.
-						</Caption>
-					</View>
-					<Camera
-						ref={cameraRef}
-						type={Camera.Constants.Type.front}
-						ratio="4:3"
-						style={styles.cmrContainer}
-					></Camera>
-					<TouchableOpacity onPress={takePicture} style={styles.btnContainer}>
-						<View
-							style={{
-								backgroundColor: "#fff",
-								width: 58,
-								height: 58,
-								display: "flex",
-								justifyContent: "center",
-								alignItems: "center",
-								borderRadius: 999,
-							}}
-						>
-							<MaterialIcons name="camera" size={24} color="#000" />
-						</View>
-					</TouchableOpacity>
-				</>
-			)}
-			{myLocation && withinClass && isShot && (
-				<>
-					<View style={styles.cmrContainer}>
-						<Image style={styles.blurredImage} source={{ faceUri }} />
-						<BlurView
-							intensity={250}
-							style={[StyleSheet.absoluteFill, styles.cmrContainer]}
-						></BlurView>
-					</View>
+			{myLocation ? (
+				withinClass ? (
+					!isShot ? (
+						<>
+							<View style={styles.borderBox}>
+								<Caption style={{ textAlign: "center" }}>
+									Giữ gương mặt vừa trong khung
+								</Caption>
+								<Caption style={{ textAlign: "center", marginTop: -8 }}>
+									và ấn nút chụp.
+								</Caption>
+							</View>
+							<Camera
+								ref={cameraRef}
+								type={Camera.Constants.Type.front}
+								ratio="4:3"
+								style={styles.cmrContainer}
+							></Camera>
+							<TouchableOpacity
+								onPress={takePicture}
+								style={styles.btnContainer}
+							>
+								<View
+									style={{
+										backgroundColor: "#fff",
+										width: 58,
+										height: 58,
+										display: "flex",
+										justifyContent: "center",
+										alignItems: "center",
+										borderRadius: 999,
+									}}
+								>
+									<MaterialIcons name="camera" size={24} color="#000" />
+								</View>
+							</TouchableOpacity>
+						</>
+					) : (
+						<>
+							{/* <View style={styles.cmrContainer}>
+								<Image style={styles.blurredImage} source={{ faceUri }} />
+								<BlurView
+									intensity={250}
+									style={[StyleSheet.absoluteFill, styles.cmrContainer]}
+								></BlurView>
+							</View> */}
 
-					<View style={styles.btnContainer}>
-						<ActivityIndicator
-							animating={isShot}
-							size="large"
-							color={Colors.red800}
-						/>
-						<Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
+							<View style={styles.btnContainer}>
+								<ActivityIndicator
+									animating={isShot}
+									size="large"
+									color={Colors.red800}
+								/>
+								<Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
+								<Text style={styles.textStyle}>
+									Vui lòng đợi và không tắt màn hình
+								</Text>
+							</View>
+						</>
+					)
+				) : (
+					<View>
+						<Text style={{ color: "#fff", textAlign: "center" }}>
+							Bạn ở ngoài lớp học
+						</Text>
+						<Text style={{ color: "#fff", textAlign: "center" }}>
+							Không thể điểm danh
+						</Text>
+						<Button
+							mode="outlined"
+							color="#fff"
+							onPress={() => navigation.goBack()}
+						>
+							Quay lại
+						</Button>
 					</View>
-				</>
-			)}
-			{myLocation && !withinClass && (
-				<View>
-					<Text>Bạn ở ngoài lớp học</Text>
-					<Text>Không thể điểm danh</Text>
-				</View>
-			)}
-			{!myLocation && (
+				)
+			) : (
 				<View>
 					{/* Chưa có location */}
-					<Text>{text}</Text>
 					<ActivityIndicator size="large" color="#0000ff" />
 				</View>
 			)}
@@ -651,13 +700,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		backgroundColor: "#000",
 		tintColor: "#000",
-		// paddingTop: StatusBar.currentHeight,
 	},
 	container: {
 		flex: 10 / 10,
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: "#000",
+		paddingTop: Constants.statusBarHeight,
 	},
 
 	textStyle: {
@@ -681,7 +730,7 @@ const styles = StyleSheet.create({
 	cmrContainer: {
 		width: "100%",
 		marginTop: 90,
-		flex: 7 / 10,
+		flex: 8 / 10,
 		alignItems: "center",
 		justifyContent: "center",
 		// borderWidth: 1,
