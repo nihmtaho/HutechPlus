@@ -4,18 +4,17 @@ import {
 	TransitionPresets,
 } from "@react-navigation/stack";
 import SettingScreen from "../../screens/SettingScreen";
-import ProfileScreen from "../../screens/ProfileScreen";
 import SubjectsListScreen from "../../screens/history-screens/SubjectsListScreen";
-import HistoryScreen from '../../screens/history-screens/HistoryScreen';
+import HistoryScreen from "../../screens/history-screens/HistoryScreen";
 
 const SettingStack = createStackNavigator();
 
 const settingStack = ({ route, navigation }) => {
-	if (route.state && route.state.index > 0) {
-		navigation.setOptions({ tabBarVisible: false });
-	} else {
-		navigation.setOptions({ tabBarVisible: true });
-	}
+	// if (route.state && route.state.index > 0) {
+	// 	navigation.setOptions({ tabBarVisible: false });
+	// } else {
+	// 	navigation.setOptions({ tabBarVisible: true });
+	// }
 	return (
 		<SettingStack.Navigator
 			screenOptions={{
@@ -30,16 +29,11 @@ const settingStack = ({ route, navigation }) => {
 				options={{ title: "Tài khoản", headerShown: false }}
 			/>
 			<SettingStack.Screen
-				name="Profile"
-				component={ProfileScreen}
-				options={{ title: "Tài khoản", headerShown: false }}
-			/>
-			<SettingStack.Screen
 				name="SubjectList"
 				component={SubjectsListScreen}
 				options={{
 					title: "Môn học",
-					headerShown: true,
+					headerShown: false,
 					headerTitleAlign: "center",
 				}}
 			/>
@@ -47,9 +41,9 @@ const settingStack = ({ route, navigation }) => {
 				name="HistoryScreen"
 				component={HistoryScreen}
 				options={{
-					title: "Lịch sử điểm danh",
-					headerShown: true,
-					headerTitleAlign: "center",
+					headerShown: false,
+					gestureEnabled: false,
+					...TransitionPresets.ModalSlideFromBottomIOS
 				}}
 			/>
 		</SettingStack.Navigator>

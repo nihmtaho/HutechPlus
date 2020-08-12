@@ -11,7 +11,8 @@ import { db } from "../../config/db";
 
 // TODO: Import Screen dir
 import SplashScreen from "../../../screens/SplashScreen";
-import TabStack from "../mainStackRoot";
+// import TabStack from "../mainStackRoot";
+import UserStack from "../UserStackRoot";
 import AuthStack from "../authStackRoot";
 
 import { AuthContext } from "../../context";
@@ -101,6 +102,7 @@ function RootStackNavigator({ navigation }) {
 						var hasUsername = Snapshot.child("username").val();
 						setUsername(hasUsername);
 						let fullName = Snapshot.child("fullname").val();
+						let name_class = Snapshot.child("classCode").val();
 
 						if (hasUsername != username) {
 							Platform.OS == "ios"
@@ -127,6 +129,7 @@ function RootStackNavigator({ navigation }) {
 									AsyncStorage.setItem("userToken", usernameToken);
 									AsyncStorage.setItem("username", hasUsername);
 									AsyncStorage.setItem("fullName", fullName);
+									AsyncStorage.setItem("nameClass", name_class);
 								} catch (error) {}
 								dispatch({ type: "SIGN_IN", token: getToken() });
 							}
@@ -143,6 +146,7 @@ function RootStackNavigator({ navigation }) {
 					AsyncStorage.removeItem("userToken");
 					AsyncStorage.removeItem("username");
 					AsyncStorage.removeItem("fullName");
+					AsyncStorage.removeItem("nameClass");
 				} catch (error) {}
 				dispatch({ type: "SIGN_OUT" });
 			},
@@ -165,7 +169,7 @@ function RootStackNavigator({ navigation }) {
 						{state.userToken == null ? (
 							<RootStack.Screen name="Auth" component={AuthStack} />
 						) : (
-							<RootStack.Screen name="Main" component={TabStack} />
+							<RootStack.Screen name="Main" component={UserStack} />
 						)}
 					</RootStack.Navigator>
 				)}

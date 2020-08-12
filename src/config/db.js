@@ -1,19 +1,21 @@
-import firebase from 'firebase'
+import firebase from "firebase";
+// import firebase from '@react-native-firebase/app';
+// import firebase from "@react-native-firebase/database";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAZ5RVA-zXlsk92on6GTFASaRf4KEGEyDo",
-    authDomain: "hutech-education.firebaseapp.com",
-    databaseURL: "https://hutech-education.firebaseio.com",
-    projectId: "hutech-education",
-    storageBucket: "hutech-education.appspot.com",
-    messagingSenderId: "501319299038",
-    appId: "1:501319299038:web:bd745da80ec5bf68c7f74f",
-    measurementId: "G-Q92Y4KVQ9D"
+	apiKey: "AIzaSyAZ5RVA-zXlsk92on6GTFASaRf4KEGEyDo",
+	authDomain: "hutech-education.firebaseapp.com",
+	databaseURL: "https://hutech-education.firebaseio.com",
+	projectId: "hutech-education",
+	storageBucket: "hutech-education.appspot.com",
+	messagingSenderId: "501319299038",
+	appId: "1:501319299038:web:bd745da80ec5bf68c7f74f",
+	measurementId: "G-Q92Y4KVQ9D",
 };
 
 // let app
 if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+	firebase.initializeApp(firebaseConfig);
 }
 
-export const db = firebase.database()
+export const db = firebase.database();

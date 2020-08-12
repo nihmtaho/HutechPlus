@@ -1,82 +1,182 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, FlatList, AsyncStorage } from "react-native";
+import React, { useState, useEffect, Component } from "react";
+import {
+	View,
+	StyleSheet,
+	FlatList,
+	AsyncStorage,
+	TouchableOpacity,
+	RefreshControl,
+	ActivityIndicator,
+	SafeAreaView
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 import ListSubject from "../../components/listSubject";
 // import { AuthContext } from "../src/context";
 import { db } from "../../src/config/db";
-
-const listIdSubject = [];
-const subjectItem = [];
-let unique;
-
-const renderRow = ({ item, index }) => {
-	return <ListSubject items={item} />;
-};
+import { Ionicons } from "@expo/vector-icons";
+import { Title, Button, Caption, Text } from "react-native-paper";
+import { ceil } from "react-native-reanimated";
 
 const SubjectsListScreen = ({ navigation }) => {
-	const [state, setState] = useState({
-		listData: null,
-		listFound: null
-	});
-	const { listData, listFound } = state;
+	const [valueData, setValueData] = useState([]);
+	const [isLoad, setIsLoad] = useState(false);
+	const [refreshing, setRefreshing] = useState(false);
 
 	useEffect(() => {
-		const findSubjectLearning = async () => {
-			let idUsername;
-			let tempData;
-			try {
-				idUsername = await AsyncStorage.getItem("username");
-				console.log(idUsername);
-				db.ref("Students/" + idUsername + "/schedule/").once(
-					"value",
-					(Snapshot) => {
-						tempData = Snapshot.val();
-					}
-				);
-				for (let i = 0; i < tempData.length; i++) {
-					const element = tempData[i];
-					const convertObject = Object.values(element)[1]; // Get value index 1
-					for (let i = 0; i < convertObject.length; i++) {
-						const element = convertObject[i];
-						listIdSubject.push(element);
-					}
-				}
-				for (let i = 0; i < listIdSubject.length; i++) {
-					const data = Object.values(listIdSubject[i])[1];
-					subjectItem.push(data);
-				}
-				unique = [...new Set(subjectItem)];
-				setState({ listFound: unique });
-			} catch (error) {}
-		};
-		setTimeout(() => {
-			findSubjectLearning();
-		}, 2000);
-
-		return () => {
-			console.log("Out Screen...");
-		};
+		// _fetchData();
+		_fetchSubjectCode();
 	}, []);
 
+	const _fetchSubjectCode = async () => {
+		try {
+			setIsLoad(true);
+			let username = await AsyncStorage.getItem("username");
+			db.ref("Students/" + username + "/schedule/").on("value", (Snapshot) => {
+				if (Snapshot.exists()) {
+					let unique_array = [];
+					let value_snapshot = Snapshot.val();
+					for (let index = 0; index < value_snapshot.length; index++) {
+						let element_first = Object.values(value_snapshot[index])[1];
+						for (let y = 0; y < element_first.length; y++) {
+							let element_second = Object.values(element_first[y])[1];
+							unique_array.push(element_second);
+						}
+					}
+					unique_array = [...new Set(unique_array)];
+					let arrayInfoSubject = [];
+
+					for (let i = 0; i < unique_array.length; i++) {
+						let value_of_array = unique_array[i];
+						db.ref("Subject/" + value_of_array + "/").on(
+							"value",
+							(Snapshot) => {
+								if (Snapshot.exists()) {
+									let value_subjectCode = Object.values(Snapshot.val())[2];
+									let value_subjectName = Object.values(Snapshot.val())[3];
+									arrayInfoSubject.push({
+										subjectCode: value_subjectCode,
+										subjectName: value_subjectName,
+									});
+								}
+							}
+						);
+					}
+					setValueData(arrayInfoSubject);
+					setRefreshing(false);
+					setTimeout(() => {
+						setIsLoad(false);
+					}, 1500);
+				}
+			});
+		} catch (error) {}
+	};
+
+	const wait = (timeout) => {
+		return new Promise((resolve) => {
+			setTimeout(resolve, timeout);
+		});
+	};
+
+	const _onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		wait(1000).then(() => _fetchSubjectCode());
+	}, []);
+
+	const _renderRow = ({ item }) => {
+		return (
+			<ListSubject
+				dataProps={item}
+				onPress={() =>
+					navigation.push("HistoryScreen", {
+						subjectCode: item.subjectCode,
+					})
+				}
+			/>
+		);
+	};
+
 	return (
-		<View style={styles.container}>
-			{/* <ListSubject onPress={() => navigation.navigate("HistoryScreen")} /> */}
-			{/* <FlatList
-				data={unique}
-				renderItem={renderRow}
-				keyExtractor={(i, k) => k.toString()}
-			/> */}
-			<Text>{JSON.stringify(listFound)}</Text>
+		<SafeAreaView style={styles.container}>
+			<View
+				style={{
+					backgroundColor: "#f08a5d",
+					paddingTop: Constants.statusBarHeight + 8,
+					height: 110,
+					borderBottomStartRadius: 32,
+					borderBottomEndRadius: 32,
+					display: "flex",
+					justifyContent: "flex-end",
+					paddingBottom: 8,
+					elevation: 4,
+				}}
+			>
+				<TouchableOpacity
+					style={{
+						position: "absolute",
+						top: Constants.statusBarHeight,
+						left: 8,
+						paddingHorizontal: 16,
+						paddingVertical: 12,
+						borderRadius: 999,
+						zIndex: 999,
+					}}
+					onPress={() => navigation.goBack()}
+				>
+					<Ionicons name="md-arrow-round-back" size={26} color="#fff" />
+				</TouchableOpacity>
+				<Title style={{ color: "#fff", textAlign: "center" }}>
+					CHỌN MÔN HỌC
+				</Title>
+				<Caption style={{ textAlign: "center", marginTop: -6 }}>
+					Chọn một môn học để xem nhật kí điểm danh
+				</Caption>
+			</View>
+			<Caption
+				style={{
+					paddingHorizontal: 8,
+					textAlign: "center",
+				}}
+			>
+				Vui lòng khởi động lại ứng dụng nếu bạn đã đăng nhập bằng tài khoản khác
+			</Caption>
+			<View style={styles.content}>
+				{isLoad ? (
+					<View style={styles.centerScreen}>
+						<ActivityIndicator color="#f08a5d" />
+						<Caption>Đang tải danh sách</Caption>
+					</View>
+				) : (
+					<FlatList
+						style={{ marginTop: 8 }}
+						data={valueData}
+						renderItem={_renderRow}
+						keyExtractor={(item) => item.subjectCode}
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
+						}
+					/>
+				)}
+			</View>
 			<StatusBar style="auto" />
-		</View>
+		</SafeAreaView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingVertical: 8,
+		backgroundColor: "#fff",
+	},
+	content: {
+		flex: 1,
+		padding: 4,
+	},
+	centerScreen: {
+		flex: 1,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 });
 

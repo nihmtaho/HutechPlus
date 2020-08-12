@@ -98,8 +98,6 @@ function Card(props) {
 	const todaySubject = props.timeTable;
 	const lession = todaySubject.time;
 	const tietHoc = lession.split(",");
-
-	console.log(learnTime[tietHoc-1]);
 	return (
 		<TouchableOpacity
 			activeOpacity={0.5}
@@ -107,7 +105,9 @@ function Card(props) {
 			style={styles.container}
 		>
 			<View style={styles.divContent}>
-				<Text style={styles.titleStyle, styles.fontSize}>{todaySubject.subject_name}</Text>
+				<Text style={(styles.titleStyle, styles.fontSize)}>
+					{todaySubject.subject_name}
+				</Text>
 			</View>
 			<View style={styles.divContent}>
 				<View style={styles.rightContent}>
@@ -120,7 +120,7 @@ function Card(props) {
 				<View style={styles.mountLeft}>
 					<Text style={styles.titleStyle}>Thời gian học: </Text>
 					<Text style={styles.titleStyle}>
-						{learnTime[tietHoc[0]-1].start} -{" "}
+						{learnTime[tietHoc[0] - 1].start} -{" "}
 						{learnTime[tietHoc[tietHoc.length - 2]].end}
 					</Text>
 				</View>
@@ -131,11 +131,12 @@ function Card(props) {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: "#5D6D7E",
+		backgroundColor: "#00bcd4",
 		padding: 12,
 		marginVertical: 4,
 		marginHorizontal: 10,
-		borderRadius: 6,
+		borderRadius: 12,
+		elevation: 2,
 	},
 	divContent: {
 		display: "flex",
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		fontWeight: "bold",
 		color: "#fff",
-	}
+	},
 });
 
 export default Card;
