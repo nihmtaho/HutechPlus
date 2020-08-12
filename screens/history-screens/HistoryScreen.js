@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import {
 	View,
 	StyleSheet,
-	ScrollView,
 	FlatList,
 	AsyncStorage,
 	TouchableOpacity,
 	RefreshControl,
 	ActivityIndicator,
+	SafeAreaView,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
@@ -43,33 +43,33 @@ const HistoryScreen = ({ navigation, route }) => {
 							let value = Object.values(Snapshot.child("2020/08").val());
 							let data_log = [];
 							for (let index = 0; index < value.length; index++) {
-								const element = value[index];
-								if (Object.keys(element) == username) {
-									data_log.push(Object.values(element));
+								const obj_value = value[index];
+								for (const key in obj_value) {
+									if (key == username) {
+										let element = obj_value[key];
+										data_log.push(element);
+									}
 								}
 							}
-							let data2 = [];
-
-							for (let index = 0; index < data_log.length; index++) {
-								const element = data_log[index];
-								for (let y = 0; y < element.length; y++) {
-									const element2 = element[y];
-									data2.push(element2);
-								}
-							}
-							setData(data2);
+							setData(data_log);
 							setHaveObj(true);
 							setRefreshing(false);
-							setIsLoad(false);
+							setTimeout(() => {
+								setIsLoad(false);
+							}, 1500);
 						} else {
 							setHaveObj(false);
 							setRefreshing(false);
-							setIsLoad(false);
+							setTimeout(() => {
+								setIsLoad(false);
+							}, 1500);
 						}
 					} else {
 						setHaveObj(false);
 						setRefreshing(false);
-						setIsLoad(false);
+						setTimeout(() => {
+							setIsLoad(false);
+						}, 1500);
 					}
 				}
 			);
@@ -105,7 +105,7 @@ const HistoryScreen = ({ navigation, route }) => {
 	};
 
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<View style={styles.contentHeader}>
 				<TouchableOpacity
 					style={styles.customTouch}
@@ -123,29 +123,34 @@ const HistoryScreen = ({ navigation, route }) => {
 					{subjectCode}
 				</Caption>
 			</View>
-			{isLoad ? (
-				<ActivityIndicator style={{ padding: 28 }} color="#96bb7c" />
-			) : haveObj ? (
-				<FlatList
-					style={{ marginTop: 8 }}
-					data={data}
-					renderItem={_renderRow}
-					keyExtractor={(i, k) => k.toString()}
-					refreshControl={
-						<RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
-					}
-				/>
-			) : (
-				<Caption style={{ textAlign: "center" }}>Not found data</Caption>
-			)}
+			<View style={styles.content}>
+				{isLoad ? (
+					<View style={styles.centerScreen}>
+						<ActivityIndicator color="#96bb7c" />
+						<Caption style={{ textAlign: "center" }}>Đang tải dữ liệu</Caption>
+					</View>
+				) : haveObj ? (
+					<FlatList
+						data={data}
+						renderItem={_renderRow}
+						keyExtractor={(i, k) => k.toString()}
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
+						}
+					/>
+				) : (
+					<Caption style={{ textAlign: "center" }}>Not found data</Caption>
+				)}
+			</View>
 			<StatusBar style="auto" />
-		</View>
+		</SafeAreaView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		backgroundColor: "#fff",
 	},
 	contentHeader: {
 		backgroundColor: "#96bb7c",
@@ -166,6 +171,15 @@ const styles = StyleSheet.create({
 		paddingVertical: 12,
 		borderRadius: 999,
 		zIndex: 999,
+	},
+	content: {
+		flex: 1,
+	},
+	centerScreen: {
+		flex: 1,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 });
 

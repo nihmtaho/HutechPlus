@@ -11,7 +11,8 @@ import { db } from "../../config/db";
 
 // TODO: Import Screen dir
 import SplashScreen from "../../../screens/SplashScreen";
-import TabStack from "../mainStackRoot";
+// import TabStack from "../mainStackRoot";
+import UserStack from "../UserStackRoot";
 import AuthStack from "../authStackRoot";
 
 import { AuthContext } from "../../context";
@@ -168,7 +169,7 @@ function RootStackNavigator({ navigation }) {
 						{state.userToken == null ? (
 							<RootStack.Screen name="Auth" component={AuthStack} />
 						) : (
-							<RootStack.Screen name="Main" component={TabStack} />
+							<RootStack.Screen name="Main" component={UserStack} />
 						)}
 					</RootStack.Navigator>
 				)}

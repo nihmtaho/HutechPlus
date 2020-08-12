@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, ScrollView, Text, Platform } from "react-native";
+import { StyleSheet, View, ScrollView, Text, Platform, SafeAreaView } from "react-native";
 import { Button, TextInput, Caption } from "react-native-paper";
 import { Toast } from "react-native-root-toaster";
 import { StatusBar } from "expo-status-bar";
@@ -28,7 +28,7 @@ function ForgotPasswordScreen({ navigation }) {
 		}, 2000);
 	};
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<Caption>Vui lòng nhập ID hoặc MSSV</Caption>
 			<TextInput
 				style={{ marginVertical: 5 }}
@@ -46,7 +46,7 @@ function ForgotPasswordScreen({ navigation }) {
 				Gửi thông tin
 			</Button>
 			<StatusBar style="auto" />
-		</View>
+		</SafeAreaView>
 	);
 }
 

@@ -8,7 +8,7 @@ function SplashScreen() {
         <SafeAreaView style={styles.container}>
             <View style={styles.logoContent}>
                 <Image style={styles.imgLogo} source={require(imgSource)} />
-                {/* <ActivityIndicator size='large' color='#E53935' /> */}
+                <ActivityIndicator size='large' color='#E53935' />
             </View>
             <View style={styles.companyContent}>
                 <MaterialCommunityIcons name="material-ui" size={52} color="#E53935" />

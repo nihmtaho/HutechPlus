@@ -17,7 +17,7 @@ const profileView = (props) => {
 		<TouchableOpacity style={styles.container} onPress={props.onPress}>
 			<View
 				style={{
-					backgroundColor: "#00bcd4",
+					backgroundColor: "#f08a5d",
 					display: "flex",
 					flexDirection: "row",
 					paddingVertical: 12,
@@ -29,11 +29,6 @@ const profileView = (props) => {
 				}}
 			>
 				<View style={styles.avatarView}>
-					{/* <Avatar.Image
-					size={54}
-					style={{ backgroundColor: "#ffffff" }}
-					source={require("../assets/profile-user/student-boy.png")}
-				/> */}
 					<Image
 						style={{ width: 60, height: 60 }}
 						source={require("../assets/profile-user/student-boy.png")}

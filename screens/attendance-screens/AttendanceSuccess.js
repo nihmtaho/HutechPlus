@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { View, Image, StyleSheet, SafeAreaView } from "react-native";
 import {
 	Button,
 	Headline,
@@ -25,10 +25,10 @@ const AttendanceSuccess = ({ navigation, route }) => {
 		(async () => {
 			setDate(moment().format("DD-MM-YYYY HH:mm"));
 		})();
-	});
+	}, []);
 
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<View style={styles.contentImg}>
 				<Image
 					style={styles.successIcon}
@@ -70,7 +70,7 @@ const AttendanceSuccess = ({ navigation, route }) => {
 					Bạn cần xác nhận bước này để điểm danh thành công
 				</Caption>
 			</View>
-		</View>
+		</SafeAreaView>
 	);
 };
 

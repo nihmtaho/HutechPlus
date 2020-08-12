@@ -8,11 +8,13 @@ import {
 	Image,
 	Platform,
 	RefreshControl,
+	SafeAreaView
 } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
 import { Caption } from "react-native-paper";
 import Constants from "expo-constants";
 import { StatusBar } from "expo-status-bar";
+import TodayInfo from "../components/todayInfo";
 
 import { db } from "../src/config/db";
 import moment from "moment";
@@ -142,7 +144,7 @@ class HomeScreen extends Component {
 			<Card
 				timeTable={item}
 				onPress={() =>
-					this.props.navigation.navigate("NavigateToDetail", {
+					this.props.navigation.push("NavigateToDetail", {
 						subjectCode: item.subjectId,
 						address: item.address,
 						name_lecturer: item.valueGV,
@@ -179,7 +181,7 @@ class HomeScreen extends Component {
 							if (searchTrue != -1) {
 								if (
 									Snapshot.child(
-										year_cut + "/" + month_cut + "/" + day_cut + "/"
+										year_cut + "/" + month_cut + "/" + day_cut + "/" + username
 									).exists()
 								) {
 									// Do not thing
@@ -218,7 +220,7 @@ class HomeScreen extends Component {
 		this.pushObject();
 
 		return (
-			<View style={styles.container}>
+			<SafeAreaView style={styles.container}>
 				<View>
 					<CalendarStrip
 						scrollable
@@ -281,9 +283,16 @@ class HomeScreen extends Component {
 						</View>
 					)}
 				</View>
-
+				<View>
+					<TodayInfo
+						day={moment().format("DD")}
+						month={moment().format("MM")}
+						weekDay={moment().format("dddd")}
+						onPress={() => this.setState({ formattedDate: moment().format("YYYY-MM-DD") })}
+					/>
+				</View>
 				<StatusBar style="auto" />
-			</View>
+			</SafeAreaView>
 		);
 	}
 }

@@ -1,13 +1,13 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { Text, Caption, Title, Subheading, Divider } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 
 const todayInfo = (props) => {
 	return (
-		<View style={styles.container}>
-			<Caption style={{textAlign: "center", color: "#fff"}}>Today</Caption>
+		<TouchableOpacity style={styles.container} onPress={props.onPress}>
+			<Caption style={{textAlign: "center", color: "#fff"}}>View Today</Caption>
             <Divider style={{backgroundColor: "#fff"}}/>
 			<View style={styles.rowCustom}>
 				<Subheading style={{ fontSize: 24, color: "#fff", fontWeight: "bold" }}>
@@ -16,7 +16,7 @@ const todayInfo = (props) => {
 				<Subheading style={{ color: "#fff" }}>{props.month}</Subheading>
 			</View>
 			<Text style={styles.textColor}>{props.weekDay}</Text>
-		</View>
+		</TouchableOpacity>
 	);
 };
 
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 		backgroundColor: "#00bcd4",
 		position: "absolute",
 		bottom: 12,
-		left: 12,
+		right: 12,
         padding: 8,
         paddingTop: 4,
 		borderRadius: 14,

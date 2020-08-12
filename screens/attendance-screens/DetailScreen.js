@@ -18,8 +18,8 @@ import {
 	Caption,
 	Text,
 } from "react-native-paper";
-import MaterialIcons from "react-native-vector-icons/FontAwesome";
-import { Ionicons } from "@expo/vector-icons";
+// import MaterialIcons from "react-native-vector-icons/FontAwesome";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { getPreciseDistance, isPointWithinRadius } from "geolib";
 import moment from "moment";
@@ -255,7 +255,7 @@ const DetailScreen = ({ navigation, route }) => {
 				handleAddFace(identityResult, uploadResult);
 				setIsShot(false);
 				_pushAttendance();
-				navigation.navigate("AttendanceSuccess", {
+				navigation.push("AttendanceSuccess", {
 					username: [mssv],
 				});
 			} else {
@@ -624,24 +624,41 @@ const DetailScreen = ({ navigation, route }) => {
 								ratio="4:3"
 								style={styles.cmrContainer}
 							></Camera>
-							<TouchableOpacity
-								onPress={takePicture}
-								style={styles.btnContainer}
-							>
-								<View
-									style={{
-										backgroundColor: "#fff",
-										width: 58,
-										height: 58,
-										display: "flex",
-										justifyContent: "center",
-										alignItems: "center",
-										borderRadius: 999,
-									}}
+							<View style={styles.btnContainer}>
+								<TouchableOpacity onPress={takePicture}>
+									<View
+										style={{
+											backgroundColor: "#fff",
+											width: 80,
+											height: 80,
+											display: "flex",
+											justifyContent: "center",
+											alignItems: "center",
+											borderRadius: 999,
+										}}
+									>
+										<MaterialIcons name="camera-alt" size={28} color="black" />
+									</View>
+								</TouchableOpacity>
+								<TouchableOpacity
+									onPress={() => navigation.goBack()}
+									style={{marginRight: 40}}
 								>
-									<MaterialIcons name="camera" size={24} color="#000" />
-								</View>
-							</TouchableOpacity>
+									<View
+										style={{
+											backgroundColor: "#fff",
+											width: 54,
+											height: 54,
+											display: "flex",
+											justifyContent: "center",
+											alignItems: "center",
+											borderRadius: 999,
+										}}
+									>
+										<MaterialIcons name="arrow-back" size={24} color="black" />
+									</View>
+								</TouchableOpacity>
+							</View>
 						</>
 					) : (
 						<>
@@ -715,10 +732,12 @@ const styles = StyleSheet.create({
 	},
 	btnContainer: {
 		flex: 3 / 10,
-		// flexDirection: 'row',
+		display: "flex",
+		flexDirection: 'row-reverse',
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: "#000",
+		marginLeft: "26%"
 	},
 	button: {
 		margin: 10,
@@ -729,16 +748,16 @@ const styles = StyleSheet.create({
 	},
 	cmrContainer: {
 		width: "100%",
-		marginTop: 90,
-		flex: 8 / 10,
+		marginTop: "18%",
+		flex: 7 / 10,
 		alignItems: "center",
 		justifyContent: "center",
 		// borderWidth: 1,
 	},
 	borderBox: {
 		position: "absolute",
-		top: "22%",
-		left: "16%",
+		top: "27%",
+		left: "17%",
 		width: 240,
 		height: 300,
 		borderWidth: 2,

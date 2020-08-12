@@ -1,12 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, SafeAreaView } from "react-native";
 import { Text, Caption, Title } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import HeaderComponent from "../../components/Header";
 
 const BugScreen = ({ navigation, route }) => {
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<HeaderComponent
 				title="BÁO LỖI"
 				subTitle="Cung cấp chi tiết thông tin lỗi xảy ra"
@@ -20,7 +20,7 @@ const BugScreen = ({ navigation, route }) => {
 				<Title style={{color: "#222831"}}>Coming-Soon</Title>
 			</View>
 			<StatusBar style="auto" />
-		</View>
+		</SafeAreaView>
 	);
 };
 

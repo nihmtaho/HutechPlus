@@ -5,18 +5,18 @@ import {
 } from "@react-navigation/stack";
 // import HomeScreen from '../../screens/HomeScreen';
 import HomeScreen from "../../screens/HomeScreenv2";
-import DetailScreen from "../../screens/attendance-screens/DetailScreen";
-import AttendanceSuccess from '../../screens/attendance-screens/AttendanceSuccess';
 import NavigateToDetail from '../../screens/attendance-screens/NavigateToDetail';
+import AttendanceSuccess from '../../screens/attendance-screens/AttendanceSuccess';
+import DetailScreen from "../../screens/attendance-screens/DetailScreen";
 
 const HomeStack = createStackNavigator();
 
 const homeStack = ({ navigation, route }) => {
-	if (route.state && route.state.index > 0) {
-		navigation.setOptions({ tabBarVisible: false });
-	} else {
-		navigation.setOptions({ tabBarVisible: true });
-	}
+	// if (route.state && route.state.index > 0) {
+	// 	navigation.setOptions({ tabBarVisible: false });
+	// } else {
+	// 	navigation.setOptions({ tabBarVisible: true });
+	// }
 	return (
 		<HomeStack.Navigator
 			initialRouteName="Home"
@@ -28,6 +28,16 @@ const homeStack = ({ navigation, route }) => {
 			<HomeStack.Screen
 				name="Home"
 				component={HomeScreen}
+				options={{ headerShown: false }}
+			/>
+			<HomeStack.Screen
+				name="NavigateToDetail"
+				component={NavigateToDetail}
+				options={{ headerShown: false, ...TransitionPresets.ModalSlideFromBottomIOS }}
+			/>
+			{/* <HomeStack.Screen
+				name="AttendanceSuccess"
+				component={AttendanceSuccess}
 				options={{ headerShown: false }}
 			/>
 			<HomeStack.Screen
@@ -43,17 +53,7 @@ const homeStack = ({ navigation, route }) => {
 					headerTitleAlign: "center",
 					...TransitionPresets.SlideFromRightIOS,
 				}}
-			/>
-			<HomeStack.Screen
-				name="NavigateToDetail"
-				component={NavigateToDetail}
-				options={{ headerShown: false }}
-			/>
-			<HomeStack.Screen
-				name="AttendanceSuccess"
-				component={AttendanceSuccess}
-				options={{ headerShown: false }}
-			/>
+			/> */}
 		</HomeStack.Navigator>
 	);
 };

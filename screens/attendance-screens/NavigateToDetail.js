@@ -6,7 +6,7 @@ import {
 	AsyncStorage,
 	ActivityIndicator,
 	Image,
-	ScrollView,
+	SafeAreaView,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { Button, Caption, Subheading, Paragraph } from "react-native-paper";
@@ -128,10 +128,13 @@ const NavigateToDetail = ({ navigation, route }) => {
 				if (Snapshot.exists()) {
 					const element = Object.values(Snapshot.val())[2];
 					setValidHaveCheckIn(element);
-					setIsLoad(false);
-				}
-				else {
-					setIsLoad(false)
+					setTimeout(() => {
+						setIsLoad(false);
+					}, 1200);
+				} else {
+					setTimeout(() => {
+						setIsLoad(false);
+					}, 1200);
 				}
 			});
 		} catch (error) {}
@@ -172,8 +175,24 @@ const NavigateToDetail = ({ navigation, route }) => {
 		});
 	};
 
+	const wait = (timeout) => {
+		return new Promise((resolve) => {
+			setTimeout(resolve, timeout);
+		});
+	};
+
+	const _onPress = () => {
+		navigation.navigate("Detail", {
+			dataMoment: dataMoment,
+			name_class: nameClass,
+			subjectCode: subject_code,
+			lecturer_code: name_lecturer,
+		});
+		wait(2000).then(() => navigation.goBack());
+	};
+
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<HeaderComponent title="THÔNG TIN" onPress={() => navigation.goBack()} />
 			<View style={styles.content}>
 				{isLoad === true ? (
@@ -187,7 +206,7 @@ const NavigateToDetail = ({ navigation, route }) => {
 									{subject_code}
 								</Subheading>
 							</View>
-							<View style={{ marginLeft: 8 }}>
+							<View style={{ marginLeft: 8, width: "70%" }}>
 								<Caption>Môn học</Caption>
 								<Subheading style={{ fontWeight: "bold" }}>
 									{subject_name}
@@ -255,15 +274,11 @@ const NavigateToDetail = ({ navigation, route }) => {
 						<Caption>Bạn đã điểm danh thành công</Caption>
 					) : (
 						<Button
+							color="#00bcd4"
 							mode="contained"
-							onPress={() =>
-								navigation.navigate("Detail", {
-									dataMoment: dataMoment,
-									name_class: nameClass,
-									subjectCode: subject_code,
-									lecturer_code: name_lecturer 
-								})
-							}
+							labelStyle={{ color: "#fff" }}
+							contentStyle={{ height: 48 }}
+							onPress={() => _onPress()}
 						>
 							Bắt đầu điểm danh
 						</Button>
@@ -281,7 +296,7 @@ const NavigateToDetail = ({ navigation, route }) => {
 				)}
 			</View>
 			<StatusBar style="auto" />
-		</View>
+		</SafeAreaView>
 	);
 };
 

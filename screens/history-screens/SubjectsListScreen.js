@@ -5,7 +5,9 @@ import {
 	FlatList,
 	AsyncStorage,
 	TouchableOpacity,
-	RefreshControl
+	RefreshControl,
+	ActivityIndicator,
+	SafeAreaView
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
@@ -61,8 +63,10 @@ const SubjectsListScreen = ({ navigation }) => {
 						);
 					}
 					setValueData(arrayInfoSubject);
-					setIsLoad(false);
 					setRefreshing(false);
+					setTimeout(() => {
+						setIsLoad(false);
+					}, 1500);
 				}
 			});
 		} catch (error) {}
@@ -93,7 +97,7 @@ const SubjectsListScreen = ({ navigation }) => {
 	};
 
 	return (
-		<View style={styles.container}>
+		<SafeAreaView style={styles.container}>
 			<View
 				style={{
 					backgroundColor: "#f08a5d",
@@ -137,28 +141,42 @@ const SubjectsListScreen = ({ navigation }) => {
 				Vui lòng khởi động lại ứng dụng nếu bạn đã đăng nhập bằng tài khoản khác
 			</Caption>
 			<View style={styles.content}>
-				<FlatList
-					style={{ marginTop: 8 }}
-					data={valueData}
-					renderItem={_renderRow}
-					keyExtractor={(item) => item.subjectCode}
-					refreshControl={
-						<RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
-					}
-				/>
+				{isLoad ? (
+					<View style={styles.centerScreen}>
+						<ActivityIndicator color="#f08a5d" />
+						<Caption>Đang tải danh sách</Caption>
+					</View>
+				) : (
+					<FlatList
+						style={{ marginTop: 8 }}
+						data={valueData}
+						renderItem={_renderRow}
+						keyExtractor={(item) => item.subjectCode}
+						refreshControl={
+							<RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
+						}
+					/>
+				)}
 			</View>
 			<StatusBar style="auto" />
-		</View>
+		</SafeAreaView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		backgroundColor: "#fff",
 	},
 	content: {
 		flex: 1,
 		padding: 4,
+	},
+	centerScreen: {
+		flex: 1,
+		display: "flex",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 });
 

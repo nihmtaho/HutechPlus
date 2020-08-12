@@ -13,7 +13,6 @@ import { db } from "../src/config/db";
 //Import Components
 import ProfileView from "../components/profileView";
 import MenuView from "../components/menuView";
-import LearnView from "../components/learnView";
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 
@@ -72,62 +71,61 @@ const SettingScreen = ({ navigation }) => {
 				{isLoading ? (
 					<ActivityIndicator
 						style={{
-							backgroundColor: "#00bcd4",
+							backgroundColor: "#f08a5d",
 							height: 120,
 							marginBottom: 14,
 							borderBottomEndRadius: 34,
 							borderBottomStartRadius: 34,
 						}}
-						color="#b2ebf2"
+						color="#f6ab6c"
 					/>
 				) : (
 					<ProfileView
 						name={fullName}
 						subName={departmentName}
 						subFaculty={email}
-						onPress={() => navigation.navigate("Profile")}
+						onPress={() => navigation.push("Profile")}
 					/>
 				)}
 			</View>
-			{/* <LearnView title="8" /> */}
-			{/* <Divider /> */}
 			<ScrollView>
 				<Subheading style={{ paddingLeft: 12, fontWeight: "bold" }}>
 					Lựa chọn
 				</Subheading>
 				<MenuView
 					title="Lịch sử điểm danh"
-					iconLeft="calendar"
 					iconRight="arrow-right"
-					color="#0063cd"
+					iconImg={require("../assets/calendar/015-calendar.png")}
 					onPress={() => navigation.navigate("SubjectList")}
 				/>
 				<MenuView
 					title="Đổi thông tin liên lạc"
-					iconLeft="customerservice"
 					iconRight="arrow-right"
-					color="green"
+					iconImg={require("../assets/help/004-ticket.png")}
 				/>
 				<MenuView
 					title="Đổi mật khẩu"
-					iconLeft="Safety"
 					iconRight="arrow-right"
-					color="green"
+					iconImg={require("../assets/password/002-protection.png")}
 				/>
 				<Subheading style={{ marginTop: 12, paddingLeft: 12, fontWeight: "bold" }}>
 					Ứng dụng
 				</Subheading>
 				<MenuView
 					title="Trợ giúp"
-					iconLeft="questioncircle"
 					iconRight="arrow-right"
-					color="#0063cd"
+					iconImg={require("../assets/help/015-loupe.png")}
 				/>
 				<MenuView
 					title="Báo lỗi"
-					iconLeft="exclamationcircle"
 					iconRight="arrow-right"
-					color="red"
+					iconImg={require("../assets/other-icon/040-error.png")}
+					onPress={() => navigation.navigate("BugScreen")}
+				/>
+				<MenuView
+					title="Giới thiệu"
+					iconRight="arrow-right"
+					iconImg={require("../assets/other-icon/045-medal.png")}
 					onPress={() => navigation.navigate("BugScreen")}
 				/>
 			</ScrollView>

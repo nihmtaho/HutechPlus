@@ -8,6 +8,7 @@ import {
 	ActivityIndicator,
 	AsyncStorage,
 	Alert,
+	SafeAreaView,
 } from "react-native";
 import {
 	Text,
@@ -116,7 +117,7 @@ const ProfileScreen = ({ navigation }, props) => {
 	};
 
 	return (
-		<View style={{ backgroundColor: "#fff", flex: 1 }}>
+		<SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
 			<View
 				style={{
 					display: "flex",
@@ -140,10 +141,16 @@ const ProfileScreen = ({ navigation }, props) => {
 					style={styles.iconLogOut}
 					onPress={() => _logOutAction()}
 				>
-					<AntDesign name="logout" size={26} color="#fff" />
-					<Text style={{ color: "#fff", fontSize: 11, marginTop: 4 }}>
-						Đăng xuất
-					</Text>
+					{isLoading ? (
+						<ActivityIndicator style={{marginRight: 12, marginTop: 12}} color="#b2ebf2" />
+					) : (
+						<>
+							<AntDesign name="logout" size={26} color="#fff" />
+							<Text style={{ color: "#fff", fontSize: 11, marginTop: 4 }}>
+								Đăng xuất
+							</Text>
+						</>
+					)}
 				</TouchableOpacity>
 				<View style={styles.headerBlock}>
 					<View
@@ -217,7 +224,7 @@ const ProfileScreen = ({ navigation }, props) => {
 				</ScrollView>
 			)}
 			<StatusBar style="inverted" />
-		</View>
+		</SafeAreaView>
 	);
 };
 const styles = StyleSheet.create({
