@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { Subheading, Divider, TouchableRipple } from "react-native-paper";
+import { Subheading, Divider } from "react-native-paper";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 
 const menuView = (props) => {

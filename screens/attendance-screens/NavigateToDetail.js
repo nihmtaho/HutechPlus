@@ -11,6 +11,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { Button, Caption, Subheading, Paragraph } from "react-native-paper";
 import HeaderComponent from "../../components/Header";
+import * as Animatable from "react-native-animatable";
 
 import { db } from "../../src/config/db";
 import moment from "moment";
@@ -193,12 +194,23 @@ const NavigateToDetail = ({ navigation, route }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<HeaderComponent title="THÔNG TIN" onPress={() => navigation.goBack()} />
-			<View style={styles.content}>
-				{isLoad === true ? (
-					<ActivityIndicator style={{ padding: 28 }} color="#00bcd4" />
-				) : (
-					<>
+			<Animatable.View animation="slideInDown">
+				<HeaderComponent
+					title="THÔNG TIN"
+					onPress={() => navigation.goBack()}
+				/>
+			</Animatable.View>
+			{isLoad ? (
+				<Animatable.View
+					animation="bounceIn"
+					style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+				>
+					<ActivityIndicator style={{ paddingTop: 28 }} color="#00bcd4" />
+					<Caption style={{ textAlign: "center" }}>Đang tải dữ liệu</Caption>
+				</Animatable.View>
+			) : (
+				<View style={{ flex: 1 }}>
+					<Animatable.View animation="fadeInUp" style={styles.content}>
 						<View style={styles.flexRow}>
 							<View style={{ marginRight: 8 }}>
 								<Caption>Mã môn học</Caption>
@@ -241,60 +253,62 @@ const NavigateToDetail = ({ navigation, route }) => {
 								)}
 							</View>
 						</View>
-					</>
-				)}
-			</View>
-			<View style={styles.contentImage}>
-				{isLoad == true ? (
-					<ActivityIndicator style={{ padding: 28 }} color="#00bcd4" />
-				) : !validCheckIn ? (
-					<>
-						<Image
-							style={styles.imgIcon}
-							source={require(sourceCheckInFalse)}
-						/>
-						<Paragraph>Bạn chưa thể điểm danh ngay bây giờ</Paragraph>
-					</>
-				) : (
-					<>
-						<Image style={styles.imgIcon} source={require(sourceCheckInTrue)} />
-						<Paragraph>Bạn đã có thể điểm danh ngay</Paragraph>
-					</>
-				)}
-			</View>
-			<View style={styles.contentButton}>
-				{isLoad == true ? (
-					<ActivityIndicator style={{ padding: 28 }} color="#00bcd4" />
-				) : !validCheckIn ? (
-					<Caption style={{ textAlign: "center" }}>
-						Giảng viên chưa mở điểm danh, quay lại sau nhé :).
-					</Caption>
-				) : dateOpen ? (
-					validHaveCheckIn ? (
-						<Caption>Bạn đã điểm danh thành công</Caption>
-					) : (
-						<Button
-							color="#00bcd4"
-							mode="contained"
-							labelStyle={{ color: "#fff" }}
-							contentStyle={{ height: 48 }}
-							onPress={() => _onPress()}
-						>
-							Bắt đầu điểm danh
-						</Button>
-					)
-				) : (
-					<>
-						<Caption style={{ textAlign: "center" }}>
-							Có vẻ như bạn đang chọn sai ngày.
-						</Caption>
-						<Caption style={{ textAlign: "center" }}>
-							Ngày điểm danh của bạn là:
-						</Caption>
-						<Caption style={{ textAlign: "center" }}>{dateFirebase}</Caption>
-					</>
-				)}
-			</View>
+					</Animatable.View>
+					<Animatable.View animation="bounceIn" style={styles.contentImage}>
+						{!validCheckIn ? (
+							<>
+								<Image
+									style={styles.imgIcon}
+									source={require(sourceCheckInFalse)}
+								/>
+								<Paragraph>Bạn chưa thể điểm danh ngay bây giờ</Paragraph>
+							</>
+						) : (
+							<>
+								<Image
+									style={styles.imgIcon}
+									source={require(sourceCheckInTrue)}
+								/>
+								<Paragraph>Bạn đã có thể điểm danh ngay</Paragraph>
+							</>
+						)}
+					</Animatable.View>
+					<Animatable.View animation="slideInUp" style={styles.contentButton}>
+						{!validCheckIn ? (
+							<Caption style={{ textAlign: "center" }}>
+								Giảng viên chưa mở điểm danh, quay lại sau nhé :)
+							</Caption>
+						) : dateOpen ? (
+							validHaveCheckIn ? (
+								<Caption>Bạn đã điểm danh thành công</Caption>
+							) : (
+								<Button
+									color="#00bcd4"
+									mode="contained"
+									labelStyle={{ color: "#fff" }}
+									contentStyle={{ height: 48 }}
+									onPress={() => _onPress()}
+								>
+									Bắt đầu điểm danh
+								</Button>
+							)
+						) : (
+							<>
+								<Caption style={{ textAlign: "center" }}>
+									Có vẻ như bạn đang chọn sai ngày.
+								</Caption>
+								<Caption style={{ textAlign: "center" }}>
+									Ngày điểm danh của bạn là:
+								</Caption>
+								<Caption style={{ textAlign: "center" }}>
+									{dateFirebase}
+								</Caption>
+							</>
+						)}
+					</Animatable.View>
+				</View>
+			)}
+
 			<StatusBar style="auto" />
 		</SafeAreaView>
 	);

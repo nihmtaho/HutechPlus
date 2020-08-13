@@ -6,20 +6,19 @@ import {
 	FlatList,
 	AsyncStorage,
 	Image,
-	Platform,
 	RefreshControl,
-	SafeAreaView
+	SafeAreaView,
 } from "react-native";
+import * as Animatable from "react-native-animatable";
 import CalendarStrip from "react-native-calendar-strip";
 import { Caption } from "react-native-paper";
 import Constants from "expo-constants";
 import { StatusBar } from "expo-status-bar";
-import TodayInfo from "../components/todayInfo";
 
+import TodayInfo from "../components/todayInfo";
+import Card from "../components/Card";
 import { db } from "../src/config/db";
 import moment from "moment";
-
-import Card from "../components/Card";
 
 let date = "";
 let customDatesStyles = [];
@@ -255,6 +254,7 @@ class HomeScreen extends Component {
 				<View style={styles.content}>
 					{searchTrue != -1 ? (
 						<FlatList
+							style={{ flex: 1 }}
 							data={this.state.list}
 							renderItem={this.renderRow}
 							keyExtractor={(i, k) => k.toString()}
@@ -266,12 +266,16 @@ class HomeScreen extends Component {
 							}
 						/>
 					) : (
-						<View style={{
-							flex: 1,
-							display: "flex",
-							justifyContent: "center",
-							alignItems: "center"
-						}}>
+						<Animatable.View
+							animation="fadeInUp"
+							duration={500}
+							style={{
+								flex: 1,
+								display: "flex",
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+						>
 							<Caption>Chọn vào lịch nếu bạn không thấy lịch học</Caption>
 							<Image
 								style={{ width: 120, height: 120 }}
@@ -280,7 +284,7 @@ class HomeScreen extends Component {
 							<Text style={{ marginTop: 8, fontWeight: "bold" }}>
 								OOPS...! Không có lịch học
 							</Text>
-						</View>
+						</Animatable.View>
 					)}
 				</View>
 				<View>
@@ -288,7 +292,9 @@ class HomeScreen extends Component {
 						day={moment().format("DD")}
 						month={moment().format("MM")}
 						weekDay={moment().format("dddd")}
-						onPress={() => this.setState({ formattedDate: moment().format("YYYY-MM-DD") })}
+						onPress={() =>
+							this.setState({ formattedDate: moment().format("YYYY-MM-DD") })
+						}
 					/>
 				</View>
 				<StatusBar style="auto" />

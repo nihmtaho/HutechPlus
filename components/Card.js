@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import * as Animatable from "react-native-animatable";
 
 const learnTime = [
 	{
@@ -99,38 +100,41 @@ function Card(props) {
 	const lession = todaySubject.time;
 	const tietHoc = lession.split(",");
 	return (
-		<TouchableOpacity
-			activeOpacity={0.5}
-			onPress={props.onPress}
-			style={styles.container}
-		>
-			<View style={styles.divContent}>
-				<Text style={(styles.titleStyle, styles.fontSize)}>
-					{todaySubject.subject_name}
-				</Text>
-			</View>
-			<View style={styles.divContent}>
-				<View style={styles.rightContent}>
-					<Text style={styles.titleStyle}>
-						Địa điểm: {todaySubject.address}
+		<Animatable.View animation="slideInDown">
+			<TouchableOpacity
+				activeOpacity={0.5}
+				onPress={props.onPress}
+				style={styles.container}
+			>
+				<View style={styles.divContent}>
+					<Text style={(styles.titleStyle, styles.fontSize)}>
+						{todaySubject.subject_name}
 					</Text>
 				</View>
-			</View>
-			<View style={styles.mountContent}>
-				<View style={styles.mountLeft}>
-					<Text style={styles.titleStyle}>Thời gian học: </Text>
-					<Text style={styles.titleStyle}>
-						{learnTime[tietHoc[0] - 1].start} -{" "}
-						{learnTime[tietHoc[tietHoc.length - 2]].end}
-					</Text>
+				<View style={styles.divContent}>
+					<View style={styles.rightContent}>
+						<Text style={styles.titleStyle}>
+							Địa điểm: {todaySubject.address}
+						</Text>
+					</View>
 				</View>
-			</View>
-		</TouchableOpacity>
+				<View style={styles.mountContent}>
+					<View style={styles.mountLeft}>
+						<Text style={styles.titleStyle}>Thời gian học: </Text>
+						<Text style={styles.titleStyle}>
+							{learnTime[tietHoc[0] - 1].start} -{" "}
+							{learnTime[tietHoc[tietHoc.length - 2]].end}
+						</Text>
+					</View>
+				</View>
+			</TouchableOpacity>
+		</Animatable.View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		backgroundColor: "#00bcd4",
 		padding: 12,
 		marginVertical: 4,

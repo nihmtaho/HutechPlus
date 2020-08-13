@@ -13,6 +13,7 @@ import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 import HistoryCheck from "../../components/historyCheck";
 import { Ionicons } from "@expo/vector-icons";
+import * as Animatable from "react-native-animatable";
 
 import { Text, Title, Caption } from "react-native-paper";
 import { db } from "../../src/config/db";
@@ -125,10 +126,10 @@ const HistoryScreen = ({ navigation, route }) => {
 			</View>
 			<View style={styles.content}>
 				{isLoad ? (
-					<View style={styles.centerScreen}>
+					<Animatable.View animation="bounceIn" style={styles.centerScreen}>
 						<ActivityIndicator color="#96bb7c" />
 						<Caption style={{ textAlign: "center" }}>Đang tải dữ liệu</Caption>
-					</View>
+					</Animatable.View>
 				) : haveObj ? (
 					<FlatList
 						data={data}
