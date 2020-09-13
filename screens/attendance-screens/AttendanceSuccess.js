@@ -30,10 +30,7 @@ const AttendanceSuccess = ({ navigation, route }) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.contentImg}>
-				<Image
-					style={styles.successIcon}
-					source={require(sourceImg)}
-				/>
+				<Image style={styles.successIcon} source={require(sourceImg)} />
 				<Headline>Xin chào {route.params.username[0]}</Headline>
 				<Subheading>{status}</Subheading>
 			</View>

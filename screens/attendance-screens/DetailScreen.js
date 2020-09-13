@@ -642,7 +642,7 @@ const DetailScreen = ({ navigation, route }) => {
 								</TouchableOpacity>
 								<TouchableOpacity
 									onPress={() => navigation.goBack()}
-									style={{marginRight: 40}}
+									style={{ marginRight: 40 }}
 								>
 									<View
 										style={{
@@ -733,11 +733,11 @@ const styles = StyleSheet.create({
 	btnContainer: {
 		flex: 3 / 10,
 		display: "flex",
-		flexDirection: 'row-reverse',
+		flexDirection: "row-reverse",
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: "#000",
-		marginLeft: "26%"
+		marginLeft: "26%",
 	},
 	button: {
 		margin: 10,
