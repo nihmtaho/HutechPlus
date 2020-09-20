@@ -106,19 +106,13 @@ function RootStackNavigator({ navigation }) {
 
 						if (hasUsername != username) {
 							Platform.OS == "ios"
-									? Toast.show("Tài khoản không tồn tại", 5000)
-									: Toast.show(
-											"\n" + "Tài khoản không tồn tại",
-											5000
-									  );
+								? Toast.show("Tài khoản không tồn tại", 5000)
+								: Toast.show("\n" + "Tài khoản không tồn tại", 5000);
 						} else {
 							if (data.password != password) {
 								Platform.OS == "ios"
 									? Toast.show("Mật khẩu không chính xác!", 5000)
-									: Toast.show(
-											"\n" + "Mật khẩu không chính xác!",
-											5000
-									  );
+									: Toast.show("\n" + "Mật khẩu không chính xác!", 5000);
 							} else if (data.password == password) {
 								usernameToken = Snapshot.child("tokenLogin").val();
 								// let deviceLogin = Snapshot.child("deviceAlive");

@@ -5,7 +5,7 @@ import {
 } from "@react-navigation/stack";
 import ProfileScreen from "../../screens/ProfileScreen";
 import BugScreen from "../../screens/bug-a-help-screens/BugScreen";
-import AttendanceSuccess from '../../screens/attendance-screens/AttendanceSuccess';
+import AttendanceSuccess from "../../screens/attendance-screens/AttendanceSuccess";
 import DetailScreen from "../../screens/attendance-screens/DetailScreen";
 
 import MainTab from "./TabStackMain";
