@@ -1,17 +1,42 @@
-# Hutech CheckIn
-Deploy with Android and IOS.
-Resource for Lecturer application: ```https://github.com/thaotruogg/Hutech-Lecturer.git```
-### Version detail: ***(Recommended)*** 
-- **NodeJS** ```12.18.2```
-- **Expo SDK** ```38.0.8```
-- **Yarn** ```~1.22.4```
-### How to run project?
-**Install ExpoCLI:** ```npm install -g expo-cli```
+# Hutech Lecturer
 
-**1. Clone project:** ```git clone https://github.com/thaotruogg/HutechPlus.git```
+Attendance app using Microsoft Face API. Support for android & IOS.
 
-**2. Install pkg:** ```npm install``` or ```yarn install```.
+### Prerequisites
 
-**3. Run Expo CLI:** ```expo start``` or ```yarn start```
+We use expo to publish and debug.
 
-**4. Scan QR code in browser or use your device** ***(Can be using IOS/Android simulator)***
+**(Recommend)**
+
+- Using NodeJS version `^12.18.3`
+- Using ExpoSDK version `^38.0.0`
+
+### Installing
+
+Install [expo-cli](https://docs.expo.io/workflow/expo-cli/):
+
+```
+npm i -g expo-cli
+```
+
+## Running or debug
+
+Debug or running to test with [expo-cli](https://docs.expo.io/workflow/expo-cli/):
+
+```
+expo start
+```
+
+## Built With
+
+- [Expo](https://docs.expo.io/) - The framework used
+- [React Navigation](https://reactnavigation.org/docs/getting-started) - Routing and navigation
+- [React Native Paper](https://callstack.github.io/react-native-paper) - Material Design for React Native
+
+## Authors
+
+- **Truogg Thao** - _Initial work_ - [ThaoTruongMinh](https://github.com/thaotruogg)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/thaotruogg/Hutech-Lecturer/blob/thaotruogg_dev/LICENSE) file for details
