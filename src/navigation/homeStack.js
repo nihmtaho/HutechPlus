@@ -5,8 +5,8 @@ import {
 } from "@react-navigation/stack";
 // import HomeScreen from '../../screens/HomeScreen';
 import HomeScreen from "../../screens/HomeScreenv2";
-import NavigateToDetail from '../../screens/attendance-screens/NavigateToDetail';
-import AttendanceSuccess from '../../screens/attendance-screens/AttendanceSuccess';
+import NavigateToDetail from "../../screens/attendance-screens/NavigateToDetail";
+import AttendanceSuccess from "../../screens/attendance-screens/AttendanceSuccess";
 import DetailScreen from "../../screens/attendance-screens/DetailScreen";
 
 const HomeStack = createStackNavigator();
@@ -33,7 +33,10 @@ const homeStack = ({ navigation, route }) => {
 			<HomeStack.Screen
 				name="NavigateToDetail"
 				component={NavigateToDetail}
-				options={{ headerShown: false, ...TransitionPresets.ModalSlideFromBottomIOS }}
+				options={{
+					headerShown: false,
+					...TransitionPresets.ModalSlideFromBottomIOS,
+				}}
 			/>
 			{/* <HomeStack.Screen
 				name="AttendanceSuccess"

@@ -1,32 +1,41 @@
 import React from "react";
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import LoginScreen from '../../screens/LoginScreen';
-import ForgotPasswordScreen from '../../screens/ForgotPasswordScreen';
+import {
+	createStackNavigator,
+	TransitionPresets,
+} from "@react-navigation/stack";
+import LoginScreen from "../../screens/LoginScreen";
+import ForgotPasswordScreen from "../../screens/ForgotPasswordScreen";
 
 const AuthStack = createStackNavigator();
 
 const authStackRoot = () => {
-  return (
-    <AuthStack.Navigator
-      initialRouteName='Login'
-      screenOptions={{
-        gestureEnabled: true,
-        gestureDirection: 'horizontal',
-        ...TransitionPresets.SlideFromRightIOS
-      }}
-    >
-      <AuthStack.Screen name="Login" component={LoginScreen}
-        options={{
-          headerShown: false
-        }} />
-      <AuthStack.Screen name="ForgotPassword" component={ForgotPasswordScreen}
-        options={{
-          title: "Quên mật khẩu",
-          headerTitleAlign: 'center',
-          headerShown: false
-        }} />
-    </AuthStack.Navigator>
-  )
-}
+	return (
+		<AuthStack.Navigator
+			initialRouteName="Login"
+			screenOptions={{
+				gestureEnabled: true,
+				gestureDirection: "horizontal",
+				...TransitionPresets.SlideFromRightIOS,
+			}}
+		>
+			<AuthStack.Screen
+				name="Login"
+				component={LoginScreen}
+				options={{
+					headerShown: false,
+				}}
+			/>
+			<AuthStack.Screen
+				name="ForgotPassword"
+				component={ForgotPasswordScreen}
+				options={{
+					title: "Quên mật khẩu",
+					headerTitleAlign: "center",
+					headerShown: false,
+				}}
+			/>
+		</AuthStack.Navigator>
+	);
+};
 
-export default authStackRoot; 
+export default authStackRoot;
