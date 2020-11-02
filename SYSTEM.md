@@ -36,6 +36,7 @@ expo start
 ## Authors
 
 - **Truogg Thao** - _Initial work_ - [ThaoTruongMinh](https://github.com/thaotruogg)
+- **Pham Thanh Tuan** - _Initial work_ - [PhamThanhTuan](https://github.com/phamthanhtuan100mc)
 
 ## License
 
