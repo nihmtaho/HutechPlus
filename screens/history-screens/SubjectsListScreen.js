@@ -12,7 +12,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import Constants from "expo-constants";
 import ListSubject from "../../components/listSubject";
-// import { AuthContext } from "../src/context";
+import * as Animatable from "react-native-animatable";
 import { db } from "../../src/config/db";
 import { Ionicons } from "@expo/vector-icons";
 import { Title, Button, Caption, Text } from "react-native-paper";
@@ -98,7 +98,8 @@ const SubjectsListScreen = ({ navigation }) => {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View
+			<Animatable.View
+			animation="slideInDown"
 				style={{
 					backgroundColor: "#f08a5d",
 					paddingTop: Constants.statusBarHeight + 8,
@@ -131,21 +132,14 @@ const SubjectsListScreen = ({ navigation }) => {
 				<Caption style={{ textAlign: "center", marginTop: -6 }}>
 					Chọn một môn học để xem nhật kí điểm danh
 				</Caption>
-			</View>
-			<Caption
-				style={{
-					paddingHorizontal: 8,
-					textAlign: "center",
-				}}
-			>
-				Vui lòng khởi động lại ứng dụng nếu bạn đã đăng nhập bằng tài khoản khác
-			</Caption>
+			</Animatable.View>
 			<View style={styles.content}>
 				{isLoad ? (
-					<View style={styles.centerScreen}>
+					<Animatable.View
+					animation="bounceIn" style={styles.centerScreen}>
 						<ActivityIndicator color="#f08a5d" />
 						<Caption>Đang tải danh sách</Caption>
-					</View>
+					</Animatable.View>
 				) : (
 					<FlatList
 						style={{ marginTop: 8 }}

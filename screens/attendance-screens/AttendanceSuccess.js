@@ -9,6 +9,7 @@ import {
 	Caption,
 } from "react-native-paper";
 import { db } from "../../src/config/db";
+import * as Animatable from "react-native-animatable";
 import moment from "moment";
 
 const sourceImg = "../../assets/success.png";
@@ -30,7 +31,11 @@ const AttendanceSuccess = ({ navigation, route }) => {
 	return (
 		<SafeAreaView style={styles.container}>
 			<View style={styles.contentImg}>
-				<Image style={styles.successIcon} source={require(sourceImg)} />
+				<Animatable.Image
+					animation="bounceIn"
+					style={styles.successIcon}
+					source={require(sourceImg)}
+				/>
 				<Headline>Xin chào {route.params.username[0]}</Headline>
 				<Subheading>{status}</Subheading>
 			</View>

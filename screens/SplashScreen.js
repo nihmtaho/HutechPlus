@@ -1,15 +1,16 @@
 import React from 'react'
 import { StyleSheet, SafeAreaView, View, Image, ActivityIndicator } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import * as Animatable from "react-native-animatable";
 const imgSource = '../assets/logo.png'
 
 function SplashScreen() {
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.logoContent}>
+            <Animatable.View animation="bounce" style={styles.logoContent}>
                 <Image style={styles.imgLogo} source={require(imgSource)} />
                 <ActivityIndicator size='large' color='#E53935' />
-            </View>
+            </Animatable.View>
             <View style={styles.companyContent}>
                 <MaterialCommunityIcons name="material-ui" size={52} color="#E53935" />
             </View>

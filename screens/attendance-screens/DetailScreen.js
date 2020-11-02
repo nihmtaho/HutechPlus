@@ -3,23 +3,19 @@ import {
 	StyleSheet,
 	View,
 	TouchableOpacity,
-	StatusBar,
 	Alert,
-	Image,
 	AsyncStorage,
 } from "react-native";
 import { Camera } from "expo-camera";
-import { BlurView } from "expo-blur";
 import {
-	Provider as PaperProvider,
 	ActivityIndicator,
 	Colors,
 	Button,
 	Caption,
 	Text,
 } from "react-native-paper";
-// import MaterialIcons from "react-native-vector-icons/FontAwesome";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import * as Animatable from "react-native-animatable";
+import { MaterialIcons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { getPreciseDistance, isPointWithinRadius } from "geolib";
 import moment from "moment";
@@ -33,9 +29,9 @@ const DetailScreen = ({ navigation, route }) => {
 	const [errorMsg, setErrorMsg] = useState(null);
 	const [myLocation, setMyLocation] = useState(null);
 	const [checkinStatus, setCheckinStatus] = useState(false);
-	const [withinClass, setWithinClass] = useState(false);
+	const [withinClass, setWithinClass] = useState();
 	const [isSuccess, setIsSuccess] = useState("");
-	const [radius, setRadius] = useState(100000);
+	const [radius, setRadius] = useState(8);
 	const toggleSwitch = () =>
 		setCheckinStatus((previousState) => !previousState);
 	// const [checkinStatus, setCheckinStatus] = useState();
@@ -48,7 +44,7 @@ const DetailScreen = ({ navigation, route }) => {
 	// temp data, waiting for teacher's app setting
 	// latitude: 10.802795,
 	// 	longitude: 106.715138,
-	const [teacherLocation, setTeacherLocation] = useState({});
+	const [teacherLocation, setTeacherLocation] = useState(null);
 
 	const cameraRef = useRef();
 	const [hasPermission, setHasPermission] = useState(null);
@@ -59,7 +55,6 @@ const DetailScreen = ({ navigation, route }) => {
 	const [personGroupId, setPersonGroupId] = useState("16dthje1"); // clean
 	const [name, setName] = useState("");
 	const [mssv, setMSSV] = useState("");
-	// const [personId, setPersonId] = useState('')
 
 	const [state, setState] = useState({
 		year: "",
@@ -92,6 +87,7 @@ const DetailScreen = ({ navigation, route }) => {
 
 	const _main = async () => {
 		try {
+			_cutString();
 			let get_mssv = await AsyncStorage.getItem("username");
 			setMSSV(get_mssv);
 			let { locationStatus } = await Location.requestPermissionsAsync();
@@ -109,42 +105,44 @@ const DetailScreen = ({ navigation, route }) => {
 				longitude: location.coords.longitude,
 			};
 
+			setMyLocation(localLocation);
+
 			let lecturerLocation;
 
-			setMyLocation({
-				latitude: location.coords.latitude,
-				longitude: location.coords.longitude,
-			});
-
-			db.ref("Teachers/" + lecturer_code + "/location/coords/").on(
+			db.ref("Teachers/" + lecturer_code + "/location/").once(
 				"value",
 				(Snapshot) => {
 					if (Snapshot.exists()) {
-						let value_latitude_location = Snapshot.child("latitude").val();
-						let value_longitude_location = Snapshot.child("longitude").val();
-
-						lecturerLocation = {
-							latitude: value_latitude_location,
-							longitude: value_longitude_location,
-						};
-
-						setTeacherLocation({
-							latitude: value_latitude_location,
-							longitude: value_longitude_location,
-						});
+						let latitude;
+						let longitude;
+						let objectCoords = Object.values(Snapshot.val())[0];
+						for (
+							let index = 0;
+							index < Object.values(objectCoords).length;
+							index++
+						) {
+							latitude = Object.values(objectCoords)[3];
+							longitude = Object.values(objectCoords)[4];
+						}
+						lecturerLocation = { latitude: latitude, longitude: longitude };
+						console.log("get value --> ", JSON.stringify(lecturerLocation));
+						console.log(
+							"location --> ",
+							JSON.stringify(localLocation),
+							JSON.stringify(lecturerLocation)
+						);
+						setWithinClass(
+							isPointWithinRadius(localLocation, lecturerLocation, radius)
+						);
 					}
 				}
 			);
-			setWithinClass(
-				isPointWithinRadius(localLocation, lecturerLocation, radius)
-			);
-			_cutString();
 		} catch (error) {
 			console.log("error list: ", error);
 		}
 	};
 
-	const _checkLocation = () => {};
+	const _checkLocationLecturer = async () => {};
 
 	const _cutString = () => {
 		let year_log = dataMoment;
@@ -215,7 +213,7 @@ const DetailScreen = ({ navigation, route }) => {
 				"Vui lòng chụp hình chỉ chứa 1 khuôn mặt",
 				[
 					{
-						text: "OK",
+						text: "Chụp lại",
 						onPress: () => {
 							setIsShot(false);
 						},
@@ -259,9 +257,9 @@ const DetailScreen = ({ navigation, route }) => {
 					username: [mssv],
 				});
 			} else {
-				Alert.alert("Điểm danh không thành công", "Đây không phải bạn", [
+				Alert.alert("Điểm danh không thành công", "Oops.. Ai đây??😀??", [
 					{
-						text: "OK",
+						text: "Chụp lại",
 						onPress: () => {
 							setIsShot(false);
 						},
@@ -661,49 +659,60 @@ const DetailScreen = ({ navigation, route }) => {
 							</View>
 						</>
 					) : (
-						<>
-							{/* <View style={styles.cmrContainer}>
-								<Image style={styles.blurredImage} source={{ faceUri }} />
-								<BlurView
-									intensity={250}
-									style={[StyleSheet.absoluteFill, styles.cmrContainer]}
-								></BlurView>
-							</View> */}
-
-							<View style={styles.btnContainer}>
-								<ActivityIndicator
-									animating={isShot}
-									size="large"
-									color={Colors.red800}
-								/>
-								<Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
-								<Text style={styles.textStyle}>
-									Vui lòng đợi và không tắt màn hình
-								</Text>
-							</View>
-						</>
+						<Animatable.View animation="bounceIn" style={styles.loadContainer}>
+							<ActivityIndicator
+								animating={isShot}
+								size="large"
+								color={Colors.red800}
+							/>
+							<Text style={styles.textStyle}>Đang quét khuôn mặt...</Text>
+							<Text style={styles.textStyle}>
+								Vui lòng đợi và không tắt màn hình
+							</Text>
+						</Animatable.View>
 					)
 				) : (
-					<View>
-						<Text style={{ color: "#fff", textAlign: "center" }}>
-							Bạn ở ngoài lớp học
-						</Text>
-						<Text style={{ color: "#fff", textAlign: "center" }}>
-							Không thể điểm danh
-						</Text>
-						<Button
-							mode="outlined"
-							color="#fff"
-							onPress={() => navigation.goBack()}
+					<View style={{ flex: 3 }}>
+						<View
+							style={{
+								flex: 2 / 3,
+								justifyContent: "center",
+								alignItems: "center",
+							}}
 						>
-							Quay lại
-						</Button>
+							<Text style={{ color: "#fff", textAlign: "center" }}>
+								{"Đang ở ngoài vùng phủ sóng??"}
+							</Text>
+							<Text style={{ color: "#fff", textAlign: "center" }}>
+								{"🙂"}
+							</Text>
+						</View>
+						<Animatable.View
+							style={{
+								flex: 1 / 3,
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+							animation="slideInUp"
+						>
+							<Button
+								style={{ marginBottom: 54 }}
+								mode="contained"
+								color="#fff"
+								onPress={() => navigation.goBack()}
+							>
+								Quay lại
+							</Button>
+						</Animatable.View>
 					</View>
 				)
 			) : (
 				<View>
 					{/* Chưa có location */}
 					<ActivityIndicator size="large" color="#0000ff" />
+					<Text style={{ marginTop: 6, color: "#fff", textAlign: "center" }}>
+						Đang tải
+					</Text>
 				</View>
 			)}
 		</View>
@@ -738,6 +747,14 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		backgroundColor: "#000",
 		marginLeft: "26%",
+	},
+	loadContainer: {
+		flex: 1,
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: "#000",
 	},
 	button: {
 		margin: 10,

@@ -24,6 +24,7 @@ import Constants from "expo-constants";
 import { StatusBar } from "expo-status-bar";
 import { db } from "../src/config/db";
 import { AuthContext } from "../src/context";
+import * as Animatable from "react-native-animatable";
 
 let imgB = "../assets/background/25499.jpg";
 let userImage = "../assets/profile-user/student-boy.png";
@@ -142,14 +143,24 @@ const ProfileScreen = ({ navigation }, props) => {
 					onPress={() => _logOutAction()}
 				>
 					{isLoading ? (
-						<ActivityIndicator style={{marginRight: 12, marginTop: 12}} color="#b2ebf2" />
+						<ActivityIndicator
+							style={{ marginRight: 12, marginTop: 12 }}
+							color="#b2ebf2"
+						/>
 					) : (
-						<>
+						<Animatable.View
+							style={{
+								display: "flex",
+								justifyContent: "center",
+								alignItems: "center",
+							}}
+							animation="fadeIn"
+						>
 							<AntDesign name="logout" size={26} color="#fff" />
 							<Text style={{ color: "#fff", fontSize: 11, marginTop: 4 }}>
 								Đăng xuất
 							</Text>
-						</>
+						</Animatable.View>
 					)}
 				</TouchableOpacity>
 				<View style={styles.headerBlock}>
@@ -167,12 +178,14 @@ const ProfileScreen = ({ navigation }, props) => {
 					{isLoading ? (
 						<ActivityIndicator style={{ padding: 28 }} color="#b2ebf2" />
 					) : (
-						<>
+						<Animatable.View animation="bounceIn">
 							<Headline style={{ marginVertical: 8, color: "#fff" }}>
 								{data[0]}
 							</Headline>
-							<Paragraph style={styles.custom}>{data[1]}</Paragraph>
-						</>
+							<Paragraph style={[styles.custom, { marginHorizontal: 20 }]}>
+								{data[1]}
+							</Paragraph>
+						</Animatable.View>
 					)}
 				</View>
 			</View>
@@ -180,7 +193,7 @@ const ProfileScreen = ({ navigation }, props) => {
 				<ActivityIndicator style={{ padding: 28 }} color="#00bcd4" />
 			) : (
 				<ScrollView style={{ backgroundColor: "#fff" }}>
-					<View style={styles.bodyBlock}>
+					<Animatable.View animation="fadeIn" style={styles.bodyBlock}>
 						<Subheading style={{ paddingTop: 12, fontWeight: "bold" }}>
 							Thông tin cơ bản
 						</Subheading>
@@ -220,7 +233,7 @@ const ProfileScreen = ({ navigation }, props) => {
 							<Caption>Địa chỉ</Caption>
 							<Text>{data[3]}</Text>
 						</View>
-					</View>
+					</Animatable.View>
 				</ScrollView>
 			)}
 			<StatusBar style="inverted" />
