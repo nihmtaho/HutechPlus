@@ -40,4 +40,4 @@ expo start
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/thaotruogg/Hutech-Lecturer/blob/thaotruogg_dev/LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/thaotruogg/HutechPlus/blob/master/LICENSE) file for details
